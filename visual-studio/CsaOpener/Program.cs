@@ -245,13 +245,26 @@ namespace Grayscale.CsaOpener
         */
 
         /// <summary>
-        /// Shift-JIS と決めつけて、UTF8に変換する。
+        /// CSAファイルは Shift-JIS と決めつけて、UTF8に変換する。
         /// </summary>
         /// <param name="dir">ディレクトリ。</param>
         public static void ChangeEncoding(string dir)
         {
             foreach (var file in Directory.GetFiles(dir, "*", System.IO.SearchOption.AllDirectories))
             {
+                var sourceEncoding = Encoding.GetEncoding("Shift_JIS");
+
+                /*
+                if (Path.GetExtension(file).ToUpper() == ".KIF")
+                {
+                    sourceEncoding = Encoding.GetEncoding("Shift_JIS");
+                    //sourceEncoding = Encoding.GetEncoding("iso-2022-jp");
+                    //sourceEncoding = Encoding.GetEncoding(932);
+                    //sourceEncoding = Encoding.GetEncoding(50220);
+                    //sourceEncoding = Encoding.GetEncoding(50222);
+                }
+                */
+
                 switch (Path.GetExtension(file).ToUpper())
                 {
                     case ".CSA":
@@ -267,8 +280,7 @@ namespace Grayscale.CsaOpener
                                 fs1.Close();
 
                                 // Shift-JIS -> UTF-8 変換（byte形）
-                                Encoding sjisEnc = Encoding.GetEncoding("Shift_JIS");
-                                string sjisstr = sjisEnc.GetString(data);
+                                string sjisstr = sourceEncoding.GetString(data);
                                 bytesData = System.Text.Encoding.UTF8.GetBytes(sjisstr);
 
                                 // string型に変換したい場合はこんな感じに
