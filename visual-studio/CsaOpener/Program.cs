@@ -3,11 +3,13 @@
 [assembly: CLSCompliant(true)]
 namespace Grayscale.CsaOpener
 {
+    using SevenZipExtractor;
     using System.Collections.Generic;
     using System.IO;
+    using System.IO.Compression;
+    using System.Runtime.InteropServices;
     using System.Text;
     using System.Threading;
-    using SevenZipExtractor;
 
     /// <summary>
     /// Entry point.
@@ -50,21 +52,24 @@ namespace Grayscale.CsaOpener
 
                         break;
 
-                    /*
-                case ".LZH":
-                    // 中に何入ってるか分からん。名前が被るかもしれない。
-                    var out_dir = Path.Combine(arguments.Output, $"extracted-{Path.GetFileNameWithoutExtension(f)}");
-                    Console.WriteLine($"LZHを解凍: {f} -> {out_dir}");
-                    Extract(f, out_dir);
-                    break;
-                    */
+                    case ".LZH":
+                        {
+                            // 中に何入ってるか分からん。名前が被るかもしれない。
+                            var out_dir = Path.Combine(arguments.Output, $"extracted-{Path.GetFileNameWithoutExtension(f)}");
+                            Console.WriteLine($"LZHを解凍: {f} -> {out_dir}");
+                            Unlzh(f, out_dir);
+                        }
+
+                        break;
 
                     case ".ZIP":
                         {
                             // 中に何入ってるか分からん。名前が被るかもしれない。
                             var out_dir = Path.Combine(arguments.Output, $"extracted-{Path.GetFileNameWithoutExtension(f)}");
                             Console.WriteLine($"ZIPを解凍: {f} -> {out_dir}");
-                            Extract(f, out_dir);
+                            Unzip(f, out_dir);
+
+                            // Extract(f, out_dir);
                         }
 
                         break;
@@ -95,6 +100,27 @@ namespace Grayscale.CsaOpener
             }
         }
 
+        /// <summary>
+        /// 解凍する。
+        /// </summary>
+        /// <param name="inputFile">入力ファイルパス。</param>
+        /// <param name="outputDirectory">出力ディレクトリーパス。</param>
+        public static void Unzip(string inputFile, string outputDirectory)
+        {
+            ZipFile.ExtractToDirectory(inputFile, outputDirectory);
+        }
+
+        /// <summary>
+        /// 解凍する。
+        /// </summary>
+        /// <param name="inputFile">入力ファイルパス。</param>
+        /// <param name="outputDirectory">出力ディレクトリーパス。</param>
+        public static void Unlzh(string inputFile, string outputDirectory)
+        {
+            LzhManager.fnExtract(inputFile, outputDirectory);
+        }
+
+        /*
         /// <summary>
         /// 解凍する。
         /// </summary>
@@ -137,6 +163,7 @@ namespace Grayscale.CsaOpener
                 Console.WriteLine(e);
             }
         }
+        */
 
         /// <summary>
         /// ディレクトリー下のファイル数をカウントだぜ☆（＾～＾）
