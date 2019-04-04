@@ -65,9 +65,6 @@ namespace Grayscale.CsaOpener
                             var out_dir = Path.Combine(arguments.Output, $"extracted-{Path.GetFileNameWithoutExtension(f)}");
                             Console.WriteLine($"ZIPを解凍: {f} -> {out_dir}");
                             Extract(f, out_dir);
-
-                            // ゆっくり☆（＾～＾）！
-                            Thread.Sleep(60 * 1000);
                         }
 
                         break;
@@ -109,12 +106,56 @@ namespace Grayscale.CsaOpener
 
             try
             {
+                // 解凍の開始☆（＾～＾）
                 ar.Extract(outputDirectory, true);
+
+                var preCount = 0;
+
+                // 一番でかい圧縮ファイルの解凍に必要な秒数☆（＾～＾）
+                var sleepSeconds = 10;
+
+                // ディレクトリの中のファイル数を監視☆（＾～＾）
+                while (true)
+                {
+                    var curCount = CountFiles(outputDirectory);
+                    if (preCount == curCount)
+                    {
+                        Console.WriteLine($"もう抜けていいだろうか☆（＾～＾）");
+                        break;
+                    }
+
+                    Console.WriteLine($"Cur count: {curCount}.");
+                    preCount = curCount;
+
+                    // ゆっくり☆（＾～＾）！
+                    Thread.Sleep(sleepSeconds * 1000);
+                    sleepSeconds++;
+                }
             }
             catch (InvalidOperationException e)
             {
                 Console.WriteLine(e);
             }
+        }
+
+        /// <summary>
+        /// ディレクトリー下のファイル数をカウントだぜ☆（＾～＾）
+        /// </summary>
+        /// <param name="dir">ディレクトリー。</param>
+        /// <returns>ファイル数</returns>
+        public static int CountFiles(string dir)
+        {
+            int sum = 0;
+            sum += Directory.GetFiles(dir, "*", System.IO.SearchOption.AllDirectories).Length;
+
+            // ショートカット踏んで 無限ループするなよ☆（＾～＾）
+            foreach (var subDir in Directory.GetDirectories(dir, "*", SearchOption.TopDirectoryOnly))
+            {
+                Console.WriteLine($"Sub dir: {subDir}. Sum: {sum}.");
+                sum += CountFiles(subDir);
+            }
+
+            return sum;
         }
 
         /// <summary>
