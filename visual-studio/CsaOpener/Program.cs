@@ -3,15 +3,14 @@
 [assembly: CLSCompliant(true)]
 namespace Grayscale.CsaOpener
 {
-    using SevenZipExtractor;
     using System.Collections.Generic;
     using System.IO;
     using System.IO.Compression;
-    using System.Runtime.InteropServices;
     using System.Text;
     using System.Threading;
     using ICSharpCode.SharpZipLib.GZip;
     using ICSharpCode.SharpZipLib.Tar;
+    using SevenZipExtractor;
 
     /// <summary>
     /// Entry point.
@@ -39,6 +38,17 @@ namespace Grayscale.CsaOpener
             {
                 switch (Path.GetExtension(f).ToUpper())
                 {
+                    case ".7Z":
+                        {
+                            // 中に何入ってるか分からん。名前が被るかもしれない。
+                            var out_dir = Path.Combine(arguments.Output, $"extracted-{Path.GetFileNameWithoutExtension(f)}");
+
+                            // Console.WriteLine($"7Zを解凍: {f} -> {out_dir}");
+                            Un7z(f, out_dir);
+                        }
+
+                        break;
+
                     case ".CSA":
                         {
                             // そのままコピーすると名前がぶつかってしまう☆（＾～＾）
@@ -179,13 +189,12 @@ namespace Grayscale.CsaOpener
             LzhManager.fnExtract(inputFile, outputDirectory);
         }
 
-        /*
         /// <summary>
         /// 解凍する。
         /// </summary>
         /// <param name="inputFile">入力ファイルパス。</param>
         /// <param name="outputDirectory">出力ディレクトリーパス。</param>
-        public static void Extract(string inputFile, string outputDirectory)
+        public static void Un7z(string inputFile, string outputDirectory)
         {
             var ar = new ArchiveFile(inputFile);
 
@@ -242,7 +251,6 @@ namespace Grayscale.CsaOpener
 
             return sum;
         }
-        */
 
         /// <summary>
         /// CSAファイルは Shift-JIS と決めつけて、UTF8に変換する。
