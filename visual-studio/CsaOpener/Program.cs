@@ -123,8 +123,15 @@ namespace Grayscale.CsaOpener
                 // ファイルを列挙する
                 foreach (string f in files)
                 {
-                    // エンコーディングを変える。
-                    ChangeEncodingFile(f);
+                    try
+                    {
+                        // エンコーディングを変える。
+                        ChangeEncodingFile(f);
+                    }
+                    catch (DirectoryNotFoundException e)
+                    {
+                        Console.WriteLine(e);
+                    }
                 }
 
                 Console.WriteLine($"むり2: {Rest}");
@@ -155,7 +162,7 @@ namespace Grayscale.CsaOpener
                         f = f.Replace(@"\", "/");
 
                         // Console.WriteLine($"7Zを解凍: {f} -> {out_dir}");
-                        new Program().Un7z(f, out_dir);
+                        Un7z(f, out_dir);
 
                         var wentDir = Path.Combine(ExpansionWentPath, Directory.GetParent(f).Name);
                         CreateDirectory(wentDir);
@@ -320,36 +327,11 @@ namespace Grayscale.CsaOpener
         /// </summary>
         /// <param name="inputFile">入力ファイルパス。</param>
         /// <param name="outputDirectory">出力ディレクトリーパス。</param>
-        public void Un7z(string inputFile, string outputDirectory)
+        public static void Un7z(string inputFile, string outputDirectory)
         {
             try
             {
                 SevenZManager.fnExtract(inputFile, outputDirectory);
-
-                /*
-                var preCount = 0;
-
-                // 一番でかい圧縮ファイルの解凍に必要な秒数☆（＾～＾）
-                var sleepSeconds = 10;
-
-                // ディレクトリの中のファイル数を監視☆（＾～＾）
-                while (true)
-                {
-                    var curCount = CountFiles(outputDirectory);
-                    if (preCount == curCount)
-                    {
-                        Console.WriteLine($"もう抜けていいだろうか☆（＾～＾）");
-                        break;
-                    }
-
-                    Console.WriteLine($"Cur count: {curCount}.");
-                    preCount = curCount;
-
-                    // ゆっくり☆（＾～＾）！
-                    Thread.Sleep(sleepSeconds * 1000);
-                    sleepSeconds++;
-                }
-                */
             }
             catch (BadImageFormatException e)
             {
@@ -360,28 +342,6 @@ namespace Grayscale.CsaOpener
                 Console.WriteLine(e);
             }
         }
-
-        /*
-        /// <summary>
-        /// ディレクトリー下のファイル数をカウントだぜ☆（＾～＾）
-        /// </summary>
-        /// <param name="dir">ディレクトリー。</param>
-        /// <returns>ファイル数</returns>
-        public static int CountFiles(string dir)
-        {
-            int sum = 0;
-            sum += Directory.GetFiles(dir, "*", System.IO.SearchOption.AllDirectories).Length;
-
-            // ショートカット踏んで 無限ループするなよ☆（＾～＾）
-            foreach (var subDir in Directory.GetDirectories(dir, "*", SearchOption.TopDirectoryOnly))
-            {
-                Console.WriteLine($"Sub dir: {subDir}. Sum: {sum}.");
-                sum += CountFiles(subDir);
-            }
-
-            return sum;
-        }
-        */
 
         /// <summary>
         /// CSAファイルは Shift-JIS と決めつけて、UTF8に変換する。
@@ -411,7 +371,10 @@ namespace Grayscale.CsaOpener
                         }
 
                         // 出力ファイルオープン（バイナリ形式）
-                        var outputFile = Path.Combine(FormationOutputPath, Path.GetFileName(inputFile));
+                        var outputDir = Path.Combine(FormationOutputPath, Directory.GetParent(inputFile).Name);
+                        CreateDirectory(outputDir);
+                        var outputFile = Path.Combine(outputDir, Path.GetFileName(inputFile));
+                        // Console.WriteLine($"outputFile: {outputFile}");
                         using (FileStream fs2 = new FileStream(outputFile, FileMode.Create))
                         {
                             // 書き込み設定（デフォルトはUTF-8）
@@ -424,7 +387,10 @@ namespace Grayscale.CsaOpener
                         }
 
                         // 終わったファイルを移動。
-                        var wentFile = Path.Combine(FormationWentPath, Path.GetFileName(inputFile));
+                        var wentDir = Path.Combine(FormationWentPath, Directory.GetParent(inputFile).Name);
+                        CreateDirectory(wentDir);
+                        var wentFile = Path.Combine(wentDir, Path.GetFileName(inputFile));
+                        // Console.WriteLine($"outputFile: {wentFile}");
                         File.Move(inputFile, wentFile);
                     }
 
