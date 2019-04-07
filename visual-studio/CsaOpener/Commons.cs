@@ -19,7 +19,8 @@
         {
             var command = @"C:\muzudho\projects_rust\kifuwarabe-wcsc29\target\release\kifuwarabe-wcsc29.exe";
             var argLine = $@" --input ""{input_file.Replace(@"\", "/")}"" --output ""{output_file.Replace(@"\", "/")}""";
-            Trace.WriteLine($"Eat: {command} {argLine}");
+
+            // Trace.WriteLine($"Eat: {command} {argLine}");
 
             ProcessStartInfo info = new ProcessStartInfo();
 
@@ -60,7 +61,7 @@
         /// </summary>
         /// <param name="config">設定。</param>
         /// <param name="inputFile">ファイル。</param>
-        public static void ChangeEncodingFile(Config config, string inputFile)
+        public static void ChangeEncodingFile(KifuwarabeWcsc29Config config, string inputFile)
         {
             Trace.WriteLine($"エンコーディング変換: {inputFile}");
 

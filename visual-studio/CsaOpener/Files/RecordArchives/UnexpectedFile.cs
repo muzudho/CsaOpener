@@ -13,7 +13,7 @@
         /// </summary>
         /// <param name="config">設定。</param>
         /// <param name="expansionGoFilePath">解凍を待っているファイルパス。</param>
-        public UnexpectedFile(Config config, string expansionGoFilePath)
+        public UnexpectedFile(KifuwarabeWcsc29Config config, string expansionGoFilePath)
             : base(config, expansionGoFilePath)
         {
             Trace.WriteLine($"Unexpected file: {this.ExpansionGoFilePath}");

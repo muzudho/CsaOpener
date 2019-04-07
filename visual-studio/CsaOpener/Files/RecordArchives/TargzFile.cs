@@ -15,7 +15,7 @@
         /// </summary>
         /// <param name="config">設定。</param>
         /// <param name="expansionGoFilePath">解凍を待っているファイルパス。</param>
-        public TargzFile(Config config, string expansionGoFilePath)
+        public TargzFile(KifuwarabeWcsc29Config config, string expansionGoFilePath)
             : base(config, expansionGoFilePath)
         {
             Trace.WriteLine($"TarGz: {this.ExpansionGoFilePath}");

@@ -62,14 +62,15 @@ namespace Grayscale.CsaOpener
                  */
 
                 // Config file.
-                var config = Config.Load();
+                var opernerConfig = OpenerConfig.Load();
+                var kw29Config = KifuwarabeWcsc29Config.Load(opernerConfig);
 
                 // 解凍フェーズ。
                 {
                     // 指定ディレクトリ以下のファイルをすべて取得する
                     IEnumerable<string> expansionGoFiles =
                         System.IO.Directory.EnumerateFiles(
-                            config.ExpansionGoPath, "*", System.IO.SearchOption.AllDirectories);
+                            kw29Config.ExpansionGoPath, "*", System.IO.SearchOption.AllDirectories);
 
                     Rest = 0;
 
@@ -80,31 +81,31 @@ namespace Grayscale.CsaOpener
                         switch (Path.GetExtension(expansionGoFile).ToUpper())
                         {
                             case ".7Z":
-                                anyFile = new SevenZipFile(config, expansionGoFile);
+                                anyFile = new SevenZipFile(kw29Config, expansionGoFile);
                                 break;
 
                             case ".CSA":
-                                anyFile = new CsaFile(config, expansionGoFile, string.Empty);
+                                anyFile = new CsaFile(kw29Config, expansionGoFile, string.Empty);
                                 break;
 
                             case ".KIF":
-                                anyFile = new KifFile(config, expansionGoFile, string.Empty);
+                                anyFile = new KifFile(kw29Config, expansionGoFile, string.Empty);
                                 break;
 
                             case ".LZH":
-                                anyFile = new LzhFile(config, expansionGoFile);
+                                anyFile = new LzhFile(kw29Config, expansionGoFile);
                                 break;
 
                             case ".TGZ":
-                                anyFile = new TargzFile(config, expansionGoFile);
+                                anyFile = new TargzFile(kw29Config, expansionGoFile);
                                 break;
 
                             case ".ZIP":
-                                anyFile = new ZipArchiveFile(config, expansionGoFile);
+                                anyFile = new ZipArchiveFile(kw29Config, expansionGoFile);
                                 break;
 
                             default:
-                                anyFile = new UnexpectedFile(config, expansionGoFile);
+                                anyFile = new UnexpectedFile(kw29Config, expansionGoFile);
                                 Rest++;
                                 break;
                         }
@@ -113,7 +114,7 @@ namespace Grayscale.CsaOpener
                         anyFile.Expand();
 
                         // エンコーディングを変える。
-                        Commons.ChangeEncodingFile(config, expansionGoFile);
+                        Commons.ChangeEncodingFile(kw29Config, expansionGoFile);
                     }
 
                     Trace.WriteLine($"むり1: {Rest}");
@@ -124,7 +125,7 @@ namespace Grayscale.CsaOpener
                     // 指定ディレクトリ以下のファイルをすべて取得する
                     IEnumerable<string> eatingGoFiles =
                         System.IO.Directory.EnumerateFiles(
-                            config.EatingGoPath, "*", System.IO.SearchOption.AllDirectories);
+                            kw29Config.EatingGoPath, "*", System.IO.SearchOption.AllDirectories);
 
                     foreach (string expansionGoFile in eatingGoFiles)
                     {
@@ -132,15 +133,15 @@ namespace Grayscale.CsaOpener
                         switch (Path.GetExtension(expansionGoFile).ToUpper())
                         {
                             case ".CSA":
-                                anyFile = new CsaFile(config, string.Empty, expansionGoFile);
+                                anyFile = new CsaFile(kw29Config, string.Empty, expansionGoFile);
                                 break;
 
                             case ".KIF":
-                                anyFile = new KifFile(config, string.Empty, expansionGoFile);
+                                anyFile = new KifFile(kw29Config, string.Empty, expansionGoFile);
                                 break;
 
                             default:
-                                anyFile = new UnexpectedFile(config, string.Empty);
+                                anyFile = new UnexpectedFile(kw29Config, string.Empty);
                                 Rest++;
                                 break;
                         }
@@ -155,7 +156,7 @@ namespace Grayscale.CsaOpener
                     {
                         // このディレクトリ以下のディレクトリをすべて取得する
                         IEnumerable<string> subDirectories =
-                            System.IO.Directory.EnumerateDirectories(config.ExpansionGoPath, "*", System.IO.SearchOption.TopDirectoryOnly);
+                            System.IO.Directory.EnumerateDirectories(kw29Config.ExpansionGoPath, "*", System.IO.SearchOption.TopDirectoryOnly);
 
                         foreach (string subDir in subDirectories)
                         {
@@ -166,7 +167,7 @@ namespace Grayscale.CsaOpener
                     {
                         // このディレクトリ以下のディレクトリをすべて取得する
                         IEnumerable<string> subDirectories =
-                            System.IO.Directory.EnumerateDirectories(config.FormationGoPath, "*", System.IO.SearchOption.TopDirectoryOnly);
+                            System.IO.Directory.EnumerateDirectories(kw29Config.FormationGoPath, "*", System.IO.SearchOption.TopDirectoryOnly);
 
                         foreach (string subDir in subDirectories)
                         {

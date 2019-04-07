@@ -1,0 +1,21 @@
+{
+	"expansion" : {
+		"go" : "C:/shogi-record/go/hunting",
+		"went" : "C:/shogi-record/went/hunted",
+		"output" : "C:/shogi-record/go/cooking"
+	},
+
+	"formation" : {
+		"go" : "C:/shogi-record/go/cooking",
+		"went" : "C:/shogi-record/went/cooked",
+		"output" : "C:/shogi-record/go/eating"
+	},
+
+	"eating" : {
+		"go" : "C:/shogi-record/go/eating",
+		"went" : "C:/shogi-record/went/ate",
+		"output" : "C:/muzudho/shogi-record/rpm"
+	},
+	
+    "learning": "C:/muzudho/shogi-record/learning/rpm"
+}

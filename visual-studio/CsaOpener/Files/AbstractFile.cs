@@ -10,7 +10,7 @@
         /// </summary>
         /// <param name="config">設定。</param>
         /// <param name="expansionGoFilePath">解凍を待っているファイルパス。</param>
-        protected AbstractFile(Config config, string expansionGoFilePath)
+        protected AbstractFile(KifuwarabeWcsc29Config config, string expansionGoFilePath)
         {
             this.Config = config;
             this.ExpansionGoFilePath = expansionGoFilePath;
@@ -24,7 +24,7 @@
         /// <summary>
         /// Gets or sets 設定。
         /// </summary>
-        public Config Config { get; protected set; }
+        public KifuwarabeWcsc29Config Config { get; protected set; }
 
         /// <summary>
         /// 解凍する。

@@ -14,7 +14,7 @@
         /// <param name="config">設定。</param>
         /// <param name="expansionGoFilePath">解凍を待っているファイルパス。</param>
         /// <param name="eatingGoFilePath">棋譜読取を待っているファイルパス。</param>
-        public KifFile(Config config, string expansionGoFilePath, string eatingGoFilePath)
+        public KifFile(KifuwarabeWcsc29Config config, string expansionGoFilePath, string eatingGoFilePath)
             : base(config, expansionGoFilePath, eatingGoFilePath)
         {
             // 解凍先ファイル。
@@ -34,7 +34,20 @@
                 Trace.WriteLine($"Kif eat: {this.EatingGoFilePath}");
 
                 this.EatingWentFilePath = Path.Combine(config.EatingWentPath, Directory.GetParent(this.EatingGoFilePath).Name, Path.GetFileName(this.EatingGoFilePath));
-                this.EatingOutputFilePath = Path.Combine(config.EatingOutputPath, Directory.GetParent(this.EatingGoFilePath).Name, Path.GetFileName(this.EatingGoFilePath));
+
+                // 拡張子は .rpmove
+                var headLen = config.EatingGoPath.Length;
+                var footLen = Path.GetFileName(this.EatingGoFilePath).Length;
+                var middlePath = this.EatingGoFilePath.Substring(headLen, this.EatingGoFilePath.Length - headLen - footLen).Replace(@"\", "/");
+                if (middlePath[0] == '/')
+                {
+                    middlePath = middlePath.Substring(1);
+                }
+
+                this.EatingOutputFilePath = Path.Combine(config.EatingOutputPath, middlePath, $"{Path.GetFileNameWithoutExtension(this.EatingGoFilePath)}.rpmove").Replace(@"\", "/");
+
+                // Trace.WriteLine($"config.EatingOutputPath: {config.EatingOutputPath}.");
+                // Trace.WriteLine($"headLen: {headLen}, footLen: {footLen}, middlePath: {middlePath}, Output: {this.EatingOutputFilePath}.");
             }
         }
 

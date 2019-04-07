@@ -13,7 +13,7 @@
         /// </summary>
         /// <param name="config">設定。</param>
         /// <param name="expansionGoFilePath">解凍を待っているファイルパス。</param>
-        public LzhFile(Config config, string expansionGoFilePath)
+        public LzhFile(KifuwarabeWcsc29Config config, string expansionGoFilePath)
             : base(config, expansionGoFilePath)
         {
             Trace.WriteLine($"Lzh: {this.ExpansionGoFilePath}");

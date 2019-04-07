@@ -10,7 +10,7 @@
         /// </summary>
         /// <param name="config">設定。</param>
         /// <param name="expansionGoFilePath">解凍を待っているファイルパス。</param>
-        public AbstractArchiveFile(Config config, string expansionGoFilePath)
+        public AbstractArchiveFile(KifuwarabeWcsc29Config config, string expansionGoFilePath)
             : base(config, expansionGoFilePath)
         {
         }

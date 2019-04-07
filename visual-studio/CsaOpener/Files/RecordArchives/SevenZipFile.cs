@@ -14,7 +14,7 @@
         /// </summary>
         /// <param name="config">設定。</param>
         /// <param name="expansionGoFilePath">解凍を待っているファイルパス。</param>
-        public SevenZipFile(Config config, string expansionGoFilePath)
+        public SevenZipFile(KifuwarabeWcsc29Config config, string expansionGoFilePath)
             : base(config, expansionGoFilePath)
         {
             Trace.WriteLine($"7zip: {this.ExpansionGoFilePath}");

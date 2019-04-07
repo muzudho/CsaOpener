@@ -6,7 +6,7 @@
     /// <summary>
     /// 設定。
     /// </summary>
-    public class Config
+    public class KifuwarabeWcsc29Config
     {
         /// <summary>
         /// Gets a これからやるパス。
@@ -56,13 +56,14 @@
         /// <summary>
         /// ファイル読み取り。
         /// </summary>
-        /// <returns>設定。</returns>
-        public static Config Load()
+        /// <param name="openerConfig">このアプリケーションの設定。</param>
+        /// <returns>ゲームエンジンの設定。</returns>
+        public static KifuwarabeWcsc29Config Load(OpenerConfig openerConfig)
         {
-            var json = File.ReadAllText("./config.json");
+            var json = File.ReadAllText(openerConfig.KifuwarabeWcsc29ConfigPath);
             dynamic config1 = DynamicJson.Parse(json);
 
-            var config2 = new Config();
+            var config2 = new KifuwarabeWcsc29Config();
             config2.ExpansionGoPath = config1.expansion.go; // arguments.Input
             config2.ExpansionWentPath = config1.expansion.went;
             config2.ExpansionOutputPath = config1.expansion.output; // arguments.Output

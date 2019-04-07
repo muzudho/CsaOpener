@@ -67,7 +67,8 @@
   <ItemGroup>
     <Compile Include="Arguments.cs" />
     <Compile Include="Commons.cs" />
-    <Compile Include="Config.cs" />
+    <Compile Include="Config\KifuwarabeWcsc29Config.cs" />
+    <Compile Include="Config\OpenerConfig.cs" />
     <Compile Include="DynamicJson.cs" />
     <Compile Include="Files\AbstractArchiveFile.cs" />
     <Compile Include="Files\AbstractFile.cs" />

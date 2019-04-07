@@ -11,7 +11,7 @@
         /// <param name="config">設定。</param>
         /// <param name="expansionGoFilePath">解凍を待っているファイルパス。</param>
         /// <param name="eatingGoFilePath">棋譜読取を待っているファイルパス。</param>
-        public AbstractGameRecordFile(Config config, string expansionGoFilePath, string eatingGoFilePath)
+        public AbstractGameRecordFile(KifuwarabeWcsc29Config config, string expansionGoFilePath, string eatingGoFilePath)
             : base(config, expansionGoFilePath)
         {
             this.EatingGoFilePath = eatingGoFilePath;
