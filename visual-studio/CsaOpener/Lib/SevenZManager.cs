@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
 
+// ここか？ http://www.csdinc.co.jp/archiver/lib/7-zip32.html
+
 /// <summary>
-/// 7z操作クラス(7-zip.dllのラッパークラス)
+/// 7z操作クラス(7-zip32.dllのラッパークラス)
 /// </summary>
 /// <remarks>
 /// 【注意】
-/// 7-zip.dllをC:\Windows\などパスの通った場所に保存していること!!
+/// 7-zip32.dllをC:\Windows\などパスの通った場所に保存していること!!
 ///  DLL取得元：統合アーカイバプロジェクト
 /// http://www.madobe.net/archiver/index.html
 /// </remarks>
@@ -24,7 +26,7 @@ public static class SevenZManager
     /// <returns>
     /// 0:正常、0以外:異常終了
     /// </returns>
-    [DllImport("7-zip.dll", CharSet = CharSet.Ansi)]
+    [DllImport("7-zip32.dll", CharSet = CharSet.Ansi)]
     private static extern int SevenZip(IntPtr hwnd, string szCmdLine, StringBuilder szOutput, int dwSize);
 
     /// <summary>
@@ -37,7 +39,7 @@ public static class SevenZManager
         lock (typeof(SevenZManager))
         {
             StringBuilder sbCmdLine = new StringBuilder(1024);   // コマンドライン文字列
-            StringBuilder sbOutput = new StringBuilder(1024);    // 7-zip.dll出力文字
+            StringBuilder sbOutput = new StringBuilder(1024);    // 7-zip32.dll出力文字
             //---------------------------------------------------------------------------------
             // コマンドライン文字列の作成
             //---------------------------------------------------------------------------------
@@ -74,7 +76,7 @@ public static class SevenZManager
         lock (typeof(SevenZManager))
         {
             StringBuilder sbCmdLine = new StringBuilder(1024);   // コマンドライン文字列
-            StringBuilder sbOutput = new StringBuilder(1024);    // 7-zip.dll出力文字
+            StringBuilder sbOutput = new StringBuilder(1024);    // 7-zip32.dll出力文字
             //---------------------------------------------------------------------------------
             // コマンドライン文字列の作成
             //---------------------------------------------------------------------------------
@@ -111,7 +113,7 @@ public static class SevenZManager
     {
         lock (typeof(SevenZManager))
         {
-            StringBuilder sbOutput = new StringBuilder(1024);   // 7-zip.dll出力文字
+            StringBuilder sbOutput = new StringBuilder(1024);   // 7-zip32.dll出力文字
             //---------------------------------------------------------------------------------
             // sFolderPathの最後が\の場合、\を取り払う
             //---------------------------------------------------------------------------------
@@ -150,7 +152,7 @@ public static class SevenZManager
     {
         lock (typeof(SevenZManager))
         {
-            StringBuilder sbOutput = new StringBuilder(1024);   // 7-zip.dll出力文字
+            StringBuilder sbOutput = new StringBuilder(1024);   // 7-zip32.dll出力文字
             //---------------------------------------------------------------------------------
             // sFolderPathの最後が\の場合、\を取り払う
             //---------------------------------------------------------------------------------
@@ -190,7 +192,7 @@ public static class SevenZManager
     {
         lock (typeof(SevenZManager))
         {
-            StringBuilder sbOutput = new StringBuilder(1024);   // 7-zip.dll出力文字
+            StringBuilder sbOutput = new StringBuilder(1024);   // 7-zip32.dll出力文字
             //---------------------------------------------------------------------------------
             // sDustFolderの最後が\の場合、\を取り払う
             //---------------------------------------------------------------------------------
@@ -236,7 +238,7 @@ public static class SevenZManager
     {
         lock (typeof(SevenZManager))
         {
-            StringBuilder sbOutput = new StringBuilder(1024);   // 7-zip.dll出力文字
+            StringBuilder sbOutput = new StringBuilder(1024);   // 7-zip32.dll出力文字
             //---------------------------------------------------------------------------------
             // sDustFolderの最後が\の場合、\を取り払う
             //---------------------------------------------------------------------------------
