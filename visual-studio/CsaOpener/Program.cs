@@ -67,79 +67,87 @@ namespace Grayscale.CsaOpener
                 // 解凍フェーズ。
                 {
                     // 指定ディレクトリ以下のファイルをすべて取得する
-                    IEnumerable<string> files =
+                    IEnumerable<string> expansionGoFiles =
                         System.IO.Directory.EnumerateFiles(
                             config.ExpansionGoPath, "*", System.IO.SearchOption.AllDirectories);
 
                     Rest = 0;
 
                     // 圧縮ファイルを解凍する
-                    foreach (string f in files)
+                    foreach (string expansionGoFile in expansionGoFiles)
                     {
-                        RecordArchiveFile recordArchiveFile;
-                        switch (Path.GetExtension(f).ToUpper())
+                        AbstractFile anyFile;
+                        switch (Path.GetExtension(expansionGoFile).ToUpper())
                         {
                             case ".7Z":
-                                recordArchiveFile = new SevenZipFile(config, f);
+                                anyFile = new SevenZipFile(config, expansionGoFile);
                                 break;
 
                             case ".CSA":
-                                recordArchiveFile = new CsaFile(config, f);
+                                anyFile = new CsaFile(config, expansionGoFile, string.Empty);
                                 break;
 
                             case ".KIF":
-                                recordArchiveFile = new KifFile(config, f);
+                                anyFile = new KifFile(config, expansionGoFile, string.Empty);
                                 break;
 
                             case ".LZH":
-                                recordArchiveFile = new LzhFile(config, f);
+                                anyFile = new LzhFile(config, expansionGoFile);
                                 break;
 
                             case ".TGZ":
-                                recordArchiveFile = new TargzFile(config, f);
+                                anyFile = new TargzFile(config, expansionGoFile);
                                 break;
 
                             case ".ZIP":
-                                recordArchiveFile = new ZipArchiveFile(config, f);
+                                anyFile = new ZipArchiveFile(config, expansionGoFile);
                                 break;
 
                             default:
-                                recordArchiveFile = new UnexpectedFile(config, f);
+                                anyFile = new UnexpectedFile(config, expansionGoFile);
                                 Rest++;
                                 break;
                         }
 
                         // 解凍する。
-                        recordArchiveFile.Expand();
+                        anyFile.Expand();
+
+                        // エンコーディングを変える。
+                        Commons.ChangeEncodingFile(config, expansionGoFile);
                     }
 
                     Trace.WriteLine($"むり1: {Rest}");
                 }
 
-                // エンコーディング フェーズ
+                // 棋譜読取フェーズ
                 {
                     // 指定ディレクトリ以下のファイルをすべて取得する
-                    IEnumerable<string> files =
+                    IEnumerable<string> eatingGoFiles =
                         System.IO.Directory.EnumerateFiles(
-                            config.FormationGoPath, "*", System.IO.SearchOption.AllDirectories);
+                            config.EatingGoPath, "*", System.IO.SearchOption.AllDirectories);
 
-                    Rest = 0;
-
-                    // ファイルを列挙する
-                    foreach (string f in files)
+                    foreach (string expansionGoFile in eatingGoFiles)
                     {
-                        try
+                        AbstractFile anyFile;
+                        switch (Path.GetExtension(expansionGoFile).ToUpper())
                         {
-                            // エンコーディングを変える。
-                            ChangeEncodingFile(config, f);
-                        }
-                        catch (DirectoryNotFoundException e)
-                        {
-                            Trace.WriteLine(e);
-                        }
-                    }
+                            case ".CSA":
+                                anyFile = new CsaFile(config, string.Empty, expansionGoFile);
+                                break;
 
-                    Trace.WriteLine($"むり2: {Rest}");
+                            case ".KIF":
+                                anyFile = new KifFile(config, string.Empty, expansionGoFile);
+                                break;
+
+                            default:
+                                anyFile = new UnexpectedFile(config, string.Empty);
+                                Rest++;
+                                break;
+                        }
+
+                        // 棋譜読取フェーズ。
+                        anyFile.ReadGameRecord();
+                    }
                 }
 
                 // 空の go のサブ・ディレクトリは削除。
@@ -174,18 +182,6 @@ namespace Grayscale.CsaOpener
         }
 
         /// <summary>
-        /// ディレクトリーがなければ作るぜ☆（＾～＾）
-        /// </summary>
-        /// <param name="dir">パス。</param>
-        public static void CreateDirectory(string dir)
-        {
-            if (!Directory.Exists(dir))
-            {
-                Directory.CreateDirectory(dir);
-            }
-        }
-
-        /// <summary>
         /// 中身が空のディレクトリーは削除するぜ☆（＾～＾）
         /// </summary>
         /// <param name="dir">ディレクトリー。</param>
@@ -214,68 +210,6 @@ namespace Grayscale.CsaOpener
             catch (UnauthorizedAccessException e)
             {
                 Trace.WriteLine(e);
-            }
-        }
-
-        /// <summary>
-        /// CSAファイルは Shift-JIS と決めつけて、UTF8に変換する。
-        /// </summary>
-        /// <param name="config">設定。</param>
-        /// <param name="inputFile">ファイル。</param>
-        public static void ChangeEncodingFile(Config config, string inputFile)
-        {
-            Trace.WriteLine($"エンコーディング変換: {inputFile}");
-
-            switch (Path.GetExtension(inputFile).ToUpper())
-            {
-                case ".CSA":
-                case ".KIF":
-                    {
-                        byte[] bytesData;
-
-                        // ファイルをbyte形で全て読み込み
-                        using (FileStream fs1 = new FileStream(inputFile, FileMode.Open))
-                        {
-                            byte[] data = new byte[fs1.Length];
-                            fs1.Read(data, 0, data.Length);
-                            fs1.Close();
-
-                            // Shift-JIS -> UTF-8 変換（byte形）
-                            string sjisstr = Encoding.GetEncoding("Shift_JIS").GetString(data);
-                            bytesData = System.Text.Encoding.UTF8.GetBytes(sjisstr);
-                        }
-
-                        // 出力ファイルオープン（バイナリ形式）
-                        var outputDir = Path.Combine(config.FormationOutputPath, Directory.GetParent(inputFile).Name);
-                        CreateDirectory(outputDir);
-                        var outputFile = Path.Combine(outputDir, Path.GetFileName(inputFile));
-                        // Trace.WriteLine($"outputFile: {outputFile}");
-                        using (FileStream fs2 = new FileStream(outputFile, FileMode.Create))
-                        {
-                            // 書き込み設定（デフォルトはUTF-8）
-                            BinaryWriter bw = new BinaryWriter(fs2);
-
-                            // 出力ファイルへ全て書き込み
-                            bw.Write(bytesData);
-                            bw.Close();
-                            fs2.Close();
-                        }
-
-                        // 終わったファイルを移動。
-                        // ExpantionGoPath = C:\shogi-record\go\hunting
-                        // InputFilePath   = C:\shogi-record\go\cooking\floodgate\2008\wdoor+floodgate-900-0+a+gps500+20080803103002.csa とかいうファイルパスになっている。
-                        var belowPath = inputFile.Substring(config.FormationGoPath.Length);
-
-                        // var wentDir = Path.Combine(FormationWentPath, Directory.GetParent(inputFile).Name);
-                        var wentDir = Path.Combine(config.FormationWentPath, belowPath);
-                        CreateDirectory(wentDir);
-
-                        var wentFile = Path.Combine(wentDir, Path.GetFileName(inputFile));
-                        // Trace.WriteLine($"outputFile: {wentFile}");
-                        File.Move(inputFile, wentFile);
-                    }
-
-                    break;
             }
         }
     }
