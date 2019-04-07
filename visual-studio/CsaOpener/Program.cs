@@ -62,8 +62,8 @@ namespace Grayscale.CsaOpener
                  */
 
                 // Config file.
-                var opernerConfig = OpenerConfig.Load();
-                var kw29Config = KifuwarabeWcsc29Config.Load(opernerConfig);
+                var openerConfig = OpenerConfig.Load();
+                var kw29Config = KifuwarabeWcsc29Config.Load(openerConfig);
 
                 // 解凍フェーズ。
                 {
@@ -147,7 +147,7 @@ namespace Grayscale.CsaOpener
                         }
 
                         // 棋譜読取フェーズ。
-                        anyFile.ReadGameRecord();
+                        anyFile.ReadGameRecord(openerConfig);
                     }
                 }
 

@@ -12,20 +12,19 @@
         /// <summary>
         /// 棋譜を読み取ります。
         /// </summary>
+        /// <param name="openerConfig">設定。</param>
         /// <param name="input_file">読み取る棋譜ファイルのパス。</param>
         /// <param name="output_file">出力先ファイルパス。</param>
         /// <returns>リターン コード。</returns>
-        public static int ReadGameRecord(string input_file, string output_file)
+        public static int ReadGameRecord(OpenerConfig openerConfig, string input_file, string output_file)
         {
-            var command = @"C:\muzudho\projects_rust\kifuwarabe-wcsc29\target\release\kifuwarabe-wcsc29.exe";
             var argLine = $@" --input ""{input_file.Replace(@"\", "/")}"" --output ""{output_file.Replace(@"\", "/")}""";
 
             // Trace.WriteLine($"Eat: {command} {argLine}");
-
             ProcessStartInfo info = new ProcessStartInfo();
 
             // 起動する実行ファイルのパスを設定する
-            info.FileName = command;
+            info.FileName = openerConfig.KifuwarabeWcsc29ExePath;
 
             // コマンドライン引数を指定する
             info.Arguments = argLine;

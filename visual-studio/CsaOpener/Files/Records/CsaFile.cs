@@ -88,9 +88,10 @@
         /// <summary>
         /// 棋譜を読み取る。
         /// </summary>
-        public override void ReadGameRecord()
+        /// <param name="openerConfig">設定。</param>
+        public override void ReadGameRecord(OpenerConfig openerConfig)
         {
-            int returnCode = Commons.ReadGameRecord(this.EatingGoFilePath, this.EatingOutputFilePath);
+            int returnCode = Commons.ReadGameRecord(openerConfig, this.EatingGoFilePath, this.EatingOutputFilePath);
 
             // 終わった元ファイルを移動。
             var dir = Path.Combine(this.Config.EatingWentPath, Directory.GetParent(this.EatingGoFilePath).Name);

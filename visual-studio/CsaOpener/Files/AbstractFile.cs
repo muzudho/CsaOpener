@@ -43,7 +43,8 @@
         /// <summary>
         /// 棋譜を読み取る。
         /// </summary>
-        public virtual void ReadGameRecord()
+        /// <param name="openerConfig">設定。</param>
+        public virtual void ReadGameRecord(OpenerConfig openerConfig)
         {
         }
     }
