@@ -8,11 +8,11 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="AbstractFile"/> class.
         /// </summary>
-        /// <param name="config">設定。</param>
+        /// <param name="kw29Config">設定。</param>
         /// <param name="expansionGoFilePath">解凍を待っているファイルパス。</param>
-        protected AbstractFile(KifuwarabeWcsc29Config config, string expansionGoFilePath)
+        protected AbstractFile(KifuwarabeWcsc29Config kw29Config, string expansionGoFilePath)
         {
-            this.Config = config;
+            this.Kw29Config = kw29Config;
             this.ExpansionGoFilePath = expansionGoFilePath;
         }
 
@@ -24,7 +24,7 @@
         /// <summary>
         /// Gets or sets 設定。
         /// </summary>
-        public KifuwarabeWcsc29Config Config { get; protected set; }
+        public KifuwarabeWcsc29Config Kw29Config { get; protected set; }
 
         /// <summary>
         /// 解凍する。

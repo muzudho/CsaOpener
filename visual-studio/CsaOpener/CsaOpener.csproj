@@ -79,6 +79,7 @@
     <Compile Include="Files\RecordArchives\TargzFile.cs" />
     <Compile Include="Files\RecordArchives\UnexpectedFile.cs" />
     <Compile Include="Files\RecordArchives\ZipArchiveFile.cs" />
+    <Compile Include="Files\RpmObj\RpmObjFile.cs" />
     <Compile Include="Lib\LogRotation.cs" />
     <Compile Include="Lib\LzhManager.cs" />
     <Compile Include="Lib\OldLogRemover.cs" />

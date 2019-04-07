@@ -65,89 +65,25 @@ namespace Grayscale.CsaOpener
                 var openerConfig = OpenerConfig.Load();
                 var kw29Config = KifuwarabeWcsc29Config.Load(openerConfig);
 
-                // 解凍フェーズ。
+                // 同じフェーズをずっとやっていても１つも完成しないので、少しずつやって、ばらけさせる。
+                var loopedCount = 1;
+
+                // ループの回った回数が０回になるまで繰り返す。
+                while (loopedCount > 0)
                 {
-                    // 指定ディレクトリ以下のファイルをすべて取得する
-                    IEnumerable<string> expansionGoFiles =
-                        System.IO.Directory.EnumerateFiles(
-                            kw29Config.ExpansionGoPath, "*", System.IO.SearchOption.AllDirectories);
+                    loopedCount = 0;
 
-                    Rest = 0;
+                    // 解凍フェーズ。
+                    loopedCount += ExpandLittleIt(kw29Config);
 
-                    // 圧縮ファイルを解凍する
-                    foreach (string expansionGoFile in expansionGoFiles)
+                    // 棋譜読取フェーズ。
+                    loopedCount += ReadLitterGameRecord(openerConfig, kw29Config);
+
+                    // たまに行う程度。
+                    if (new System.Random().Next() % 4 == 0)
                     {
-                        AbstractFile anyFile;
-                        switch (Path.GetExtension(expansionGoFile).ToUpper())
-                        {
-                            case ".7Z":
-                                anyFile = new SevenZipFile(kw29Config, expansionGoFile);
-                                break;
-
-                            case ".CSA":
-                                anyFile = new CsaFile(kw29Config, expansionGoFile, string.Empty);
-                                break;
-
-                            case ".KIF":
-                                anyFile = new KifFile(kw29Config, expansionGoFile, string.Empty);
-                                break;
-
-                            case ".LZH":
-                                anyFile = new LzhFile(kw29Config, expansionGoFile);
-                                break;
-
-                            case ".TGZ":
-                                anyFile = new TargzFile(kw29Config, expansionGoFile);
-                                break;
-
-                            case ".ZIP":
-                                anyFile = new ZipArchiveFile(kw29Config, expansionGoFile);
-                                break;
-
-                            default:
-                                anyFile = new UnexpectedFile(kw29Config, expansionGoFile);
-                                Rest++;
-                                break;
-                        }
-
-                        // 解凍する。
-                        anyFile.Expand();
-
-                        // エンコーディングを変える。
-                        Commons.ChangeEncodingFile(kw29Config, expansionGoFile);
-                    }
-
-                    Trace.WriteLine($"むり1: {Rest}");
-                }
-
-                // 棋譜読取フェーズ
-                {
-                    // 指定ディレクトリ以下のファイルをすべて取得する
-                    IEnumerable<string> eatingGoFiles =
-                        System.IO.Directory.EnumerateFiles(
-                            kw29Config.EatingGoPath, "*", System.IO.SearchOption.AllDirectories);
-
-                    foreach (string expansionGoFile in eatingGoFiles)
-                    {
-                        AbstractFile anyFile;
-                        switch (Path.GetExtension(expansionGoFile).ToUpper())
-                        {
-                            case ".CSA":
-                                anyFile = new CsaFile(kw29Config, string.Empty, expansionGoFile);
-                                break;
-
-                            case ".KIF":
-                                anyFile = new KifFile(kw29Config, string.Empty, expansionGoFile);
-                                break;
-
-                            default:
-                                anyFile = new UnexpectedFile(kw29Config, string.Empty);
-                                Rest++;
-                                break;
-                        }
-
-                        // 棋譜読取フェーズ。
-                        anyFile.ReadGameRecord(openerConfig);
+                        // JSON作成フェーズ。
+                        loopedCount += MergeLittleRpmoveObj(kw29Config);
                     }
                 }
 
@@ -156,7 +92,7 @@ namespace Grayscale.CsaOpener
                     {
                         // このディレクトリ以下のディレクトリをすべて取得する
                         IEnumerable<string> subDirectories =
-                            System.IO.Directory.EnumerateDirectories(kw29Config.ExpansionGoPath, "*", System.IO.SearchOption.TopDirectoryOnly);
+                            System.IO.Directory.EnumerateDirectories(kw29Config.expansion.go, "*", System.IO.SearchOption.TopDirectoryOnly);
 
                         foreach (string subDir in subDirectories)
                         {
@@ -167,7 +103,7 @@ namespace Grayscale.CsaOpener
                     {
                         // このディレクトリ以下のディレクトリをすべて取得する
                         IEnumerable<string> subDirectories =
-                            System.IO.Directory.EnumerateDirectories(kw29Config.FormationGoPath, "*", System.IO.SearchOption.TopDirectoryOnly);
+                            System.IO.Directory.EnumerateDirectories(kw29Config.formation.go, "*", System.IO.SearchOption.TopDirectoryOnly);
 
                         foreach (string subDir in subDirectories)
                         {
@@ -180,6 +116,208 @@ namespace Grayscale.CsaOpener
                 Trace.WriteLine($"Finished. sleep: {sleepSeconds} sec.");
                 Thread.Sleep(sleepSeconds * 1000);
             });
+        }
+
+        /// <summary>
+        /// RPM棋譜の断片（.rpmove ファイル）を100個ぐらい 適当にくっつけて JSONファイルにする。
+        /// </summary>
+        /// <param name="kw29Config">設定。</param>
+        /// <returns>ループが回った回数。</returns>
+        public static int MergeLittleRpmoveObj(KifuwarabeWcsc29Config kw29Config)
+        {
+            Trace.WriteLine($"Merge rpmove obj(A) : kw29Config.eating.output: {kw29Config.eating.output}");
+
+            // 指定ディレクトリ以下のファイルをすべて取得する
+            IEnumerable<string> rpmoveFiles =
+                System.IO.Directory.EnumerateFiles(
+                    kw29Config.eating.output, "*.rpmove", System.IO.SearchOption.AllDirectories);
+
+            var count = 0;
+
+            // まず、ファイルを 1～100個集める。
+            var fileGroup = new List<string>();
+            foreach (string rpmoveFile in rpmoveFiles)
+            {
+                if (fileGroup.Count > 99)
+                {
+                    break;
+                }
+
+                fileGroup.Add(rpmoveFile);
+                count++;
+            }
+
+            Trace.WriteLine("Merge rpmove obj(B)...");
+            var builder = new StringBuilder();
+            foreach (var file in fileGroup)
+            {
+                builder.AppendLine(File.ReadAllText(file));
+            }
+
+            if (builder.Length < 1)
+            {
+                Trace.WriteLine($"fileGroup.Count: {fileGroup.Count}, builder.Length: {builder.Length}");
+
+                // 空ファイルを読み込んでいたら無限ループしてしまう。 0 を返す。
+                return 0;
+            }
+
+            // 最後のコンマを除去する。
+            var content = builder.ToString();
+            var lastComma = content.LastIndexOf(',');
+            content = content.Substring(0, lastComma);
+
+            // 括弧で囲む。
+            content = string.Join("{", content, "}");
+
+            // TODO 拡張子を .rpmrec にして保存する。ファイル名は適当。
+            // ファイル名が被ってしまったら、今回はパス。
+            {
+                // ランダムな数を４つ つなげて長くする。
+                var rand1 = new System.Random().Next();
+                var rand2 = new System.Random().Next();
+                var rand3 = new System.Random().Next();
+                var rand4 = new System.Random().Next();
+
+                Trace.WriteLine("Merge rpmove obj(Write1)...");
+                var path = Path.Combine(kw29Config.rpm_record, $"{rand1}-{rand2}-{rand3}-{rand4}-rpmrec.json");
+                if (!File.Exists(path))
+                {
+                    File.WriteAllText(path, content);
+
+                    // 結合が終わったファイルは消す。
+                    foreach (string rpmoveFile in rpmoveFiles)
+                    {
+                        Trace.WriteLine($"Remove: {rpmoveFile}");
+                        File.Delete(rpmoveFile);
+                    }
+                }
+            }
+
+            Trace.WriteLine("Merge rpmove obj(End)...");
+            return count;
+        }
+
+        /// <summary>
+        /// 少し棋譜を読み取る。
+        /// </summary>
+        /// <param name="openerConfig">このアプリケーションの設定。</param>
+        /// <param name="kw29Config">設定。</param>
+        /// <returns>ループが回った回数。</returns>
+        public static int ReadLitterGameRecord(OpenerConfig openerConfig, KifuwarabeWcsc29Config kw29Config)
+        {
+            // 指定ディレクトリ以下のファイルをすべて取得する
+            IEnumerable<string> eatingGoFiles =
+                System.IO.Directory.EnumerateFiles(
+                    kw29Config.eating.go, "*", System.IO.SearchOption.AllDirectories);
+
+            Trace.WriteLine("Reading game record...");
+
+            // 100件回す。
+            var count = 0;
+            foreach (string eatingGoFile in eatingGoFiles)
+            {
+
+                if (count > 99)
+                {
+                    break;
+                }
+
+                AbstractFile anyFile;
+                switch (Path.GetExtension(eatingGoFile).ToUpper())
+                {
+                    case ".CSA":
+                        anyFile = new CsaFile(kw29Config, string.Empty, eatingGoFile);
+                        break;
+
+                    case ".KIF":
+                        anyFile = new KifFile(kw29Config, string.Empty, eatingGoFile);
+                        break;
+
+                    default:
+                        anyFile = new UnexpectedFile(kw29Config, string.Empty);
+                        Rest++;
+                        break;
+                }
+
+                // 棋譜読取フェーズ。
+                anyFile.ReadGameRecord(openerConfig);
+
+                count++;
+            }
+
+            return count;
+        }
+
+        /// <summary>
+        /// 少し解凍。
+        /// </summary>
+        /// <param name="kw29Config">設定。</param>
+        /// <returns>ループが回った回数。</returns>
+        public static int ExpandLittleIt(KifuwarabeWcsc29Config kw29Config)
+        {
+            // 指定ディレクトリ以下のファイルをすべて取得する
+            IEnumerable<string> expansionGoFiles =
+                System.IO.Directory.EnumerateFiles(
+                    kw29Config.expansion.go, "*", System.IO.SearchOption.AllDirectories);
+
+            Rest = 0;
+
+            Trace.WriteLine("Expanding...");
+            // 圧縮ファイルを 3つ 解凍する
+            var count = 0;
+            foreach (string expansionGoFile in expansionGoFiles)
+            {
+                if (count > 3)
+                {
+                    break;
+                }
+
+                AbstractFile anyFile;
+                switch (Path.GetExtension(expansionGoFile).ToUpper())
+                {
+                    case ".7Z":
+                        anyFile = new SevenZipFile(kw29Config, expansionGoFile);
+                        break;
+
+                    case ".CSA":
+                        anyFile = new CsaFile(kw29Config, expansionGoFile, string.Empty);
+                        break;
+
+                    case ".KIF":
+                        anyFile = new KifFile(kw29Config, expansionGoFile, string.Empty);
+                        break;
+
+                    case ".LZH":
+                        anyFile = new LzhFile(kw29Config, expansionGoFile);
+                        break;
+
+                    case ".TGZ":
+                        anyFile = new TargzFile(kw29Config, expansionGoFile);
+                        break;
+
+                    case ".ZIP":
+                        anyFile = new ZipArchiveFile(kw29Config, expansionGoFile);
+                        break;
+
+                    default:
+                        anyFile = new UnexpectedFile(kw29Config, expansionGoFile);
+                        Rest++;
+                        break;
+                }
+
+                // 解凍する。
+                anyFile.Expand();
+
+                // エンコーディングを変える。
+                Commons.ChangeEncodingFile(kw29Config, expansionGoFile);
+
+                count++;
+            }
+
+            Trace.WriteLine($"むり1: {Rest}");
+
+            return count;
         }
 
         /// <summary>

@@ -22,7 +22,7 @@
             Trace.WriteLine($"むり: {this.ExpansionGoFilePath}");
 
             // そのままコピーすると名前がぶつかってしまう☆（＾～＾）
-            this.ExpansionOutputDir = Path.Combine(config.ExpansionOutputPath, $"copied-{Path.GetFileNameWithoutExtension(this.ExpansionGoFilePath)}");
+            this.ExpansionOutputDir = Path.Combine(config.expansion.output, $"copied-{Path.GetFileNameWithoutExtension(this.ExpansionGoFilePath)}");
             Commons.CreateDirectory(this.ExpansionOutputDir);
         }
 
@@ -36,7 +36,7 @@
                 return;
             }
 
-            var wentDir = Path.Combine(this.Config.ExpansionWentPath, Path.GetFileName(this.ExpansionGoFilePath));
+            var wentDir = Path.Combine(this.Kw29Config.expansion.went, Path.GetFileName(this.ExpansionGoFilePath));
             Trace.WriteLine($"Evasion: {this.ExpansionGoFilePath} -> {wentDir}");
 
             // 無理だった元ファイルを移動。

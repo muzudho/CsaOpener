@@ -20,7 +20,7 @@
             Trace.WriteLine($"Zip: {this.ExpansionGoFilePath}");
 
             // 中に何入ってるか分からん。名前が被るかもしれない。
-            this.ExpansionOutputDir = Path.Combine(config.ExpansionOutputPath, $"extracted-{Path.GetFileNameWithoutExtension(this.ExpansionGoFilePath)}");
+            this.ExpansionOutputDir = Path.Combine(config.expansion.output, $"extracted-{Path.GetFileNameWithoutExtension(this.ExpansionGoFilePath)}");
             Commons.CreateDirectory(this.ExpansionOutputDir);
         }
 
@@ -33,7 +33,7 @@
             ZipFile.ExtractToDirectory(this.ExpansionGoFilePath, this.ExpansionOutputDir);
 
             // 解凍が終わった元ファイルを移動。
-            File.Move(this.ExpansionGoFilePath, Path.Combine(this.Config.ExpansionWentPath, Path.GetFileName(this.ExpansionGoFilePath)));
+            File.Move(this.ExpansionGoFilePath, Path.Combine(this.Kw29Config.expansion.went, Path.GetFileName(this.ExpansionGoFilePath)));
         }
     }
 }
