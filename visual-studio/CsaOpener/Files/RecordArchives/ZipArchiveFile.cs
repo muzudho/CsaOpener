@@ -17,7 +17,7 @@
         public ZipArchiveFile(KifuwarabeWcsc29Config config, string expansionGoFilePath)
             : base(config, expansionGoFilePath)
         {
-            Trace.WriteLine($"Zip: {this.ExpansionGoFilePath}");
+            // Trace.WriteLine($"Zip: {this.ExpansionGoFilePath}");
 
             // 中に何入ってるか分からん。名前が被るかもしれない。
             this.ExpansionOutputDir = Path.Combine(config.expansion.output, $"extracted-{Path.GetFileNameWithoutExtension(this.ExpansionGoFilePath)}");
@@ -29,7 +29,7 @@
         /// </summary>
         public override void Expand()
         {
-            Trace.WriteLine($"Unzip: {this.ExpansionGoFilePath} -> {this.ExpansionOutputDir}");
+            // Trace.WriteLine($"Unzip: {this.ExpansionGoFilePath} -> {this.ExpansionOutputDir}");
             ZipFile.ExtractToDirectory(this.ExpansionGoFilePath, this.ExpansionOutputDir);
 
             // 解凍が終わった元ファイルを移動。

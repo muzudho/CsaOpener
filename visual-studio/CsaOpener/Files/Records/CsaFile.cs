@@ -20,7 +20,7 @@
             // 解凍先ファイル。
             if (!string.IsNullOrWhiteSpace(this.ExpansionGoFilePath))
             {
-                Trace.WriteLine($"Csa exp: {this.ExpansionGoFilePath}");
+                // Trace.WriteLine($"Csa exp: {this.ExpansionGoFilePath}");
 
                 // そのままコピーすると名前がぶつかってしまう☆（＾～＾）
                 var wrappingDir = Path.Combine(config.expansion.output, $"copied-{Path.GetFileNameWithoutExtension(this.ExpansionGoFilePath)}");
@@ -31,7 +31,7 @@
             // 棋譜読取を待っているファイルパス。
             if (!string.IsNullOrWhiteSpace(this.EatingGoFilePath))
             {
-                Trace.WriteLine($"Kif eat: {this.EatingGoFilePath}");
+                // Trace.WriteLine($"Kif eat: {this.EatingGoFilePath}");
 
                 this.EatingWentFilePath = Path.Combine(config.eating.went, Directory.GetParent(this.EatingGoFilePath).Name, Path.GetFileName(this.EatingGoFilePath));
 
@@ -56,7 +56,7 @@
         /// </summary>
         public override void Expand()
         {
-            Trace.WriteLine($"Copy csa: {this.ExpansionGoFilePath} -> {this.ExpansionOutputFile}");
+            // Trace.WriteLine($"Copy csa: {this.ExpansionGoFilePath} -> {this.ExpansionOutputFile}");
             if (string.IsNullOrWhiteSpace(this.ExpansionGoFilePath))
             {
                 return;

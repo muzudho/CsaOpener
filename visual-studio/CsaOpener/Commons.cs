@@ -39,7 +39,10 @@
             p.WaitForExit(60 * 1000);
 
             var returnCode = p.ExitCode;
-            Trace.WriteLine($"Eat: returnCode='{returnCode}' {info.FileName} {info.Arguments}");
+            if (returnCode != 0)
+            {
+                Trace.WriteLine($"Eat: returnCode='{returnCode}' {info.FileName} {info.Arguments}");
+            }
 
             return returnCode;
         }
@@ -63,7 +66,7 @@
         /// <param name="inputFile">ファイル。</param>
         public static void ChangeEncodingFile(KifuwarabeWcsc29Config kw29Config, string inputFile)
         {
-            Trace.WriteLine($"エンコーディング変換: {inputFile}");
+            // Trace.WriteLine($"エンコーディング変換: {inputFile}");
 
             switch (Path.GetExtension(inputFile).ToUpper())
             {

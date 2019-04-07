@@ -16,10 +16,10 @@
         public UnexpectedFile(KifuwarabeWcsc29Config config, string expansionGoFilePath)
             : base(config, expansionGoFilePath)
         {
-            Trace.WriteLine($"Unexpected file: {this.ExpansionGoFilePath}");
+            // Trace.WriteLine($"Unexpected file: {this.ExpansionGoFilePath}");
 
             // .exe とか解凍できないやつが入っている☆（＾～＾）！
-            Trace.WriteLine($"むり: {this.ExpansionGoFilePath}");
+            // Trace.WriteLine($"むり: {this.ExpansionGoFilePath}");
 
             // そのままコピーすると名前がぶつかってしまう☆（＾～＾）
             this.ExpansionOutputDir = Path.Combine(config.expansion.output, $"copied-{Path.GetFileNameWithoutExtension(this.ExpansionGoFilePath)}");
@@ -37,7 +37,7 @@
             }
 
             var wentDir = Path.Combine(this.Kw29Config.expansion.went, Path.GetFileName(this.ExpansionGoFilePath));
-            Trace.WriteLine($"Evasion: {this.ExpansionGoFilePath} -> {wentDir}");
+            // Trace.WriteLine($"Evasion: {this.ExpansionGoFilePath} -> {wentDir}");
 
             // 無理だった元ファイルを移動。
             File.Move(this.ExpansionGoFilePath, wentDir);

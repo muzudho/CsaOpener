@@ -6,21 +6,13 @@ namespace Grayscale.CsaOpener
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
-    using System.IO.Compression;
-    using System.Reflection;
     using System.Runtime.InteropServices;
     using System.Text;
-    using System.Text.RegularExpressions;
     using System.Threading;
-    using Codeplex.Data;
-    using ICSharpCode.SharpZipLib.GZip;
-    using ICSharpCode.SharpZipLib.Tar;
 
     // [ソリューション エクスプローラー]のプロジェクトの下の[参照]を右クリック、
     // [参照の追加(R)...]をクリック。[アセンブリ] - [フレームワーク] と進み、
     // Microsoft.VisualBasic をチェックしてください。
-    using VBFileIO = Microsoft.VisualBasic.FileIO;
-    using VBLogging = Microsoft.VisualBasic.Logging;
 
     /// <summary>
     /// Entry point.
@@ -80,7 +72,7 @@ namespace Grayscale.CsaOpener
                     loopedCount += ReadLitterGameRecord(openerConfig, kw29Config);
 
                     // たまに行う程度。
-                    if (new System.Random().Next() % 4 == 0)
+                    if (new System.Random().Next() % 3 == 0)
                     {
                         // JSON作成フェーズ。
                         loopedCount += MergeLittleRpmoveObj(kw29Config);
@@ -119,13 +111,13 @@ namespace Grayscale.CsaOpener
         }
 
         /// <summary>
-        /// RPM棋譜の断片（.rpmove ファイル）を100個ぐらい 適当にくっつけて JSONファイルにする。
+        /// RPM棋譜の断片（.rpmove ファイル）を600個ぐらい 適当にくっつけて JSONファイルにする。
         /// </summary>
         /// <param name="kw29Config">設定。</param>
         /// <returns>ループが回った回数。</returns>
         public static int MergeLittleRpmoveObj(KifuwarabeWcsc29Config kw29Config)
         {
-            Trace.WriteLine($"Merge rpmove obj(A) : kw29Config.eating.output: {kw29Config.eating.output}");
+            // Trace.WriteLine($"Merge rpmove obj(A) : kw29Config.eating.output: {kw29Config.eating.output}");
 
             // 指定ディレクトリ以下のファイルをすべて取得する
             IEnumerable<string> rpmoveFiles =
@@ -134,11 +126,11 @@ namespace Grayscale.CsaOpener
 
             var count = 0;
 
-            // まず、ファイルを 1～100個集める。
+            // まず、ファイルを 1～600個集める。
             var fileGroup = new List<string>();
             foreach (string rpmoveFile in rpmoveFiles)
             {
-                if (fileGroup.Count > 99)
+                if (fileGroup.Count > 599)
                 {
                     break;
                 }
@@ -147,7 +139,15 @@ namespace Grayscale.CsaOpener
                 count++;
             }
 
-            Trace.WriteLine("Merge rpmove obj(B)...");
+            if (count < 400)
+            {
+                Trace.WriteLine($"Break: fileGroup.Count: {fileGroup.Count} < 400");
+
+                // 400件も溜まってなければ、まだマージしない。
+                return count;
+            }
+
+            // Trace.WriteLine("Merge rpmove obj(B)...");
             var builder = new StringBuilder();
             foreach (var file in fileGroup)
             {
@@ -156,7 +156,7 @@ namespace Grayscale.CsaOpener
 
             if (builder.Length < 1)
             {
-                Trace.WriteLine($"fileGroup.Count: {fileGroup.Count}, builder.Length: {builder.Length}");
+                // Trace.WriteLine($"fileGroup.Count: {fileGroup.Count}, builder.Length: {builder.Length}");
 
                 // 空ファイルを読み込んでいたら無限ループしてしまう。 0 を返す。
                 return 0;
@@ -168,9 +168,9 @@ namespace Grayscale.CsaOpener
             content = content.Substring(0, lastComma);
 
             // 括弧で囲む。
-            content = string.Join("{", content, "}");
+            content = string.Concat("{", content, "}");
 
-            // TODO 拡張子を .rpmrec にして保存する。ファイル名は適当。
+            // 拡張子を .rpmrec にして保存する。ファイル名は適当。
             // ファイル名が被ってしまったら、今回はパス。
             {
                 // ランダムな数を４つ つなげて長くする。
@@ -179,7 +179,7 @@ namespace Grayscale.CsaOpener
                 var rand3 = new System.Random().Next();
                 var rand4 = new System.Random().Next();
 
-                Trace.WriteLine("Merge rpmove obj(Write1)...");
+                // Trace.WriteLine("Merge rpmove obj(Write1)...");
                 var path = Path.Combine(kw29Config.rpm_record, $"{rand1}-{rand2}-{rand3}-{rand4}-rpmrec.json");
                 if (!File.Exists(path))
                 {
@@ -188,13 +188,13 @@ namespace Grayscale.CsaOpener
                     // 結合が終わったファイルは消す。
                     foreach (string rpmoveFile in rpmoveFiles)
                     {
-                        Trace.WriteLine($"Remove: {rpmoveFile}");
+                        // Trace.WriteLine($"Remove: {rpmoveFile}");
                         File.Delete(rpmoveFile);
                     }
                 }
             }
 
-            Trace.WriteLine("Merge rpmove obj(End)...");
+            // Trace.WriteLine("Merge rpmove obj(End)...");
             return count;
         }
 
@@ -211,14 +211,13 @@ namespace Grayscale.CsaOpener
                 System.IO.Directory.EnumerateFiles(
                     kw29Config.eating.go, "*", System.IO.SearchOption.AllDirectories);
 
-            Trace.WriteLine("Reading game record...");
+            // Trace.WriteLine("Reading game record...");
 
-            // 100件回す。
+            // 200件回す。
             var count = 0;
             foreach (string eatingGoFile in eatingGoFiles)
             {
-
-                if (count > 99)
+                if (count > 199)
                 {
                     break;
                 }
@@ -263,7 +262,8 @@ namespace Grayscale.CsaOpener
 
             Rest = 0;
 
-            Trace.WriteLine("Expanding...");
+            // Trace.WriteLine("Expanding...");
+
             // 圧縮ファイルを 3つ 解凍する
             var count = 0;
             foreach (string expansionGoFile in expansionGoFiles)
@@ -315,7 +315,7 @@ namespace Grayscale.CsaOpener
                 count++;
             }
 
-            Trace.WriteLine($"むり1: {Rest}");
+            // Trace.WriteLine($"むり1: {Rest}");
 
             return count;
         }
@@ -342,7 +342,7 @@ namespace Grayscale.CsaOpener
                 if (Directory.GetFiles(dir, "*", SearchOption.AllDirectories).Length == 0)
                 {
                     // ファイルがなければ削除する。
-                    Trace.WriteLine($"削除: {dir}.");
+                    Trace.WriteLine($"Delete dir: {dir}.");
                     Directory.Delete(dir);
                 }
             }

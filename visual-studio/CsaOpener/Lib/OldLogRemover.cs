@@ -35,7 +35,7 @@
 
                 foreach (var file in files)
                 {
-                    Trace.WriteLine("File: " + file);
+                    // Trace.WriteLine("Remove old log: " + file);
                     var match = regex.Match(file);
                     if (match.Success)
                     {
@@ -45,15 +45,18 @@
                             int.Parse(match.Groups[3].Value));
                         if (fileNameDate < tenDaysAgo)
                         {
+                            Trace.WriteLine("Remove old log: " + file);
+
                             // 完全に削除したいなら。
-                            // File.Delete(file);
+                            File.Delete(file);
+
+                            /*
                             // ゴミ箱に入れたいなら。
                             VBFileIO.FileSystem.DeleteFile(
                                 file,
                                 VBFileIO.UIOption.OnlyErrorDialogs,
                                 VBFileIO.RecycleOption.SendToRecycleBin);
-
-                            Trace.WriteLine("Removed: " + file);
+                             */
                         }
                     }
                 }

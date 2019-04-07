@@ -17,7 +17,7 @@
         public SevenZipFile(KifuwarabeWcsc29Config config, string expansionGoFilePath)
             : base(config, expansionGoFilePath)
         {
-            Trace.WriteLine($"7zip: {this.ExpansionGoFilePath}");
+            // Trace.WriteLine($"7zip: {this.ExpansionGoFilePath}");
 
             // 中に何入ってるか分からん。名前が被るかもしれない。
             this.ExpansionOutputDir = Path.Combine(
@@ -34,7 +34,7 @@
         {
             try
             {
-                Trace.WriteLine($"Un7z: {this.ExpansionGoFilePath} -> {this.ExpansionOutputDir}");
+                // Trace.WriteLine($"Un7z: {this.ExpansionGoFilePath} -> {this.ExpansionOutputDir}");
                 if (string.IsNullOrWhiteSpace(this.ExpansionGoFilePath))
                 {
                     return;
