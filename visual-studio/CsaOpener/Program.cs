@@ -73,11 +73,44 @@ namespace Grayscale.CsaOpener
 
                     Rest = 0;
 
-                    // ファイルを列挙する
+                    // 圧縮ファイルを解凍する
                     foreach (string f in files)
                     {
+                        RecordArchiveFile recordArchiveFile;
+                        switch (Path.GetExtension(f).ToUpper())
+                        {
+                            case ".7Z":
+                                recordArchiveFile = new SevenZipFile(config, f);
+                                break;
+
+                            case ".CSA":
+                                recordArchiveFile = new CsaFile(config, f);
+                                break;
+
+                            case ".KIF":
+                                recordArchiveFile = new KifFile(config, f);
+                                break;
+
+                            case ".LZH":
+                                recordArchiveFile = new LzhFile(config, f);
+                                break;
+
+                            case ".TGZ":
+                                recordArchiveFile = new TargzFile(config, f);
+                                break;
+
+                            case ".ZIP":
+                                recordArchiveFile = new ZipArchiveFile(config, f);
+                                break;
+
+                            default:
+                                recordArchiveFile = new UnexpectedFile(config, f);
+                                Rest++;
+                                break;
+                        }
+
                         // 解凍する。
-                        Expand(config, f);
+                        recordArchiveFile.Expand();
                     }
 
                     Trace.WriteLine($"むり1: {Rest}");
@@ -141,121 +174,6 @@ namespace Grayscale.CsaOpener
         }
 
         /// <summary>
-        /// 解凍フェーズ。
-        /// </summary>
-        /// <param name="config">設定。</param>
-        /// <param name="f">ファイル。</param>
-        public static void Expand(Config config, string f)
-        {
-            Trace.WriteLine($"解凍: {f}");
-
-            switch (Path.GetExtension(f).ToUpper())
-            {
-                case ".7Z":
-                    {
-                        new SevenZipFile(config, f).Expand();
-                    }
-
-                    break;
-
-                case ".CSA":
-                    {
-                        // そのままコピーすると名前がぶつかってしまう☆（＾～＾）
-                        var out_dir = Path.Combine(config.ExpansionOutputPath, $"copied-{Path.GetFileNameWithoutExtension(f)}");
-                        CreateDirectory(out_dir);
-                        var out_path = Path.Combine(out_dir, Path.GetFileName(f));
-
-                        // 成果物の作成。
-                        File.Copy(f, out_path, true);
-
-                        // 解凍が終わった元ファイルを移動。
-                        File.Move(f, Path.Combine(config.ExpansionWentPath, Path.GetFileName(f)));
-                    }
-
-                    break;
-
-                case ".KIF":
-                    {
-                        // そのままコピーすると名前がぶつかってしまう☆（＾～＾）
-                        var out_dir = Path.Combine(config.ExpansionOutputPath, $"copied-{Path.GetFileNameWithoutExtension(f)}");
-                        CreateDirectory(out_dir);
-                        var out_path = Path.Combine(out_dir, Path.GetFileName(f));
-
-                        // Trace.WriteLine($"コピー: {f} -> {out_path}");
-                        File.Copy(f, out_path, true);
-
-                        // 解凍が終わった元ファイルを移動。
-                        File.Move(f, Path.Combine(config.ExpansionWentPath, Path.GetFileName(f)));
-                    }
-
-                    break;
-
-                case ".LZH":
-                    {
-                        // 中に何入ってるか分からん。名前が被るかもしれない。
-                        var out_dir = Path.Combine(config.ExpansionOutputPath, $"extracted-{Path.GetFileNameWithoutExtension(f)}");
-
-                        // Trace.WriteLine($"LZHを解凍: {f} -> {out_dir}");
-                        Unlzh(f, out_dir);
-
-                        // 解凍が終わった元ファイルを移動。
-                        File.Move(f, Path.Combine(config.ExpansionWentPath, Path.GetFileName(f)));
-                    }
-
-                    break;
-
-                case ".TGZ":
-                    {
-                        // 中に何入ってるか分からん。名前が被るかもしれない。
-                        var out_dir = Path.Combine(config.ExpansionOutputPath, $"extracted-{Path.GetFileNameWithoutExtension(f)}");
-
-                        // Trace.WriteLine($"TGZを解凍: {f} -> {out_dir}");
-                        Untgz(f, out_dir);
-
-                        // 解凍が終わった元ファイルを移動。
-                        File.Move(f, Path.Combine(config.ExpansionWentPath, Path.GetFileName(f)));
-                    }
-
-                    break;
-
-                case ".ZIP":
-                    {
-                        // 中に何入ってるか分からん。名前が被るかもしれない。
-                        var out_dir = Path.Combine(config.ExpansionOutputPath, $"extracted-{Path.GetFileNameWithoutExtension(f)}");
-
-                        // Trace.WriteLine($"ZIPを解凍: {f} -> {out_dir}");
-                        Unzip(f, out_dir);
-
-                        // 解凍が終わった元ファイルを移動。
-                        File.Move(f, Path.Combine(config.ExpansionWentPath, Path.GetFileName(f)));
-                    }
-
-                    break;
-
-                default:
-                    {
-                        // .exe とか解凍できないやつが入っている☆（＾～＾）！
-                        Trace.WriteLine($"むり: {f}");
-
-                        // そのままコピーすると名前がぶつかってしまう☆（＾～＾）
-                        var out_dir = Path.Combine(config.ExpansionOutputPath, $"copied-{Path.GetFileNameWithoutExtension(f)}");
-                        CreateDirectory(out_dir);
-                        var out_path = Path.Combine(out_dir, Path.GetFileName(f));
-
-                        // Trace.WriteLine($"コピー: {f} -> {out_path}");
-                        File.Copy(f, out_path, true);
-
-                        // 無理だった元ファイルを移動。
-                        File.Move(f, Path.Combine(config.ExpansionWentPath, Path.GetFileName(f)));
-
-                        Rest++;
-                    }
-
-                    break;
-            }
-        }
-
-        /// <summary>
         /// ディレクトリーがなければ作るぜ☆（＾～＾）
         /// </summary>
         /// <param name="dir">パス。</param>
@@ -297,44 +215,6 @@ namespace Grayscale.CsaOpener
             {
                 Trace.WriteLine(e);
             }
-        }
-
-        /// <summary>
-        /// 解凍する。
-        /// </summary>
-        /// <param name="inputFile">入力ファイルパス。</param>
-        /// <param name="outputDirectory">出力ディレクトリーパス。</param>
-        public static void Untgz(string inputFile, string outputDirectory)
-        {
-            Stream inStream = File.OpenRead(inputFile);
-            Stream gzipStream = new GZipInputStream(inStream);
-
-            TarArchive tarArchive = TarArchive.CreateInputTarArchive(gzipStream);
-            tarArchive.ExtractContents(outputDirectory);
-            tarArchive.Close();
-
-            gzipStream.Close();
-            inStream.Close();
-        }
-
-        /// <summary>
-        /// 解凍する。
-        /// </summary>
-        /// <param name="inputFile">入力ファイルパス。</param>
-        /// <param name="outputDirectory">出力ディレクトリーパス。</param>
-        public static void Unzip(string inputFile, string outputDirectory)
-        {
-            ZipFile.ExtractToDirectory(inputFile, outputDirectory);
-        }
-
-        /// <summary>
-        /// 解凍する。
-        /// </summary>
-        /// <param name="inputFile">入力ファイルパス。</param>
-        /// <param name="outputDirectory">出力ディレクトリーパス。</param>
-        public static void Unlzh(string inputFile, string outputDirectory)
-        {
-            LzhManager.fnExtract(inputFile, outputDirectory);
         }
 
         /// <summary>

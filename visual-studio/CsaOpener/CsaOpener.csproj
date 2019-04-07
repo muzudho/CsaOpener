@@ -68,12 +68,19 @@
     <Compile Include="Arguments.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="DynamicJson.cs" />
+    <Compile Include="Files\RecordArchiveFile.cs" />
+    <Compile Include="Files\CsaFile.cs" />
+    <Compile Include="Files\KifFile.cs" />
+    <Compile Include="Files\LzhFile.cs" />
+    <Compile Include="Files\TargzFile.cs" />
+    <Compile Include="Files\UnexpectedFile.cs" />
+    <Compile Include="Files\ZipArchiveFile.cs" />
     <Compile Include="Lib\LogRotation.cs" />
     <Compile Include="Lib\LzhManager.cs" />
     <Compile Include="Lib\OldLogRemover.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SevenZipFile.cs" />
+    <Compile Include="Files\SevenZipFile.cs" />
     <Compile Include="Lib\SevenZManager.cs" />
   </ItemGroup>
   <ItemGroup>

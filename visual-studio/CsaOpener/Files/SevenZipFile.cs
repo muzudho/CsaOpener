@@ -7,7 +7,7 @@
     /// <summary>
     /// .7z ファイル。
     /// </summary>
-    public class SevenZipFile
+    public class SevenZipFile : RecordArchiveFile
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="SevenZipFile"/> class.
@@ -15,37 +15,21 @@
         /// <param name="config">設定。</param>
         /// <param name="filePath">ファイルパス。</param>
         public SevenZipFile(Config config, string filePath)
+            : base(config, filePath)
         {
-            this.Config = config;
-            this.FilePath = filePath;
-
             // 中に何入ってるか分からん。名前が被るかもしれない。
             this.OutDir = Path.Combine(
                 this.Config.ExpansionOutputPath,
                 Directory.GetParent(this.FilePath).Name,
                 $"extracted-{Path.GetFileNameWithoutExtension(this.FilePath)}").Replace(@"\", "/");
             this.FilePath = this.FilePath.Replace(@"\", "/");
+            Trace.WriteLine($"7zip: {this.FilePath}");
         }
-
-        /// <summary>
-        /// Gets or sets a ファイルパス。
-        /// </summary>
-        public string FilePath { get; set; }
-
-        /// <summary>
-        /// Gets or sets a 出力ディレクトリー。
-        /// </summary>
-        public string OutDir { get; set; }
-
-        /// <summary>
-        /// Gets or sets 設定。
-        /// </summary>
-        public Config Config { get; set; }
 
         /// <summary>
         /// 解凍する。
         /// </summary>
-        public void Expand()
+        public override void Expand()
         {
             try
             {
@@ -70,9 +54,8 @@
             }
         }
 
-        public void ChangeEncoding()
+        public override void ChangeEncoding()
         {
-
         }
     }
 }
