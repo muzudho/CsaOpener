@@ -167,20 +167,21 @@ namespace Grayscale.CsaOpener
             var lastComma = content.LastIndexOf(',');
             content = content.Substring(0, lastComma);
 
-            // 括弧で囲む。
-            content = string.Concat("{", content, "}");
+            // JSON形式として読めるように、配列のオブジェクトにする。
+            content = string.Concat(@"{""book"": [", content, "]}");
 
             // 拡張子を .rpmrec にして保存する。ファイル名は適当。
             // ファイル名が被ってしまったら、今回はパス。
             {
                 // ランダムな数を４つ つなげて長くする。
-                var rand1 = new System.Random().Next();
-                var rand2 = new System.Random().Next();
-                var rand3 = new System.Random().Next();
-                var rand4 = new System.Random().Next();
+                var rand = new System.Random();
+                var num1 = rand.Next();
+                var num2 = rand.Next();
+                var num3 = rand.Next();
+                var num4 = rand.Next();
 
                 // Trace.WriteLine("Merge rpmove obj(Write1)...");
-                var path = Path.Combine(kw29Config.rpm_record, $"{rand1}-{rand2}-{rand3}-{rand4}-rpmrec.json");
+                var path = Path.Combine(kw29Config.rpm_record, $"{num1}-{num2}-{num3}-{num4}-rpmrec.json");
                 if (!File.Exists(path))
                 {
                     File.WriteAllText(path, content);
