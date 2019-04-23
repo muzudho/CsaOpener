@@ -2,6 +2,7 @@
 {
     using System.Diagnostics;
     using System.IO;
+    using Grayscale.CsaOpener.Location;
 
     /// <summary>
     /// 予期しない形式のファイル。
@@ -21,7 +22,7 @@
             // Trace.WriteLine($"むり: {this.ExpansionGoFilePath}");
 
             // そのままコピーすると名前がぶつかってしまう☆（＾～＾）
-            this.ExpansionOutputDir = Path.Combine(KifuwarabeWcsc29Config.Instance.expansion.output, $"copied-{Path.GetFileNameWithoutExtension(this.ExpansionGoFilePath)}");
+            this.ExpansionOutputDir = Path.Combine(ExpansionOutputDirectory.Instance.Path, $"copied-{Path.GetFileNameWithoutExtension(this.ExpansionGoFilePath)}");
             Commons.CreateDirectory(this.ExpansionOutputDir);
         }
 
@@ -35,7 +36,7 @@
                 return;
             }
 
-            var wentDir = Path.Combine(KifuwarabeWcsc29Config.Instance.expansion.went, Path.GetFileName(this.ExpansionGoFilePath));
+            var wentDir = Path.Combine(ExpansionWentDirectory.Instance.Path, Path.GetFileName(this.ExpansionGoFilePath));
             // Trace.WriteLine($"Evasion: {this.ExpansionGoFilePath} -> {wentDir}");
 
             // 無理だった元ファイルを移動。

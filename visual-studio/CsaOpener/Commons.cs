@@ -3,6 +3,7 @@
     using System.Diagnostics;
     using System.IO;
     using System.Text;
+    using Grayscale.CsaOpener.Location;
 
     /// <summary>
     /// 何か所かで使うもの。
@@ -86,7 +87,7 @@
                         }
 
                         // 出力ファイルオープン（バイナリ形式）
-                        var outputDir = Path.Combine(KifuwarabeWcsc29Config.Instance.formation.output, Directory.GetParent(inputFile).Name);
+                        var outputDir = Path.Combine(FomationOutputDirectory.Instance.Path, Directory.GetParent(inputFile).Name);
                         CreateDirectory(outputDir);
                         var outputFile = Path.Combine(outputDir, Path.GetFileName(inputFile));
                         // Trace.WriteLine($"outputFile: {outputFile}");
@@ -104,10 +105,10 @@
                         // 終わったファイルを移動。
                         // ExpantionGoPath = C:\shogi-record\go\hunting
                         // InputFilePath   = C:\shogi-record\go\cooking\floodgate\2008\wdoor+floodgate-900-0+a+gps500+20080803103002.csa とかいうファイルパスになっている。
-                        var belowPath = inputFile.Substring(KifuwarabeWcsc29Config.Instance.formation.go.Length);
+                        var belowPath = inputFile.Substring(FomationGoDirectory.Instance.Path.Length);
 
                         // var wentDir = Path.Combine(FormationWentPath, Directory.GetParent(inputFile).Name);
-                        var wentDir = Path.Combine(KifuwarabeWcsc29Config.Instance.formation.went, belowPath);
+                        var wentDir = Path.Combine(FomationWentDirectory.Instance.Path, belowPath);
                         CreateDirectory(wentDir);
 
                         var wentFile = Path.Combine(wentDir, Path.GetFileName(inputFile));

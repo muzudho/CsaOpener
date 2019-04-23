@@ -5,27 +5,27 @@
     /// <summary>
     /// ディレクトリ。
     /// </summary>
-    public class ExpansionWentDirectory
+    public class EatingGoDirectory
     {
-        private static ExpansionWentDirectory thisInstance;
+        private static EatingGoDirectory thisInstance;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ExpansionWentDirectory"/> class.
+        /// Initializes a new instance of the <see cref="EatingGoDirectory"/> class.
         /// </summary>
-        protected ExpansionWentDirectory()
+        protected EatingGoDirectory()
         {
         }
 
         /// <summary>
         /// Gets a このインスタンス。
         /// </summary>
-        public static ExpansionWentDirectory Instance
+        public static EatingGoDirectory Instance
         {
             get
             {
                 if (thisInstance == null)
                 {
-                    thisInstance = new ExpansionWentDirectory();
+                    thisInstance = new EatingGoDirectory();
                     if (!Directory.Exists(thisInstance.Path))
                     {
                         Directory.CreateDirectory(thisInstance.Path);
@@ -41,7 +41,7 @@
         /// </summary>
         public string Path
         {
-            get { return KifuwarabeWcsc29Config.Instance.expansion.went; }
+            get { return KifuwarabeWcsc29Config.Instance.eating.go; }
         }
     }
 }

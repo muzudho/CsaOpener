@@ -2,6 +2,7 @@
 {
     using System.Diagnostics;
     using System.IO;
+    using Grayscale.CsaOpener.Location;
 
     /// <summary>
     /// LZH形式棋譜ファイル。
@@ -18,7 +19,7 @@
             // Trace.WriteLine($"Lzh: {this.ExpansionGoFilePath}");
 
             // 中に何入ってるか分からん。名前が被るかもしれない。
-            this.ExpansionOutputDir = Path.Combine(KifuwarabeWcsc29Config.Instance.expansion.output, $"extracted-{Path.GetFileNameWithoutExtension(this.ExpansionGoFilePath)}");
+            this.ExpansionOutputDir = Path.Combine(ExpansionOutputDirectory.Instance.Path, $"extracted-{Path.GetFileNameWithoutExtension(this.ExpansionGoFilePath)}");
             Commons.CreateDirectory(this.ExpansionOutputDir);
 
         }
@@ -37,7 +38,7 @@
             LzhManager.fnExtract(this.ExpansionGoFilePath, this.ExpansionOutputDir);
 
             // 解凍が終わった元ファイルを移動。
-            File.Move(this.ExpansionGoFilePath, Path.Combine(KifuwarabeWcsc29Config.Instance.expansion.went, Path.GetFileName(this.ExpansionGoFilePath)));
+            File.Move(this.ExpansionGoFilePath, Path.Combine(ExpansionWentDirectory.Instance.Path, Path.GetFileName(this.ExpansionGoFilePath)));
         }
     }
 }

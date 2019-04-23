@@ -83,6 +83,15 @@
     <Compile Include="Lib\LogRotation.cs" />
     <Compile Include="Lib\LzhManager.cs" />
     <Compile Include="Lib\OldLogRemover.cs" />
+    <Compile Include="Location\Directory\EatingWentDirectory.cs" />
+    <Compile Include="Location\Directory\ExpansionOutputDirectory.cs" />
+    <Compile Include="Location\Directory\RpmRecordDirectory.cs" />
+    <Compile Include="Location\Directory\FomationWentDirectory.cs" />
+    <Compile Include="Location\Directory\FomationGoDirectory.cs" />
+    <Compile Include="Location\Directory\FomationOutputDirectory.cs" />
+    <Compile Include="Location\Directory\EatingOutputDirectory.cs" />
+    <Compile Include="Location\Directory\EatingGoDirectory.cs" />
+    <Compile Include="Location\Directory\ExpansionGoDirectory.cs" />
     <Compile Include="Location\Directory\ExpansionWentDirectory.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

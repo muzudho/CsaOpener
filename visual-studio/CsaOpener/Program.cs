@@ -9,6 +9,7 @@ namespace Grayscale.CsaOpener
     using System.Runtime.InteropServices;
     using System.Text;
     using System.Threading;
+    using Grayscale.CsaOpener.Location;
 
     // [ソリューション エクスプローラー]のプロジェクトの下の[参照]を右クリック、
     // [参照の追加(R)...]をクリック。[アセンブリ] - [フレームワーク] と進み、
@@ -54,12 +55,25 @@ namespace Grayscale.CsaOpener
                     // 棋譜読取フェーズ。
                     loopedCount += ReadLitterGameRecord();
 
+
                     // たまに行う程度。
-                    if (new System.Random().Next() % 3 == 0)
-                    {
+                    //if (new System.Random().Next() % 3 == 0)
+                    //{
                         // JSON作成フェーズ。
-                        loopedCount += MergeLittleRpmoveObj();
-                    }
+                        loopedCount += MergeLittleRpmoveObj(false);
+                    //}
+                }
+
+                // 最後の余りに対応する１回。
+                {
+                    // 解凍フェーズ。
+                    loopedCount += ExpandLittleIt();
+
+                    // 棋譜読取フェーズ。
+                    loopedCount += ReadLitterGameRecord();
+
+                    // JSON作成フェーズ。
+                    loopedCount += MergeLittleRpmoveObj(true);
                 }
 
                 // 空の go のサブ・ディレクトリは削除。
@@ -67,7 +81,7 @@ namespace Grayscale.CsaOpener
                     {
                         // このディレクトリ以下のディレクトリをすべて取得する
                         IEnumerable<string> subDirectories =
-                            System.IO.Directory.EnumerateDirectories(KifuwarabeWcsc29Config.Instance.expansion.go, "*", System.IO.SearchOption.TopDirectoryOnly);
+                            System.IO.Directory.EnumerateDirectories(ExpansionGoDirectory.Instance.Path, "*", System.IO.SearchOption.TopDirectoryOnly);
 
                         foreach (string subDir in subDirectories)
                         {
@@ -78,7 +92,7 @@ namespace Grayscale.CsaOpener
                     {
                         // このディレクトリ以下のディレクトリをすべて取得する
                         IEnumerable<string> subDirectories =
-                            System.IO.Directory.EnumerateDirectories(KifuwarabeWcsc29Config.Instance.formation.go, "*", System.IO.SearchOption.TopDirectoryOnly);
+                            System.IO.Directory.EnumerateDirectories(FomationGoDirectory.Instance.Path, "*", System.IO.SearchOption.TopDirectoryOnly);
 
                         foreach (string subDir in subDirectories)
                         {
@@ -96,15 +110,16 @@ namespace Grayscale.CsaOpener
         /// <summary>
         /// RPM棋譜の断片（.rpmove ファイル）を600個ぐらい 適当にくっつけて JSONファイルにする。
         /// </summary>
+        /// <param name="isLast">余り。</param>
         /// <returns>ループが回った回数。</returns>
-        public static int MergeLittleRpmoveObj()
+        public static int MergeLittleRpmoveObj(bool isLast)
         {
             // Trace.WriteLine($"Merge rpmove obj(A) : kw29Config.eating.output: {kw29Config.eating.output}");
 
             // 指定ディレクトリ以下のファイルをすべて取得する
             IEnumerable<string> rpmoveFiles =
                 System.IO.Directory.EnumerateFiles(
-                    KifuwarabeWcsc29Config.Instance.eating.output, "*.rpmove", System.IO.SearchOption.AllDirectories);
+                    EatingOutputDirectory.Instance.Path, "*.rpmove", System.IO.SearchOption.AllDirectories);
 
             var count = 0;
 
@@ -121,9 +136,9 @@ namespace Grayscale.CsaOpener
                 count++;
             }
 
-            if (count < 400)
+            if (!isLast && count < 400)
             {
-                Trace.WriteLine($"Break: fileGroup.Count: {fileGroup.Count} < 400");
+                Trace.WriteLine($"Break: 数: {fileGroup.Count} < 400。マージをパス。");
 
                 // 400件も溜まってなければ、まだマージしない。
                 return count;
@@ -163,7 +178,7 @@ namespace Grayscale.CsaOpener
                 var num4 = rand.Next();
 
                 // Trace.WriteLine("Merge rpmove obj(Write1)...");
-                var path = Path.Combine(KifuwarabeWcsc29Config.Instance.rpm_record, $"{num1}-{num2}-{num3}-{num4}-rpmrec.json");
+                var path = Path.Combine(RpmRecordDirectory.Instance.Path, $"{num1}-{num2}-{num3}-{num4}-rpmrec.json");
                 if (!File.Exists(path))
                 {
                     File.WriteAllText(path, content);
@@ -190,7 +205,7 @@ namespace Grayscale.CsaOpener
             // 指定ディレクトリ以下のファイルをすべて取得する
             IEnumerable<string> eatingGoFiles =
                 System.IO.Directory.EnumerateFiles(
-                    KifuwarabeWcsc29Config.Instance.eating.go, "*", System.IO.SearchOption.AllDirectories);
+                    EatingGoDirectory.Instance.Path, "*", System.IO.SearchOption.AllDirectories);
 
             // Trace.WriteLine("Reading game record...");
 
@@ -238,7 +253,7 @@ namespace Grayscale.CsaOpener
             // 指定ディレクトリ以下のファイルをすべて取得する
             IEnumerable<string> expansionGoFiles =
                 System.IO.Directory.EnumerateFiles(
-                    KifuwarabeWcsc29Config.Instance.expansion.go, "*", System.IO.SearchOption.AllDirectories);
+                    ExpansionGoDirectory.Instance.Path, "*", System.IO.SearchOption.AllDirectories);
 
             Rest = 0;
 

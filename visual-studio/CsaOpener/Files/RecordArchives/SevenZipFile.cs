@@ -3,6 +3,7 @@
     using System;
     using System.Diagnostics;
     using System.IO;
+    using Grayscale.CsaOpener.Location;
 
     /// <summary>
     /// .7z ファイル。
@@ -20,7 +21,7 @@
 
             // 中に何入ってるか分からん。名前が被るかもしれない。
             this.ExpansionOutputDir = Path.Combine(
-                KifuwarabeWcsc29Config.Instance.expansion.output,
+                ExpansionOutputDirectory.Instance.Path,
                 Directory.GetParent(this.ExpansionGoFilePath).Name,
                 $"extracted-{Path.GetFileNameWithoutExtension(this.ExpansionGoFilePath)}").Replace(@"\", "/");
             this.ExpansionGoFilePath = this.ExpansionGoFilePath.Replace(@"\", "/");
@@ -41,7 +42,7 @@
 
                 SevenZManager.fnExtract(this.ExpansionGoFilePath, this.ExpansionOutputDir);
 
-                var wentDir = Path.Combine(KifuwarabeWcsc29Config.Instance.expansion.went, Directory.GetParent(this.ExpansionGoFilePath).Name);
+                var wentDir = Path.Combine(ExpansionWentDirectory.Instance.Path, Directory.GetParent(this.ExpansionGoFilePath).Name);
                 Commons.CreateDirectory(wentDir);
                 var wentFile = Path.Combine(wentDir, Path.GetFileName(this.ExpansionGoFilePath));
 
