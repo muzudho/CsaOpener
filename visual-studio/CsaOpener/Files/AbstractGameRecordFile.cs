@@ -8,11 +8,10 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="AbstractGameRecordFile"/> class.
         /// </summary>
-        /// <param name="config">設定。</param>
         /// <param name="expansionGoFilePath">解凍を待っているファイルパス。</param>
         /// <param name="eatingGoFilePath">棋譜読取を待っているファイルパス。</param>
-        public AbstractGameRecordFile(KifuwarabeWcsc29Config config, string expansionGoFilePath, string eatingGoFilePath)
-            : base(config, expansionGoFilePath)
+        public AbstractGameRecordFile(string expansionGoFilePath, string eatingGoFilePath)
+            : base(expansionGoFilePath)
         {
             this.EatingGoFilePath = eatingGoFilePath;
         }

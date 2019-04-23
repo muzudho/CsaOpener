@@ -22,19 +22,6 @@ namespace Grayscale.CsaOpener
     public class Program
     {
         /// <summary>
-        /// [DLL Import] SevenZipのコマンドラインメソッド
-        /// </summary>
-        /// <param name="hwnd">ウィンドウハンドル(=0)</param>
-        /// <param name="szCmdLine">コマンドライン</param>
-        /// <param name="szOutput">実行結果文字列</param>
-        /// <param name="dwSize">実行結果文字列格納サイズ</param>
-        /// <returns>
-        /// 0:正常、0以外:異常終了
-        /// </returns>
-        [DllImport("7-zip32.dll", CharSet = CharSet.Ansi)]
-        private static extern int SevenZip(IntPtr hwnd, string szCmdLine, StringBuilder szOutput, int dwSize);
-
-        /// <summary>
         /// Gets or sets a 処理できなかったファイル数。
         /// </summary>
         public static int Rest { get; set; }
@@ -53,10 +40,6 @@ namespace Grayscale.CsaOpener
                 Trace.WriteLine($"Input directory: '{arguments.Input}', Output directory: '{arguments.Output}'.");
                  */
 
-                // Config file.
-                var openerConfig = OpenerConfig.Load();
-                var kw29Config = KifuwarabeWcsc29Config.Load(openerConfig);
-
                 // 同じフェーズをずっとやっていても１つも完成しないので、少しずつやって、ばらけさせる。
                 var loopedCount = 1;
 
@@ -66,16 +49,16 @@ namespace Grayscale.CsaOpener
                     loopedCount = 0;
 
                     // 解凍フェーズ。
-                    loopedCount += ExpandLittleIt(kw29Config);
+                    loopedCount += ExpandLittleIt();
 
                     // 棋譜読取フェーズ。
-                    loopedCount += ReadLitterGameRecord(openerConfig, kw29Config);
+                    loopedCount += ReadLitterGameRecord();
 
                     // たまに行う程度。
                     if (new System.Random().Next() % 3 == 0)
                     {
                         // JSON作成フェーズ。
-                        loopedCount += MergeLittleRpmoveObj(kw29Config);
+                        loopedCount += MergeLittleRpmoveObj();
                     }
                 }
 
@@ -84,7 +67,7 @@ namespace Grayscale.CsaOpener
                     {
                         // このディレクトリ以下のディレクトリをすべて取得する
                         IEnumerable<string> subDirectories =
-                            System.IO.Directory.EnumerateDirectories(kw29Config.expansion.go, "*", System.IO.SearchOption.TopDirectoryOnly);
+                            System.IO.Directory.EnumerateDirectories(KifuwarabeWcsc29Config.Instance.expansion.go, "*", System.IO.SearchOption.TopDirectoryOnly);
 
                         foreach (string subDir in subDirectories)
                         {
@@ -95,7 +78,7 @@ namespace Grayscale.CsaOpener
                     {
                         // このディレクトリ以下のディレクトリをすべて取得する
                         IEnumerable<string> subDirectories =
-                            System.IO.Directory.EnumerateDirectories(kw29Config.formation.go, "*", System.IO.SearchOption.TopDirectoryOnly);
+                            System.IO.Directory.EnumerateDirectories(KifuwarabeWcsc29Config.Instance.formation.go, "*", System.IO.SearchOption.TopDirectoryOnly);
 
                         foreach (string subDir in subDirectories)
                         {
@@ -113,16 +96,15 @@ namespace Grayscale.CsaOpener
         /// <summary>
         /// RPM棋譜の断片（.rpmove ファイル）を600個ぐらい 適当にくっつけて JSONファイルにする。
         /// </summary>
-        /// <param name="kw29Config">設定。</param>
         /// <returns>ループが回った回数。</returns>
-        public static int MergeLittleRpmoveObj(KifuwarabeWcsc29Config kw29Config)
+        public static int MergeLittleRpmoveObj()
         {
             // Trace.WriteLine($"Merge rpmove obj(A) : kw29Config.eating.output: {kw29Config.eating.output}");
 
             // 指定ディレクトリ以下のファイルをすべて取得する
             IEnumerable<string> rpmoveFiles =
                 System.IO.Directory.EnumerateFiles(
-                    kw29Config.eating.output, "*.rpmove", System.IO.SearchOption.AllDirectories);
+                    KifuwarabeWcsc29Config.Instance.eating.output, "*.rpmove", System.IO.SearchOption.AllDirectories);
 
             var count = 0;
 
@@ -173,7 +155,7 @@ namespace Grayscale.CsaOpener
             // 拡張子を .rpmrec にして保存する。ファイル名は適当。
             // ファイル名が被ってしまったら、今回はパス。
             {
-                // ランダムな数を４つ つなげて長くする。
+                // ランダムな正の数を４つ つなげて長くする。
                 var rand = new System.Random();
                 var num1 = rand.Next();
                 var num2 = rand.Next();
@@ -181,7 +163,7 @@ namespace Grayscale.CsaOpener
                 var num4 = rand.Next();
 
                 // Trace.WriteLine("Merge rpmove obj(Write1)...");
-                var path = Path.Combine(kw29Config.rpm_record, $"{num1}-{num2}-{num3}-{num4}-rpmrec.json");
+                var path = Path.Combine(KifuwarabeWcsc29Config.Instance.rpm_record, $"{num1}-{num2}-{num3}-{num4}-rpmrec.json");
                 if (!File.Exists(path))
                 {
                     File.WriteAllText(path, content);
@@ -202,15 +184,13 @@ namespace Grayscale.CsaOpener
         /// <summary>
         /// 少し棋譜を読み取る。
         /// </summary>
-        /// <param name="openerConfig">このアプリケーションの設定。</param>
-        /// <param name="kw29Config">設定。</param>
         /// <returns>ループが回った回数。</returns>
-        public static int ReadLitterGameRecord(OpenerConfig openerConfig, KifuwarabeWcsc29Config kw29Config)
+        public static int ReadLitterGameRecord()
         {
             // 指定ディレクトリ以下のファイルをすべて取得する
             IEnumerable<string> eatingGoFiles =
                 System.IO.Directory.EnumerateFiles(
-                    kw29Config.eating.go, "*", System.IO.SearchOption.AllDirectories);
+                    KifuwarabeWcsc29Config.Instance.eating.go, "*", System.IO.SearchOption.AllDirectories);
 
             // Trace.WriteLine("Reading game record...");
 
@@ -227,21 +207,21 @@ namespace Grayscale.CsaOpener
                 switch (Path.GetExtension(eatingGoFile).ToUpper())
                 {
                     case ".CSA":
-                        anyFile = new CsaFile(kw29Config, string.Empty, eatingGoFile);
+                        anyFile = new CsaFile(string.Empty, eatingGoFile);
                         break;
 
                     case ".KIF":
-                        anyFile = new KifFile(kw29Config, string.Empty, eatingGoFile);
+                        anyFile = new KifFile(string.Empty, eatingGoFile);
                         break;
 
                     default:
-                        anyFile = new UnexpectedFile(kw29Config, string.Empty);
+                        anyFile = new UnexpectedFile(string.Empty);
                         Rest++;
                         break;
                 }
 
                 // 棋譜読取フェーズ。
-                anyFile.ReadGameRecord(openerConfig);
+                anyFile.ReadGameRecord();
 
                 count++;
             }
@@ -252,14 +232,13 @@ namespace Grayscale.CsaOpener
         /// <summary>
         /// 少し解凍。
         /// </summary>
-        /// <param name="kw29Config">設定。</param>
         /// <returns>ループが回った回数。</returns>
-        public static int ExpandLittleIt(KifuwarabeWcsc29Config kw29Config)
+        public static int ExpandLittleIt()
         {
             // 指定ディレクトリ以下のファイルをすべて取得する
             IEnumerable<string> expansionGoFiles =
                 System.IO.Directory.EnumerateFiles(
-                    kw29Config.expansion.go, "*", System.IO.SearchOption.AllDirectories);
+                    KifuwarabeWcsc29Config.Instance.expansion.go, "*", System.IO.SearchOption.AllDirectories);
 
             Rest = 0;
 
@@ -278,31 +257,31 @@ namespace Grayscale.CsaOpener
                 switch (Path.GetExtension(expansionGoFile).ToUpper())
                 {
                     case ".7Z":
-                        anyFile = new SevenZipFile(kw29Config, expansionGoFile);
+                        anyFile = new SevenZipFile(expansionGoFile);
                         break;
 
                     case ".CSA":
-                        anyFile = new CsaFile(kw29Config, expansionGoFile, string.Empty);
+                        anyFile = new CsaFile(expansionGoFile, string.Empty);
                         break;
 
                     case ".KIF":
-                        anyFile = new KifFile(kw29Config, expansionGoFile, string.Empty);
+                        anyFile = new KifFile(expansionGoFile, string.Empty);
                         break;
 
                     case ".LZH":
-                        anyFile = new LzhFile(kw29Config, expansionGoFile);
+                        anyFile = new LzhFile(expansionGoFile);
                         break;
 
                     case ".TGZ":
-                        anyFile = new TargzFile(kw29Config, expansionGoFile);
+                        anyFile = new TargzFile(expansionGoFile);
                         break;
 
                     case ".ZIP":
-                        anyFile = new ZipArchiveFile(kw29Config, expansionGoFile);
+                        anyFile = new ZipArchiveFile(expansionGoFile);
                         break;
 
                     default:
-                        anyFile = new UnexpectedFile(kw29Config, expansionGoFile);
+                        anyFile = new UnexpectedFile(expansionGoFile);
                         Rest++;
                         break;
                 }
@@ -311,7 +290,7 @@ namespace Grayscale.CsaOpener
                 anyFile.Expand();
 
                 // エンコーディングを変える。
-                Commons.ChangeEncodingFile(kw29Config, expansionGoFile);
+                Commons.ChangeEncodingFile(expansionGoFile);
 
                 count++;
             }
@@ -352,5 +331,18 @@ namespace Grayscale.CsaOpener
                 Trace.WriteLine(e);
             }
         }
+
+        /// <summary>
+        /// [DLL Import] SevenZipのコマンドラインメソッド
+        /// </summary>
+        /// <param name="hwnd">ウィンドウハンドル(=0)</param>
+        /// <param name="szCmdLine">コマンドライン</param>
+        /// <param name="szOutput">実行結果文字列</param>
+        /// <param name="dwSize">実行結果文字列格納サイズ</param>
+        /// <returns>
+        /// 0:正常、0以外:異常終了
+        /// </returns>
+        [DllImport("7-zip32.dll", CharSet = CharSet.Ansi)]
+        private static extern int SevenZip(IntPtr hwnd, string szCmdLine, StringBuilder szOutput, int dwSize);
     }
 }

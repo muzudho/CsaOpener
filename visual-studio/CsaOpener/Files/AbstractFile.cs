@@ -8,11 +8,9 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="AbstractFile"/> class.
         /// </summary>
-        /// <param name="kw29Config">設定。</param>
         /// <param name="expansionGoFilePath">解凍を待っているファイルパス。</param>
-        protected AbstractFile(KifuwarabeWcsc29Config kw29Config, string expansionGoFilePath)
+        protected AbstractFile(string expansionGoFilePath)
         {
-            this.Kw29Config = kw29Config;
             this.ExpansionGoFilePath = expansionGoFilePath;
         }
 
@@ -20,11 +18,6 @@
         /// Gets or sets a 解凍を待っているファイルパス。。
         /// </summary>
         public string ExpansionGoFilePath { get; protected set; }
-
-        /// <summary>
-        /// Gets or sets 設定。
-        /// </summary>
-        public KifuwarabeWcsc29Config Kw29Config { get; protected set; }
 
         /// <summary>
         /// 解凍する。
@@ -43,9 +36,9 @@
         /// <summary>
         /// 棋譜を読み取る。
         /// </summary>
-        /// <param name="openerConfig">設定。</param>
-        public virtual void ReadGameRecord(OpenerConfig openerConfig)
+        public virtual void ReadGameRecord()
         {
+            // OpenerConfig.Instance
         }
     }
 }

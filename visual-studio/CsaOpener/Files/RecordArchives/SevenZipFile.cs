@@ -12,16 +12,15 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="SevenZipFile"/> class.
         /// </summary>
-        /// <param name="config">設定。</param>
         /// <param name="expansionGoFilePath">解凍を待っているファイルパス。</param>
-        public SevenZipFile(KifuwarabeWcsc29Config config, string expansionGoFilePath)
-            : base(config, expansionGoFilePath)
+        public SevenZipFile(string expansionGoFilePath)
+            : base(expansionGoFilePath)
         {
             // Trace.WriteLine($"7zip: {this.ExpansionGoFilePath}");
 
             // 中に何入ってるか分からん。名前が被るかもしれない。
             this.ExpansionOutputDir = Path.Combine(
-                this.Kw29Config.expansion.output,
+                KifuwarabeWcsc29Config.Instance.expansion.output,
                 Directory.GetParent(this.ExpansionGoFilePath).Name,
                 $"extracted-{Path.GetFileNameWithoutExtension(this.ExpansionGoFilePath)}").Replace(@"\", "/");
             this.ExpansionGoFilePath = this.ExpansionGoFilePath.Replace(@"\", "/");
@@ -42,7 +41,7 @@
 
                 SevenZManager.fnExtract(this.ExpansionGoFilePath, this.ExpansionOutputDir);
 
-                var wentDir = Path.Combine(this.Kw29Config.expansion.went, Directory.GetParent(this.ExpansionGoFilePath).Name);
+                var wentDir = Path.Combine(KifuwarabeWcsc29Config.Instance.expansion.went, Directory.GetParent(this.ExpansionGoFilePath).Name);
                 Commons.CreateDirectory(wentDir);
                 var wentFile = Path.Combine(wentDir, Path.GetFileName(this.ExpansionGoFilePath));
 

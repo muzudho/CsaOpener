@@ -8,10 +8,9 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="AbstractArchiveFile"/> class.
         /// </summary>
-        /// <param name="config">設定。</param>
         /// <param name="expansionGoFilePath">解凍を待っているファイルパス。</param>
-        public AbstractArchiveFile(KifuwarabeWcsc29Config config, string expansionGoFilePath)
-            : base(config, expansionGoFilePath)
+        public AbstractArchiveFile(string expansionGoFilePath)
+            : base(expansionGoFilePath)
         {
         }
 

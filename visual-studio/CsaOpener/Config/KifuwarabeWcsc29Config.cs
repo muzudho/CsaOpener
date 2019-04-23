@@ -8,6 +8,26 @@
     /// </summary>
     public class KifuwarabeWcsc29Config
     {
+        private static KifuwarabeWcsc29Config thisInstance;
+
+        /// <summary>
+        /// Gets a ゲームエンジンの設定ファイル。
+        /// </summary>
+        /// <returns>ゲームエンジンの設定。</returns>
+        public static KifuwarabeWcsc29Config Instance
+        {
+            get
+            {
+                if (thisInstance == null)
+                {
+                    var json = DynamicJson.Parse(File.ReadAllText(OpenerConfig.Instance.KifuwarabeWcsc29ConfigPath));
+                    thisInstance = json.Deserialize<KifuwarabeWcsc29Config>();
+                }
+
+                return thisInstance;
+            }
+        }
+
         /// <summary>
         /// ディレクトリー。
         /// </summary>
@@ -53,16 +73,5 @@
         /// Gets a マージ済み棋譜ファイル置き場。
         /// </summary>
         public string rpm_record { get; private set; }
-
-        /// <summary>
-        /// ファイル読み取り。
-        /// </summary>
-        /// <param name="openerConfig">このアプリケーションの設定。</param>
-        /// <returns>ゲームエンジンの設定。</returns>
-        public static KifuwarabeWcsc29Config Load(OpenerConfig openerConfig)
-        {
-            var json = DynamicJson.Parse(File.ReadAllText(openerConfig.KifuwarabeWcsc29ConfigPath));
-            return json.Deserialize<KifuwarabeWcsc29Config>();
-        }
     }
 }

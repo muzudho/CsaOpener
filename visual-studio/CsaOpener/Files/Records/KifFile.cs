@@ -11,11 +11,10 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="KifFile"/> class.
         /// </summary>
-        /// <param name="kw29Config">設定。</param>
         /// <param name="expansionGoFilePath">解凍を待っているファイルパス。</param>
         /// <param name="eatingGoFilePath">棋譜読取を待っているファイルパス。</param>
-        public KifFile(KifuwarabeWcsc29Config kw29Config, string expansionGoFilePath, string eatingGoFilePath)
-            : base(kw29Config, expansionGoFilePath, eatingGoFilePath)
+        public KifFile(string expansionGoFilePath, string eatingGoFilePath)
+            : base(expansionGoFilePath, eatingGoFilePath)
         {
             // 解凍先ファイル。
             if (!string.IsNullOrWhiteSpace(this.ExpansionGoFilePath))
@@ -23,7 +22,7 @@
                 // Trace.WriteLine($"Kif exp: {this.ExpansionGoFilePath}");
 
                 // そのままコピーすると名前がぶつかってしまう☆（＾～＾）
-                var wrappingDir = Path.Combine(kw29Config.expansion.output, $"copied-{Path.GetFileNameWithoutExtension(this.ExpansionGoFilePath)}");
+                var wrappingDir = Path.Combine(KifuwarabeWcsc29Config.Instance.expansion.output, $"copied-{Path.GetFileNameWithoutExtension(this.ExpansionGoFilePath)}");
                 Commons.CreateDirectory(wrappingDir);
                 this.ExpansionGoFilePath = Path.Combine(wrappingDir, Path.GetFileName(this.ExpansionGoFilePath));
             }
@@ -33,10 +32,10 @@
             {
                 // Trace.WriteLine($"Kif eat: {this.EatingGoFilePath}");
 
-                this.EatingWentFilePath = Path.Combine(kw29Config.expansion.went, Directory.GetParent(this.EatingGoFilePath).Name, Path.GetFileName(this.EatingGoFilePath));
+                this.EatingWentFilePath = Path.Combine(KifuwarabeWcsc29Config.Instance.expansion.went, Directory.GetParent(this.EatingGoFilePath).Name, Path.GetFileName(this.EatingGoFilePath));
 
                 // 拡張子は .rpmove
-                var headLen = kw29Config.eating.go.Length;
+                var headLen = KifuwarabeWcsc29Config.Instance.eating.go.Length;
                 var footLen = Path.GetFileName(this.EatingGoFilePath).Length;
                 var middlePath = this.EatingGoFilePath.Substring(headLen, this.EatingGoFilePath.Length - headLen - footLen).Replace(@"\", "/");
                 if (middlePath[0] == '/')
@@ -44,7 +43,7 @@
                     middlePath = middlePath.Substring(1);
                 }
 
-                this.EatingOutputFilePath = Path.Combine(kw29Config.eating.output, middlePath, $"{Path.GetFileNameWithoutExtension(this.EatingGoFilePath)}.rpmove").Replace(@"\", "/");
+                this.EatingOutputFilePath = Path.Combine(KifuwarabeWcsc29Config.Instance.eating.output, middlePath, $"{Path.GetFileNameWithoutExtension(this.EatingGoFilePath)}.rpmove").Replace(@"\", "/");
 
                 // Trace.WriteLine($"config.EatingOutputPath: {config.EatingOutputPath}.");
                 // Trace.WriteLine($"headLen: {headLen}, footLen: {footLen}, middlePath: {middlePath}, Output: {this.EatingOutputFilePath}.");
@@ -65,7 +64,7 @@
             File.Copy(this.ExpansionGoFilePath, this.ExpansionGoFilePath, true);
 
             // 解凍が終わった元ファイルを移動。
-            File.Move(this.ExpansionGoFilePath, Path.Combine(this.Kw29Config.expansion.went, Path.GetFileName(this.ExpansionGoFilePath)));
+            File.Move(this.ExpansionGoFilePath, Path.Combine(KifuwarabeWcsc29Config.Instance.expansion.went, Path.GetFileName(this.ExpansionGoFilePath)));
         }
 
         /// <summary>
@@ -76,7 +75,7 @@
             try
             {
                 // エンコーディングを変えます。
-                Commons.ChangeEncodingFile(this.Kw29Config, this.ExpansionGoFilePath);
+                Commons.ChangeEncodingFile(this.ExpansionGoFilePath);
             }
             catch (DirectoryNotFoundException e)
             {
@@ -87,13 +86,12 @@
         /// <summary>
         /// 棋譜を読み取る。
         /// </summary>
-        /// <param name="openerConfig">設定。</param>
-        public override void ReadGameRecord(OpenerConfig openerConfig)
+        public override void ReadGameRecord()
         {
-            int returnCode = Commons.ReadGameRecord(openerConfig, this.EatingGoFilePath, this.EatingOutputFilePath);
+            int returnCode = Commons.ReadGameRecord(this.EatingGoFilePath, this.EatingOutputFilePath);
 
             // 終わった元ファイルを移動。
-            var dir = Path.Combine(this.Kw29Config.eating.went, Directory.GetParent(this.EatingGoFilePath).Name);
+            var dir = Path.Combine(KifuwarabeWcsc29Config.Instance.eating.went, Directory.GetParent(this.EatingGoFilePath).Name);
             Commons.CreateDirectory(dir);
             File.Move(this.EatingGoFilePath, Path.Combine(dir, Path.GetFileName(this.EatingGoFilePath)));
         }

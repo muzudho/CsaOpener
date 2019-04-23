@@ -13,15 +13,14 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="TargzFile"/> class.
         /// </summary>
-        /// <param name="config">設定。</param>
         /// <param name="expansionGoFilePath">解凍を待っているファイルパス。</param>
-        public TargzFile(KifuwarabeWcsc29Config config, string expansionGoFilePath)
-            : base(config, expansionGoFilePath)
+        public TargzFile(string expansionGoFilePath)
+            : base(expansionGoFilePath)
         {
             // Trace.WriteLine($"TarGz: {this.ExpansionGoFilePath}");
 
             // 中に何入ってるか分からん。名前が被るかもしれない。
-            this.ExpansionOutputDir = Path.Combine(config.expansion.output, $"extracted-{Path.GetFileNameWithoutExtension(this.ExpansionGoFilePath)}");
+            this.ExpansionOutputDir = Path.Combine(KifuwarabeWcsc29Config.Instance.expansion.output, $"extracted-{Path.GetFileNameWithoutExtension(this.ExpansionGoFilePath)}");
             Commons.CreateDirectory(this.ExpansionOutputDir);
         }
 
@@ -48,7 +47,7 @@
             }
 
             // 解凍が終わった元ファイルを移動。
-            File.Move(this.ExpansionGoFilePath, Path.Combine(this.Kw29Config.expansion.went, Path.GetFileName(this.ExpansionGoFilePath)));
+            File.Move(this.ExpansionGoFilePath, Path.Combine(KifuwarabeWcsc29Config.Instance.expansion.went, Path.GetFileName(this.ExpansionGoFilePath)));
         }
     }
 }

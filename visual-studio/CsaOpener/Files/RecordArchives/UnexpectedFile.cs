@@ -11,10 +11,9 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="UnexpectedFile"/> class.
         /// </summary>
-        /// <param name="config">設定。</param>
         /// <param name="expansionGoFilePath">解凍を待っているファイルパス。</param>
-        public UnexpectedFile(KifuwarabeWcsc29Config config, string expansionGoFilePath)
-            : base(config, expansionGoFilePath)
+        public UnexpectedFile(string expansionGoFilePath)
+            : base(expansionGoFilePath)
         {
             // Trace.WriteLine($"Unexpected file: {this.ExpansionGoFilePath}");
 
@@ -22,7 +21,7 @@
             // Trace.WriteLine($"むり: {this.ExpansionGoFilePath}");
 
             // そのままコピーすると名前がぶつかってしまう☆（＾～＾）
-            this.ExpansionOutputDir = Path.Combine(config.expansion.output, $"copied-{Path.GetFileNameWithoutExtension(this.ExpansionGoFilePath)}");
+            this.ExpansionOutputDir = Path.Combine(KifuwarabeWcsc29Config.Instance.expansion.output, $"copied-{Path.GetFileNameWithoutExtension(this.ExpansionGoFilePath)}");
             Commons.CreateDirectory(this.ExpansionOutputDir);
         }
 
@@ -36,7 +35,7 @@
                 return;
             }
 
-            var wentDir = Path.Combine(this.Kw29Config.expansion.went, Path.GetFileName(this.ExpansionGoFilePath));
+            var wentDir = Path.Combine(KifuwarabeWcsc29Config.Instance.expansion.went, Path.GetFileName(this.ExpansionGoFilePath));
             // Trace.WriteLine($"Evasion: {this.ExpansionGoFilePath} -> {wentDir}");
 
             // 無理だった元ファイルを移動。
