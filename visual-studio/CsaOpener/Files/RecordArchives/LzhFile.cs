@@ -20,9 +20,10 @@
             // Trace.WriteLine($"Lzh: {this.ExpansionGoFilePath}");
 
             // 中に何入ってるか分からん。名前が被るかもしれない。
-            this.ExpansionOutputDir = Path.Combine(ExpansionOutputDirectory.Instance.Path, $"extracted-{Path.GetFileNameWithoutExtension(this.ExpansionGoFilePath)}");
-            Commons.CreateDirectory(this.ExpansionOutputDir);
+            // this.ExpansionOutputDir = Path.Combine(ExpansionOutputDirectory.Instance.Path, $"extracted-{Path.GetFileNameWithoutExtension(this.ExpansionGoFilePath)}");
+            this.ExpansionOutputDir = Path.Combine(ExpansionOutputDirectory.Instance.Path, Path.GetFileNameWithoutExtension(this.ExpansionGoFilePath));
 
+            Commons.CreateDirectory(this.ExpansionOutputDir);
         }
 
         /// <summary>

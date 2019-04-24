@@ -23,7 +23,10 @@
             this.ExpansionOutputDir = Path.Combine(
                 ExpansionOutputDirectory.Instance.Path,
                 Directory.GetParent(this.ExpansionGoFilePath).Name,
-                $"extracted-{Path.GetFileNameWithoutExtension(this.ExpansionGoFilePath)}").Replace(@"\", "/");
+
+                // $"extracted-{Path.GetFileNameWithoutExtension(this.ExpansionGoFilePath)}"
+                Path.GetFileNameWithoutExtension(this.ExpansionGoFilePath)
+                ).Replace(@"\", "/");
             this.ExpansionGoFilePath = this.ExpansionGoFilePath.Replace(@"\", "/");
         }
 

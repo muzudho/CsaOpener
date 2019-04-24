@@ -12,20 +12,6 @@
     public class PathFlat
     {
         /// <summary>
-        /// 実行。
-        /// </summary>
-        /// <param name="file">ファイル名。</param>
-        public static void Execute(string file)
-        {
-            var joinedName = $"{Directory.GetParent(file).Name}$%{Path.GetFileName(file)}";
-            var parentParentDirectory = Directory.GetParent(Directory.GetParent(file).FullName).FullName;
-            var destination = Path.Combine(parentParentDirectory, joinedName);
-
-            Trace.WriteLine($"Execute : {file} -> {destination}.");
-            File.Move(file, destination);
-        }
-
-        /// <summary>
         /// ディレクトリーの中を全部実行。
         /// </summary>
         /// <param name="directory">ディレクトリー。</param>
@@ -33,26 +19,50 @@
         {
             Trace.WriteLine($"Search  : {directory}.");
 
-            // 指定ディレクトリ以下のファイルをすべて取得する
-            IEnumerable<string> childDirectoies =
-                System.IO.Directory.EnumerateDirectories(
-                    directory, "*", System.IO.SearchOption.TopDirectoryOnly);
-            foreach (var child in childDirectoies)
-            {
-                Trace.WriteLine($"Child   : {child}.");
-
-                // 指定ディレクトリ以下のファイルをすべて取得する
-                IEnumerable<string> someFiles =
-                    System.IO.Directory.EnumerateFiles(
-                        child, "*", System.IO.SearchOption.AllDirectories);
-
-                foreach (var file in someFiles)
-                {
-                    PathFlat.Execute(file);
-                }
-            }
+            // 再帰呼出し。
+            PathFlat.SearchSub(directory);
 
             Trace.WriteLine("Search  : End.");
+        }
+
+        /// <summary>
+        /// 再帰サーチ。
+        /// </summary>
+        /// <param name="directory">ディレクトリー。</param>
+        private static void SearchSub(string directory)
+        {
+            IEnumerable<string> childDirectories =
+                System.IO.Directory.EnumerateDirectories(
+                    directory, "*", System.IO.SearchOption.TopDirectoryOnly);
+
+            foreach (var child in childDirectories)
+            {
+                // 再帰呼出し。
+                PathFlat.SearchSub(child);
+            }
+
+            // この階層のファイル。
+            IEnumerable<string> files =
+                System.IO.Directory.EnumerateFiles(
+                    directory, "*", System.IO.SearchOption.TopDirectoryOnly);
+            foreach (var file in files)
+            {
+                PathFlat.ExecuteFile(file);
+            }
+        }
+
+        /// <summary>
+        /// 実行。
+        /// </summary>
+        /// <param name="file">ファイル名。</param>
+        private static void ExecuteFile(string file)
+        {
+            var joinedName = $"{Directory.GetParent(file).Name}$%{Path.GetFileName(file)}";
+            var parentParentDirectory = Directory.GetParent(Directory.GetParent(file).FullName).FullName;
+            var destination = Path.Combine(parentParentDirectory, joinedName);
+
+            Trace.WriteLine($"Execute : {file} -> {destination}.");
+            File.Move(file, destination);
         }
     }
 }
