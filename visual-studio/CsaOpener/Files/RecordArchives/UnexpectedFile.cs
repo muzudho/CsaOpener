@@ -20,10 +20,6 @@
 
             // .exe とか解凍できないやつが入っている☆（＾～＾）！
             // Trace.WriteLine($"むり: {this.ExpansionGoFilePath}");
-
-            // そのままコピーすると名前がぶつかってしまう☆（＾～＾）
-            this.ExpansionOutputDir = Path.Combine(ExpansionOutputDirectory.Instance.Path, $"copied-{Path.GetFileNameWithoutExtension(this.ExpansionGoFilePath)}");
-            Commons.CreateDirectory(this.ExpansionOutputDir);
         }
 
         /// <summary>
@@ -32,7 +28,7 @@
         /// <returns>展開に成功した。</returns>
         public override bool Expand()
         {
-            Trace.WriteLine($"Expand  : {this.ExpansionGoFilePath} -> {this.ExpansionOutputDir}");
+            Trace.WriteLine($"Expand  : {this.ExpansionGoFilePath} -> None.");
             if (string.IsNullOrWhiteSpace(this.ExpansionGoFilePath))
             {
                 return false;

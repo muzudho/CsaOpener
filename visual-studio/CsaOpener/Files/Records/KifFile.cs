@@ -72,22 +72,6 @@
         }
 
         /// <summary>
-        /// エンコーディングを変えます。
-        /// </summary>
-        public override void ChangeEncodingOfTextFile()
-        {
-            try
-            {
-                // エンコーディングを変えます。
-                Commons.ChangeEncodingOfTextFile(this.ExpansionGoFilePath);
-            }
-            catch (DirectoryNotFoundException e)
-            {
-                Trace.WriteLine(e);
-            }
-        }
-
-        /// <summary>
         /// 棋譜を読み取る。
         /// </summary>
         public override void ReadGameRecord()

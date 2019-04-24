@@ -13,10 +13,5 @@
             : base(expansionGoFilePath)
         {
         }
-
-        /// <summary>
-        /// Gets or sets a 解凍先ディレクトリー。
-        /// </summary>
-        public string ExpansionOutputDir { get; protected set; }
     }
 }

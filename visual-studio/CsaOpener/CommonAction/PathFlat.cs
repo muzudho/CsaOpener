@@ -47,7 +47,7 @@
                     directory, "*", System.IO.SearchOption.TopDirectoryOnly);
             foreach (var file in files)
             {
-                PathFlat.ExecuteFile(file);
+                PathFlat.RenameFile(file);
             }
         }
 
@@ -55,13 +55,13 @@
         /// 実行。
         /// </summary>
         /// <param name="file">ファイル名。</param>
-        private static void ExecuteFile(string file)
+        private static void RenameFile(string file)
         {
             var joinedName = $"{Directory.GetParent(file).Name}$%{Path.GetFileName(file)}";
             var parentParentDirectory = Directory.GetParent(Directory.GetParent(file).FullName).FullName;
             var destination = Path.Combine(parentParentDirectory, joinedName);
 
-            Trace.WriteLine($"Execute : {file} -> {destination}.");
+            Trace.WriteLine($"Rename  : {file} -> {destination}.");
             File.Move(file, destination);
         }
     }

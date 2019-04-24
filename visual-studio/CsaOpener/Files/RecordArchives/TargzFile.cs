@@ -19,11 +19,6 @@
             : base(expansionGoFilePath)
         {
             // Trace.WriteLine($"TarGz: {this.ExpansionGoFilePath}");
-
-            // 中に何入ってるか分からん。名前が被るかもしれない。
-            // this.ExpansionOutputDir = Path.Combine(ExpansionOutputDirectory.Instance.Path, $"extracted-{Path.GetFileNameWithoutExtension(this.ExpansionGoFilePath)}");
-            this.ExpansionOutputDir = Path.Combine(ExpansionOutputDirectory.Instance.Path, Path.GetFileNameWithoutExtension(this.ExpansionGoFilePath));
-            Commons.CreateDirectory(this.ExpansionOutputDir);
         }
 
         /// <summary>
@@ -32,7 +27,7 @@
         /// <returns>展開に成功した。</returns>
         public override bool Expand()
         {
-            Trace.WriteLine($"Expand  : {this.ExpansionGoFilePath} -> {this.ExpansionOutputDir}");
+            Trace.WriteLine($"Expand  : {this.ExpansionGoFilePath} -> {ExpansionOutputDirectory.Instance.Path}");
             if (string.IsNullOrWhiteSpace(this.ExpansionGoFilePath))
             {
                 return false;
@@ -44,7 +39,7 @@
                 {
                     using (var tarArchive = TarArchive.CreateInputTarArchive(gzipStream))
                     {
-                        tarArchive.ExtractContents(this.ExpansionOutputDir);
+                        tarArchive.ExtractContents(ExpansionOutputDirectory.Instance.Path);
                     }
                 }
             }

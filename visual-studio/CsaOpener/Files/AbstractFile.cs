@@ -29,13 +29,6 @@
         }
 
         /// <summary>
-        /// エンコーディングを変換します。
-        /// </summary>
-        public virtual void ChangeEncodingOfTextFile()
-        {
-        }
-
-        /// <summary>
         /// 棋譜を読み取る。
         /// </summary>
         public virtual void ReadGameRecord()

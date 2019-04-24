@@ -45,16 +45,17 @@ namespace Grayscale.CsaOpener
                 var expandedCount = 1;
                 var readCount = 0;
                 var mergedCount = 0;
+                var merged = false;
                 List<string> expansionOutputDirectories;
 
                 // ループの回った回数が０回になるまで繰り返す。
-                while (expandedCount+ readCount+ mergedCount > 0)
+                while (expandedCount+ readCount+ mergedCount > 0 && merged)
                 {
                     // 解凍フェーズ。
-                    (expandedCount, expansionOutputDirectories) = ExpansionPhase.ExpandLittleIt();
+                    expandedCount = ExpansionPhase.ExpandLittleIt();
 
                     // TODO フォルダーを探索して、棋譜のエンコーディングを変換。
-                    EncodingPhase.Encode(expansionOutputDirectories);
+                    EncodingPhase.ExecuteEncode();
 
                     // 棋譜読取フェーズ。
                     readCount = ReadLitterGameRecord();
@@ -63,7 +64,7 @@ namespace Grayscale.CsaOpener
                     //if (new System.Random().Next() % 3 == 0)
                     //{
                     // JSON作成フェーズ。
-                    mergedCount = MergeLittleRpmoveObj(false);
+                    (mergedCount, merged) = MergeLittleRpmoveObj(false);
                     //}
 
                     Trace.WriteLine($"expandedCount: {expandedCount}, readCount: {readCount}, mergedCount: {mergedCount}.");
@@ -72,16 +73,16 @@ namespace Grayscale.CsaOpener
                 // 最後の余りに対応する１回。
                 {
                     // 解凍フェーズ。
-                    (expandedCount, expansionOutputDirectories) = ExpansionPhase.ExpandLittleIt();
+                    expandedCount = ExpansionPhase.ExpandLittleIt();
 
                     // TODO フォルダーを探索して、棋譜のエンコーディングを変換。
-                    EncodingPhase.Encode(expansionOutputDirectories);
+                    EncodingPhase.ExecuteEncode();
 
                     // 棋譜読取フェーズ。
                     readCount = ReadLitterGameRecord();
 
                     // JSON作成フェーズ。
-                    mergedCount = MergeLittleRpmoveObj(true);
+                    (mergedCount, merged) = MergeLittleRpmoveObj(true);
 
                     Trace.WriteLine($"LAST: expandedCount: {expandedCount}, readCount: {readCount}, mergedCount: {mergedCount}.");
                 }
@@ -121,10 +122,10 @@ namespace Grayscale.CsaOpener
         /// RPM棋譜の断片（.rpmove ファイル）を600個ぐらい 適当にくっつけて JSONファイルにする。
         /// </summary>
         /// <param name="isLast">余り。</param>
-        /// <returns>ループが回った回数。</returns>
-        public static int MergeLittleRpmoveObj(bool isLast)
+        /// <returns>ループが回った回数、マージを１つ以上行った。</returns>
+        public static (int, bool) MergeLittleRpmoveObj(bool isLast)
         {
-            // Trace.WriteLine($"Merge rpmove obj(A) : kw29Config.eating.output: {kw29Config.eating.output}");
+            Trace.WriteLine($"Merge   : isLast: {isLast}.");
 
             // 指定ディレクトリ以下のファイルをすべて取得する
             IEnumerable<string> rpmoveFiles =
@@ -148,10 +149,10 @@ namespace Grayscale.CsaOpener
 
             if (!isLast && count < 400)
             {
-                Trace.WriteLine($"Break: 数: {fileGroup.Count} < 400。マージをパス。");
+                Trace.WriteLine($"Break: 数: Count: {count}, グループ: {fileGroup.Count} < 400。マージをパス。");
 
                 // 400件も溜まってなければ、まだマージしない。
-                return count;
+                return (count, false);
             }
 
             // Trace.WriteLine("Merge rpmove obj(B)...");
@@ -166,7 +167,7 @@ namespace Grayscale.CsaOpener
                 // Trace.WriteLine($"fileGroup.Count: {fileGroup.Count}, builder.Length: {builder.Length}");
 
                 // 空ファイルを読み込んでいたら無限ループしてしまう。 0 を返す。
-                return 0;
+                return (0, true);
             }
 
             // 最後のコンマを除去する。
@@ -203,7 +204,7 @@ namespace Grayscale.CsaOpener
             }
 
             // Trace.WriteLine("Merge rpmove obj(End)...");
-            return count;
+            return (count, true);
         }
 
         /// <summary>
@@ -212,6 +213,8 @@ namespace Grayscale.CsaOpener
         /// <returns>ループが回った回数。</returns>
         public static int ReadLitterGameRecord()
         {
+            Trace.WriteLine($"Start   : ReadLitterGameRecord. Directory: {EatingGoDirectory.Instance.Path}.");
+
             // 指定ディレクトリ以下のファイルをすべて取得する
             IEnumerable<string> eatingGoFiles =
                 System.IO.Directory.EnumerateFiles(
@@ -221,6 +224,8 @@ namespace Grayscale.CsaOpener
             var count = 0;
             foreach (string eatingGoFile in eatingGoFiles)
             {
+                Trace.WriteLine($"Entry   : eatingGoFile: {eatingGoFile}.");
+
                 if (count > 199)
                 {
                     break;
@@ -249,6 +254,7 @@ namespace Grayscale.CsaOpener
                 count++;
             }
 
+            Trace.WriteLine("End     : ReadLitterGameRecord.");
             return count;
         }
 

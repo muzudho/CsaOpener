@@ -18,15 +18,6 @@
             : base(expansionGoFilePath)
         {
             // Trace.WriteLine($"7zip: {this.ExpansionGoFilePath}");
-
-            // 中に何入ってるか分からん。名前が被るかもしれない。
-            this.ExpansionOutputDir = Path.Combine(
-                ExpansionOutputDirectory.Instance.Path,
-                Directory.GetParent(this.ExpansionGoFilePath).Name,
-
-                // $"extracted-{Path.GetFileNameWithoutExtension(this.ExpansionGoFilePath)}"
-                Path.GetFileNameWithoutExtension(this.ExpansionGoFilePath)
-                ).Replace(@"\", "/");
             this.ExpansionGoFilePath = this.ExpansionGoFilePath.Replace(@"\", "/");
         }
 
@@ -38,13 +29,13 @@
         {
             try
             {
-                Trace.WriteLine($"Expand  : {this.ExpansionGoFilePath} -> {this.ExpansionOutputDir}");
+                Trace.WriteLine($"Expand  : {this.ExpansionGoFilePath} -> {ExpansionOutputDirectory.Instance.Path}");
                 if (string.IsNullOrWhiteSpace(this.ExpansionGoFilePath))
                 {
                     return false;
                 }
 
-                SevenZManager.fnExtract(this.ExpansionGoFilePath, this.ExpansionOutputDir);
+                SevenZManager.fnExtract(this.ExpansionGoFilePath, ExpansionOutputDirectory.Instance.Path);
 
                 var wentDir = Path.Combine(ExpansionWentDirectory.Instance.Path, Directory.GetParent(this.ExpansionGoFilePath).Name);
                 Commons.CreateDirectory(wentDir);
