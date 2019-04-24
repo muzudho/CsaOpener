@@ -112,9 +112,14 @@
                         CreateDirectory(wentDir);
 
                         var wentFile = Path.Combine(wentDir, Path.GetFileName(textFile));
-
-                        // Trace.WriteLine($"outputFile: {wentFile}");
-                        File.Move(textFile, wentFile);
+                        try
+                        {
+                            File.Move(textFile, wentFile);
+                        }
+                        catch (IOException e)
+                        {
+                            Trace.WriteLine($"Move    : {textFile} --> {wentFile}, {e}");
+                        }
                     }
 
                     break;

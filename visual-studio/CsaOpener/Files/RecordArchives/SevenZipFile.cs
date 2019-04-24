@@ -35,7 +35,7 @@
         {
             try
             {
-                // Trace.WriteLine($"Un7z: {this.ExpansionGoFilePath} -> {this.ExpansionOutputDir}");
+                Trace.WriteLine($"Expand  : {this.ExpansionGoFilePath} -> {this.ExpansionOutputDir}");
                 if (string.IsNullOrWhiteSpace(this.ExpansionGoFilePath))
                 {
                     return false;

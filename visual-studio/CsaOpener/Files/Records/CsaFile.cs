@@ -57,7 +57,7 @@
         /// <returns>展開に成功した。</returns>
         public override bool Expand()
         {
-            // Trace.WriteLine($"Copy csa: {this.ExpansionGoFilePath} -> {this.ExpansionOutputFile}");
+            Trace.WriteLine($"Expand  : {this.ExpansionGoFilePath} -> {this.ExpansionOutputFile}");
             if (string.IsNullOrWhiteSpace(this.ExpansionGoFilePath))
             {
                 return false;

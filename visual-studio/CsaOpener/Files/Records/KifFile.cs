@@ -57,7 +57,7 @@
         /// <returns>展開に成功した。</returns>
         public override bool Expand()
         {
-            // Trace.WriteLine($"Copy kif: {this.ExpansionGoFilePath} -> {this.ExpansionGoFilePath}");
+            Trace.WriteLine($"Expand  : {this.ExpansionGoFilePath} -> {this.ExpansionGoFilePath}");
             if (string.IsNullOrWhiteSpace(this.ExpansionGoFilePath))
             {
                 return false;

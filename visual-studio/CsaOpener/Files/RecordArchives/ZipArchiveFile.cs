@@ -30,7 +30,7 @@
         /// <returns>展開に成功した。</returns>
         public override bool Expand()
         {
-            // Trace.WriteLine($"Unzip: {this.ExpansionGoFilePath} -> {this.ExpansionOutputDir}");
+            Trace.WriteLine($"Expand  : {this.ExpansionGoFilePath} -> {this.ExpansionOutputDir}");
             ZipFile.ExtractToDirectory(this.ExpansionGoFilePath, this.ExpansionOutputDir);
 
             // 解凍が終わった元ファイルを移動。

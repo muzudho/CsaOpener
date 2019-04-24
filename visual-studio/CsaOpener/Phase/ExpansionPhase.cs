@@ -1,12 +1,7 @@
 ﻿namespace Grayscale.CsaOpener
 {
-    using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.IO;
-    using System.Runtime.InteropServices;
-    using System.Text;
-    using System.Threading;
     using Grayscale.CsaOpener.Location;
 
     /// <summary>
@@ -23,13 +18,14 @@
         /// 少し解凍。
         /// </summary>
         /// <returns>ループが回った回数。</returns>
-        public static int ExpandLittleIt()
+        public static (int, List<string>) ExpandLittleIt()
         {
             // 指定ディレクトリ以下のファイルをすべて取得する
             IEnumerable<string> expansionGoFiles =
                 System.IO.Directory.EnumerateFiles(
                     ExpansionGoDirectory.Instance.Path, "*", System.IO.SearchOption.AllDirectories);
 
+            var expansionOutputDirectories = new List<string>();
             Rest = 0;
 
             // Trace.WriteLine("Expanding...");
@@ -81,11 +77,10 @@
                 {
                     if (anyFile is AbstractArchiveFile)
                     {
+                        expansionOutputDirectories.Add(((AbstractArchiveFile)anyFile).ExpansionOutputDir);
+
                         // TODO 解凍した先のディレクトリを検索すること。
                         // エンコーディングを変える。
-                        var dir = ((AbstractArchiveFile)anyFile).ExpansionOutputDir;
-                        EncodingPhase.Encode(dir);
-
                         // Commons.ChangeEncodingOfTextFile();
                     }
                 }
@@ -94,7 +89,7 @@
             }
 
             // Trace.WriteLine($"むり1: {Rest}");
-            return count;
+            return (count, expansionOutputDirectories);
         }
     }
 }

@@ -45,15 +45,16 @@ namespace Grayscale.CsaOpener
                 var expandedCount = 1;
                 var readCount = 0;
                 var mergedCount = 0;
+                List<string> expansionOutputDirectories;
 
                 // ループの回った回数が０回になるまで繰り返す。
                 while (expandedCount+ readCount+ mergedCount > 0)
                 {
                     // 解凍フェーズ。
-                    expandedCount = ExpansionPhase.ExpandLittleIt();
+                    (expandedCount, expansionOutputDirectories) = ExpansionPhase.ExpandLittleIt();
 
                     // TODO フォルダーを探索して、棋譜のエンコーディングを変換。
-                    // EncodingPhase.Encode();
+                    EncodingPhase.Encode(expansionOutputDirectories);
 
                     // 棋譜読取フェーズ。
                     readCount = ReadLitterGameRecord();
@@ -71,10 +72,10 @@ namespace Grayscale.CsaOpener
                 // 最後の余りに対応する１回。
                 {
                     // 解凍フェーズ。
-                    expandedCount = ExpansionPhase.ExpandLittleIt();
+                    (expandedCount, expansionOutputDirectories) = ExpansionPhase.ExpandLittleIt();
 
                     // TODO フォルダーを探索して、棋譜のエンコーディングを変換。
-                    // EncodingPhase.Encode();
+                    EncodingPhase.Encode(expansionOutputDirectories);
 
                     // 棋譜読取フェーズ。
                     readCount = ReadLitterGameRecord();

@@ -1,13 +1,6 @@
 ﻿namespace Grayscale.CsaOpener
 {
-    using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.IO;
-    using System.Runtime.InteropServices;
-    using System.Text;
-    using System.Threading;
-    using Grayscale.CsaOpener.Location;
 
     /// <summary>
     /// エンコーディング・フェーズ。
@@ -18,30 +11,34 @@
         /// エンコーディングを変える。
         /// 解凍した先のディレクトリを検索すること。
         /// </summary>
-        /// <param name="directory">ディレクトリー。</param>
+        /// <param name="directories">ディレクトリー。</param>
         /// <returns>ループが回った回数。</returns>
-        public static int Encode(string directory)
+        public static int Encode(List<string> directories)
         {
-            // 指定ディレクトリ以下のファイルをすべて取得する
-            IEnumerable<string> files =
-                System.IO.Directory.EnumerateFiles(
-                    directory, "*", System.IO.SearchOption.AllDirectories);
-
-            // Trace.WriteLine("Expanding...");
-
-            // 圧縮ファイルを 3つ 解凍する
             var count = 0;
-            foreach (string file in files)
+            foreach (var directory in directories)
             {
-                if (count > 3)
-                {
-                    break;
-                }
+                // 指定ディレクトリ以下のファイルをすべて取得する
+                IEnumerable<string> files =
+                    System.IO.Directory.EnumerateFiles(
+                        directory, "*", System.IO.SearchOption.AllDirectories);
 
-                Commons.ChangeEncodingOfTextFile(file);
-                count++;
+                // Trace.WriteLine("Expanding...");
+
+                // 圧縮ファイルを 3つ 解凍する
+                foreach (string file in files)
+                {
+                    if (count > 3)
+                    {
+                        goto next;
+                    }
+
+                    Commons.ChangeEncodingOfTextFile(file);
+                    count++;
+                }
             }
 
+            next:
             return count;
         }
     }

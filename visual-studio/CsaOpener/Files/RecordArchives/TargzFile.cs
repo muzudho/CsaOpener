@@ -31,7 +31,7 @@
         /// <returns>展開に成功した。</returns>
         public override bool Expand()
         {
-            // Trace.WriteLine($"UnTarGz: {this.ExpansionGoFilePath} -> {this.ExpansionOutputDir}");
+            Trace.WriteLine($"Expand  : {this.ExpansionGoFilePath} -> {this.ExpansionOutputDir}");
             if (string.IsNullOrWhiteSpace(this.ExpansionGoFilePath))
             {
                 return false;

@@ -66,6 +66,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Arguments.cs" />
+    <Compile Include="CommonAction\PathFlat.cs" />
     <Compile Include="Commons.cs" />
     <Compile Include="Config\KifuwarabeWcsc29Config.cs" />
     <Compile Include="Config\OpenerConfig.cs" />
