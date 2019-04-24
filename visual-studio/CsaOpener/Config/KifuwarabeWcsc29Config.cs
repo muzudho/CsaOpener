@@ -34,17 +34,17 @@
         public class Directories
         {
             /// <summary>
-            /// これからやるパス。
+            /// Gets or sets a これからやるパス。
             /// </summary>
             public string go { get; set; }
 
             /// <summary>
-            /// やり終わったパス。
+            /// Gets or sets a やり終わったパス。
             /// </summary>
             public string went { get; set; }
 
             /// <summary>
-            /// 出力先のパス。
+            /// Gets or sets a 出力先のパス。
             /// </summary>
             public string output { get; set; }
         }

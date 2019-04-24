@@ -62,12 +62,11 @@
         /// <summary>
         /// CSAファイルは Shift-JIS と決めつけて、UTF8に変換する。
         /// </summary>
-        /// <param name="inputFile">ファイル。</param>
-        public static void ChangeEncodingFile(string inputFile)
+        /// <param name="textFile">棋譜のテキストファイル。圧縮ファイルではなく。</param>
+        public static void ChangeEncodingOfTextFile(string textFile)
         {
-            // Trace.WriteLine($"エンコーディング変換: {inputFile}");
-
-            switch (Path.GetExtension(inputFile).ToUpper())
+            Trace.WriteLine($"エンコーディング変換: {textFile}");
+            switch (Path.GetExtension(textFile).ToUpper())
             {
                 case ".CSA":
                 case ".KIF":
@@ -75,7 +74,7 @@
                         byte[] bytesData;
 
                         // ファイルをbyte形で全て読み込み
-                        using (FileStream fs1 = new FileStream(inputFile, FileMode.Open))
+                        using (FileStream fs1 = new FileStream(textFile, FileMode.Open))
                         {
                             byte[] data = new byte[fs1.Length];
                             fs1.Read(data, 0, data.Length);
@@ -87,9 +86,10 @@
                         }
 
                         // 出力ファイルオープン（バイナリ形式）
-                        var outputDir = Path.Combine(FomationOutputDirectory.Instance.Path, Directory.GetParent(inputFile).Name);
+                        var outputDir = Path.Combine(FomationOutputDirectory.Instance.Path, Directory.GetParent(textFile).Name);
                         CreateDirectory(outputDir);
-                        var outputFile = Path.Combine(outputDir, Path.GetFileName(inputFile));
+                        var outputFile = Path.Combine(outputDir, Path.GetFileName(textFile));
+
                         // Trace.WriteLine($"outputFile: {outputFile}");
                         using (FileStream fs2 = new FileStream(outputFile, FileMode.Create))
                         {
@@ -105,16 +105,16 @@
                         // 終わったファイルを移動。
                         // ExpantionGoPath = C:\shogi-record\go\hunting
                         // InputFilePath   = C:\shogi-record\go\cooking\floodgate\2008\wdoor+floodgate-900-0+a+gps500+20080803103002.csa とかいうファイルパスになっている。
-                        var belowPath = inputFile.Substring(FomationGoDirectory.Instance.Path.Length);
+                        var belowPath = textFile.Substring(FomationGoDirectory.Instance.Path.Length);
 
                         // var wentDir = Path.Combine(FormationWentPath, Directory.GetParent(inputFile).Name);
                         var wentDir = Path.Combine(FomationWentDirectory.Instance.Path, belowPath);
                         CreateDirectory(wentDir);
 
-                        var wentFile = Path.Combine(wentDir, Path.GetFileName(inputFile));
+                        var wentFile = Path.Combine(wentDir, Path.GetFileName(textFile));
 
                         // Trace.WriteLine($"outputFile: {wentFile}");
-                        File.Move(inputFile, wentFile);
+                        File.Move(textFile, wentFile);
                     }
 
                     break;

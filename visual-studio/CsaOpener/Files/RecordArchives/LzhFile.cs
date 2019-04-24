@@ -27,18 +27,21 @@
         /// <summary>
         /// 解凍する。
         /// </summary>
-        public override void Expand()
+        /// <returns>展開に成功した。</returns>
+        public override bool Expand()
         {
             // Trace.WriteLine($"UnLzh: {this.ExpansionGoFilePath} -> {this.ExpansionOutputDir}");
             if (string.IsNullOrWhiteSpace(this.ExpansionGoFilePath))
             {
-                return;
+                return false;
             }
 
             LzhManager.fnExtract(this.ExpansionGoFilePath, this.ExpansionOutputDir);
 
             // 解凍が終わった元ファイルを移動。
             File.Move(this.ExpansionGoFilePath, Path.Combine(ExpansionWentDirectory.Instance.Path, Path.GetFileName(this.ExpansionGoFilePath)));
+
+            return true;
         }
     }
 }

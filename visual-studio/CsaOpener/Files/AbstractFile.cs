@@ -22,14 +22,16 @@
         /// <summary>
         /// 解凍する。
         /// </summary>
-        public virtual void Expand()
+        /// <returns>展開に成功した。</returns>
+        public virtual bool Expand()
         {
+            return false;
         }
 
         /// <summary>
         /// エンコーディングを変換します。
         /// </summary>
-        public virtual void ChangeEncoding()
+        public virtual void ChangeEncodingOfTextFile()
         {
         }
 

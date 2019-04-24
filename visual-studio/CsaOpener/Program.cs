@@ -42,38 +42,47 @@ namespace Grayscale.CsaOpener
                  */
 
                 // 同じフェーズをずっとやっていても１つも完成しないので、少しずつやって、ばらけさせる。
-                var loopedCount = 1;
+                var expandedCount = 1;
+                var readCount = 0;
+                var mergedCount = 0;
 
                 // ループの回った回数が０回になるまで繰り返す。
-                while (loopedCount > 0)
+                while (expandedCount+ readCount+ mergedCount > 0)
                 {
-                    loopedCount = 0;
-
                     // 解凍フェーズ。
-                    loopedCount += ExpandLittleIt();
+                    expandedCount = ExpansionPhase.ExpandLittleIt();
+
+                    // TODO フォルダーを探索して、棋譜のエンコーディングを変換。
+                    // EncodingPhase.Encode();
 
                     // 棋譜読取フェーズ。
-                    loopedCount += ReadLitterGameRecord();
-
+                    readCount = ReadLitterGameRecord();
 
                     // たまに行う程度。
                     //if (new System.Random().Next() % 3 == 0)
                     //{
-                        // JSON作成フェーズ。
-                        loopedCount += MergeLittleRpmoveObj(false);
+                    // JSON作成フェーズ。
+                    mergedCount = MergeLittleRpmoveObj(false);
                     //}
+
+                    Trace.WriteLine($"expandedCount: {expandedCount}, readCount: {readCount}, mergedCount: {mergedCount}.");
                 }
 
                 // 最後の余りに対応する１回。
                 {
                     // 解凍フェーズ。
-                    loopedCount += ExpandLittleIt();
+                    expandedCount = ExpansionPhase.ExpandLittleIt();
+
+                    // TODO フォルダーを探索して、棋譜のエンコーディングを変換。
+                    // EncodingPhase.Encode();
 
                     // 棋譜読取フェーズ。
-                    loopedCount += ReadLitterGameRecord();
+                    readCount = ReadLitterGameRecord();
 
                     // JSON作成フェーズ。
-                    loopedCount += MergeLittleRpmoveObj(true);
+                    mergedCount = MergeLittleRpmoveObj(true);
+
+                    Trace.WriteLine($"LAST: expandedCount: {expandedCount}, readCount: {readCount}, mergedCount: {mergedCount}.");
                 }
 
                 // 空の go のサブ・ディレクトリは削除。
@@ -207,8 +216,6 @@ namespace Grayscale.CsaOpener
                 System.IO.Directory.EnumerateFiles(
                     EatingGoDirectory.Instance.Path, "*", System.IO.SearchOption.AllDirectories);
 
-            // Trace.WriteLine("Reading game record...");
-
             // 200件回す。
             var count = 0;
             foreach (string eatingGoFile in eatingGoFiles)
@@ -240,77 +247,6 @@ namespace Grayscale.CsaOpener
 
                 count++;
             }
-
-            return count;
-        }
-
-        /// <summary>
-        /// 少し解凍。
-        /// </summary>
-        /// <returns>ループが回った回数。</returns>
-        public static int ExpandLittleIt()
-        {
-            // 指定ディレクトリ以下のファイルをすべて取得する
-            IEnumerable<string> expansionGoFiles =
-                System.IO.Directory.EnumerateFiles(
-                    ExpansionGoDirectory.Instance.Path, "*", System.IO.SearchOption.AllDirectories);
-
-            Rest = 0;
-
-            // Trace.WriteLine("Expanding...");
-
-            // 圧縮ファイルを 3つ 解凍する
-            var count = 0;
-            foreach (string expansionGoFile in expansionGoFiles)
-            {
-                if (count > 3)
-                {
-                    break;
-                }
-
-                AbstractFile anyFile;
-                switch (Path.GetExtension(expansionGoFile).ToUpper())
-                {
-                    case ".7Z":
-                        anyFile = new SevenZipFile(expansionGoFile);
-                        break;
-
-                    case ".CSA":
-                        anyFile = new CsaFile(expansionGoFile, string.Empty);
-                        break;
-
-                    case ".KIF":
-                        anyFile = new KifFile(expansionGoFile, string.Empty);
-                        break;
-
-                    case ".LZH":
-                        anyFile = new LzhFile(expansionGoFile);
-                        break;
-
-                    case ".TGZ":
-                        anyFile = new TargzFile(expansionGoFile);
-                        break;
-
-                    case ".ZIP":
-                        anyFile = new ZipArchiveFile(expansionGoFile);
-                        break;
-
-                    default:
-                        anyFile = new UnexpectedFile(expansionGoFile);
-                        Rest++;
-                        break;
-                }
-
-                // 解凍する。
-                anyFile.Expand();
-
-                // エンコーディングを変える。
-                Commons.ChangeEncodingFile(expansionGoFile);
-
-                count++;
-            }
-
-            // Trace.WriteLine($"むり1: {Rest}");
 
             return count;
         }

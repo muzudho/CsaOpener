@@ -29,11 +29,12 @@
         /// <summary>
         /// 解凍する。
         /// </summary>
-        public override void Expand()
+        /// <returns>展開に成功した。</returns>
+        public override bool Expand()
         {
             if (string.IsNullOrWhiteSpace(this.ExpansionGoFilePath))
             {
-                return;
+                return false;
             }
 
             var wentDir = Path.Combine(ExpansionWentDirectory.Instance.Path, Path.GetFileName(this.ExpansionGoFilePath));
@@ -41,6 +42,8 @@
 
             // 無理だった元ファイルを移動。
             File.Move(this.ExpansionGoFilePath, wentDir);
+
+            return true;
         }
     }
 }

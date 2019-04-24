@@ -80,6 +80,7 @@
     <Compile Include="Files\RecordArchives\UnexpectedFile.cs" />
     <Compile Include="Files\RecordArchives\ZipArchiveFile.cs" />
     <Compile Include="Files\RpmObj\RpmObjFile.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Lib\LogRotation.cs" />
     <Compile Include="Lib\LzhManager.cs" />
     <Compile Include="Lib\OldLogRemover.cs" />
@@ -93,6 +94,8 @@
     <Compile Include="Location\Directory\EatingGoDirectory.cs" />
     <Compile Include="Location\Directory\ExpansionGoDirectory.cs" />
     <Compile Include="Location\Directory\ExpansionWentDirectory.cs" />
+    <Compile Include="Phase\EncodingPhase.cs" />
+    <Compile Include="Phase\ExpansionPhase.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Files\RecordArchives\SevenZipFile.cs" />

@@ -54,29 +54,32 @@
         /// <summary>
         /// 解凍する。
         /// </summary>
-        public override void Expand()
+        /// <returns>展開に成功した。</returns>
+        public override bool Expand()
         {
             // Trace.WriteLine($"Copy kif: {this.ExpansionGoFilePath} -> {this.ExpansionGoFilePath}");
             if (string.IsNullOrWhiteSpace(this.ExpansionGoFilePath))
             {
-                return;
+                return false;
             }
 
             File.Copy(this.ExpansionGoFilePath, this.ExpansionGoFilePath, true);
 
             // 解凍が終わった元ファイルを移動。
             File.Move(this.ExpansionGoFilePath, Path.Combine(ExpansionWentDirectory.Instance.Path, Path.GetFileName(this.ExpansionGoFilePath)));
+
+            return true;
         }
 
         /// <summary>
         /// エンコーディングを変えます。
         /// </summary>
-        public override void ChangeEncoding()
+        public override void ChangeEncodingOfTextFile()
         {
             try
             {
                 // エンコーディングを変えます。
-                Commons.ChangeEncodingFile(this.ExpansionGoFilePath);
+                Commons.ChangeEncodingOfTextFile(this.ExpansionGoFilePath);
             }
             catch (DirectoryNotFoundException e)
             {

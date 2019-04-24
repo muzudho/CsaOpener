@@ -30,14 +30,15 @@
         /// <summary>
         /// 解凍する。
         /// </summary>
-        public override void Expand()
+        /// <returns>展開に成功した。</returns>
+        public override bool Expand()
         {
             try
             {
                 // Trace.WriteLine($"Un7z: {this.ExpansionGoFilePath} -> {this.ExpansionOutputDir}");
                 if (string.IsNullOrWhiteSpace(this.ExpansionGoFilePath))
                 {
-                    return;
+                    return false;
                 }
 
                 SevenZManager.fnExtract(this.ExpansionGoFilePath, this.ExpansionOutputDir);
@@ -48,15 +49,18 @@
 
                 // 解凍が終わった元ファイルを移動。
                 File.Move(this.ExpansionGoFilePath, wentFile);
+                return true;
             }
             catch (BadImageFormatException e)
             {
                 // 32ビットのプログラムを 64ビットで動かそうとしたときなど。
                 Trace.WriteLine(e);
+                return false;
             }
             catch (InvalidOperationException e)
             {
                 Trace.WriteLine(e);
+                return false;
             }
         }
     }

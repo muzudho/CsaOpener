@@ -28,12 +28,13 @@
         /// <summary>
         /// 解凍する。
         /// </summary>
-        public override void Expand()
+        /// <returns>展開に成功した。</returns>
+        public override bool Expand()
         {
             // Trace.WriteLine($"UnTarGz: {this.ExpansionGoFilePath} -> {this.ExpansionOutputDir}");
             if (string.IsNullOrWhiteSpace(this.ExpansionGoFilePath))
             {
-                return;
+                return false;
             }
 
             using (var inStream = File.OpenRead(this.ExpansionGoFilePath))
@@ -49,6 +50,8 @@
 
             // 解凍が終わった元ファイルを移動。
             File.Move(this.ExpansionGoFilePath, Path.Combine(ExpansionWentDirectory.Instance.Path, Path.GetFileName(this.ExpansionGoFilePath)));
+
+            return true;
         }
     }
 }

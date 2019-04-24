@@ -27,13 +27,16 @@
         /// <summary>
         /// 解凍する。
         /// </summary>
-        public override void Expand()
+        /// <returns>展開に成功した。</returns>
+        public override bool Expand()
         {
             // Trace.WriteLine($"Unzip: {this.ExpansionGoFilePath} -> {this.ExpansionOutputDir}");
             ZipFile.ExtractToDirectory(this.ExpansionGoFilePath, this.ExpansionOutputDir);
 
             // 解凍が終わった元ファイルを移動。
             File.Move(this.ExpansionGoFilePath, Path.Combine(ExpansionWentDirectory.Instance.Path, Path.GetFileName(this.ExpansionGoFilePath)));
+
+            return true;
         }
     }
 }
