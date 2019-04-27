@@ -14,12 +14,12 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="SevenZipFile"/> class.
         /// </summary>
-        /// <param name="expansionGoFilePath">解凍を待っているファイルパス。</param>
-        public SevenZipFile(string expansionGoFilePath)
-            : base(expansionGoFilePath)
+        /// <param name="expansionGoFile">解凍を待っているファイル。</param>
+        public SevenZipFile(TraceableFile expansionGoFile)
+            : base(expansionGoFile)
         {
             // Trace.WriteLine($"7zip: {this.ExpansionGoFilePath}");
-            this.ExpansionGoFilePath = this.ExpansionGoFilePath.Replace(@"\", "/");
+            // TODO this.ExpansionGoFilePath = this.ExpansionGoFilePath.Replace(@"\", "/");
         }
 
         /// <summary>
@@ -30,20 +30,22 @@
         {
             try
             {
-                Trace.WriteLine($"Expand  : {this.ExpansionGoFilePath} -> {ExpansionOutputDirectory.Instance.FullName}");
-                if (string.IsNullOrWhiteSpace(this.ExpansionGoFilePath))
+                Trace.WriteLine($"Expand  : {this.ExpansionGoFile.FullName} -> {ExpansionOutputDirectory.Instance.FullName}");
+                if (string.IsNullOrWhiteSpace(this.ExpansionGoFile.FullName))
                 {
                     return false;
                 }
 
-                SevenZManager.fnExtract(this.ExpansionGoFilePath, ExpansionOutputDirectory.Instance.FullName);
+                SevenZManager.fnExtract(this.ExpansionGoFile.FullName, ExpansionOutputDirectory.Instance.FullName);
 
-                var wentDir = new TraceableDirectory( Path.Combine(ExpansionWentDirectory.Instance.FullName, Directory.GetParent(this.ExpansionGoFilePath).Name));
+                /*
+                var wentDir = new TraceableDirectory(PathHelper.Combine(ExpansionWentDirectory.Instance.FullName, Directory.GetParent(this.ExpansionGoFile.FullName).Name));
                 wentDir.Create();
-                var wentFile = Path.Combine(wentDir.FullName, Path.GetFileName(this.ExpansionGoFilePath));
+                var wentFile = PathHelper.Combine(wentDir.FullName, Path.GetFileName(this.ExpansionGoFile.FullName));
+                */
 
                 // 解凍が終わった元ファイルを移動。
-                File.Move(this.ExpansionGoFilePath, wentFile);
+                this.ExpansionGoFile.Move(this.ExpansionWentFile.FullName);
                 return true;
             }
             catch (BadImageFormatException e)

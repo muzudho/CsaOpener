@@ -1,4 +1,6 @@
-﻿namespace Grayscale.CsaOpener
+﻿using Grayscale.CsaOpener.Commons;
+
+namespace Grayscale.CsaOpener
 {
     /// <summary>
     /// 棋譜ファイル。
@@ -8,10 +10,10 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="AbstractGameRecordFile"/> class.
         /// </summary>
-        /// <param name="expansionGoFilePath">解凍を待っているファイルパス。</param>
+        /// <param name="expansionGoFile">解凍を待っているファイル。</param>
         /// <param name="eatingGoFilePath">棋譜読取を待っているファイルパス。</param>
-        public AbstractGameRecordFile(string expansionGoFilePath, string eatingGoFilePath)
-            : base(expansionGoFilePath)
+        public AbstractGameRecordFile(TraceableFile expansionGoFile, string eatingGoFilePath)
+            : base(expansionGoFile)
         {
             this.EatingGoFilePath = eatingGoFilePath;
         }

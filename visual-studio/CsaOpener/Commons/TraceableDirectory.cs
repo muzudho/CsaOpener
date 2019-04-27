@@ -34,7 +34,7 @@
         /// </summary>
         public void Create()
         {
-            Trace.WriteLine($"Create   : '{this.FullName}' directory ...");
+            Trace.WriteLine($"Create  : '{this.FullName}' directory ...");
             if (!System.IO.Directory.Exists(this.FullName))
             {
                 System.IO.Directory.CreateDirectory(this.FullName);

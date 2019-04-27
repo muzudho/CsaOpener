@@ -1,5 +1,7 @@
 ﻿namespace Grayscale.CsaOpener
 {
+    using Grayscale.CsaOpener.Commons;
+
     /// <summary>
     /// 棋譜を圧縮しているファイル。
     /// </summary>
@@ -8,9 +10,9 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="AbstractArchiveFile"/> class.
         /// </summary>
-        /// <param name="expansionGoFilePath">解凍を待っているファイルパス。</param>
-        public AbstractArchiveFile(string expansionGoFilePath)
-            : base(expansionGoFilePath)
+        /// <param name="expansionGoFile">解凍を待っているファイル。</param>
+        public AbstractArchiveFile(TraceableFile expansionGoFile)
+            : base(expansionGoFile)
         {
         }
     }

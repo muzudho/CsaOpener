@@ -5,6 +5,7 @@
     using Grayscale.CsaOpener.Location;
     using ICSharpCode.SharpZipLib.GZip;
     using ICSharpCode.SharpZipLib.Tar;
+    using Grayscale.CsaOpener.Commons;
 
     /// <summary>
     /// Tar.Gz形式棋譜ファイル。、
@@ -14,9 +15,9 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="TargzFile"/> class.
         /// </summary>
-        /// <param name="expansionGoFilePath">解凍を待っているファイルパス。</param>
-        public TargzFile(string expansionGoFilePath)
-            : base(expansionGoFilePath)
+        /// <param name="expansionGoFile">解凍を待っているファイル。</param>
+        public TargzFile(TraceableFile expansionGoFile)
+            : base(expansionGoFile)
         {
             // Trace.WriteLine($"TarGz: {this.ExpansionGoFilePath}");
         }
@@ -27,13 +28,13 @@
         /// <returns>展開に成功した。</returns>
         public override bool Expand()
         {
-            Trace.WriteLine($"Expand  : {this.ExpansionGoFilePath} -> {ExpansionOutputDirectory.Instance.FullName}");
-            if (string.IsNullOrWhiteSpace(this.ExpansionGoFilePath))
+            Trace.WriteLine($"Expand  : {this.ExpansionGoFile.FullName} -> {ExpansionOutputDirectory.Instance.FullName}");
+            if (string.IsNullOrWhiteSpace(this.ExpansionGoFile.FullName))
             {
                 return false;
             }
 
-            using (var inStream = File.OpenRead(this.ExpansionGoFilePath))
+            using (var inStream = File.OpenRead(this.ExpansionGoFile.FullName))
             {
                 using (var gzipStream = new GZipInputStream(inStream))
                 {
@@ -45,7 +46,7 @@
             }
 
             // 解凍が終わった元ファイルを移動。
-            File.Move(this.ExpansionGoFilePath, Path.Combine(ExpansionWentDirectory.Instance.FullName, Path.GetFileName(this.ExpansionGoFilePath)));
+            this.ExpansionGoFile.Move(this.ExpansionWentFile.FullName);
 
             return true;
         }

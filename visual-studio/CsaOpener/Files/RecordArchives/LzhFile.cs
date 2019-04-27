@@ -3,6 +3,7 @@
     using System.Diagnostics;
     using System.IO;
     using Grayscale.CsaOpener.CommonAction;
+    using Grayscale.CsaOpener.Commons;
     using Grayscale.CsaOpener.Location;
 
     /// <summary>
@@ -13,8 +14,8 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="LzhFile"/> class.
         /// </summary>
-        /// <param name="expansionGoFile">解凍を待っているファイルパス。</param>
-        public LzhFile(string expansionGoFile)
+        /// <param name="expansionGoFile">解凍を待っているファイル。</param>
+        public LzhFile(TraceableFile expansionGoFile)
             : base(expansionGoFile)
         {
             // Trace.WriteLine($"Lzh: {this.ExpansionGoFilePath}");
@@ -26,19 +27,19 @@
         /// <returns>展開に成功した。</returns>
         public override bool Expand()
         {
-            Trace.WriteLine($"Expand  : {this.ExpansionGoFilePath} -> {ExpansionOutputDirectory.Instance.FullName}");
-            if (string.IsNullOrWhiteSpace(this.ExpansionGoFilePath))
+            Trace.WriteLine($"Expand  : {this.ExpansionGoFile.FullName} -> {ExpansionOutputDirectory.Instance.FullName}");
+            if (string.IsNullOrWhiteSpace(this.ExpansionGoFile.FullName))
             {
                 return false;
             }
 
-            LzhManager.fnExtract(this.ExpansionGoFilePath, ExpansionOutputDirectory.Instance.FullName);
+            LzhManager.fnExtract(this.ExpansionGoFile.FullName, ExpansionOutputDirectory.Instance.FullName);
 
             // ディレクトリーを浅くします。
             PathFlat.Search(ExpansionOutputDirectory.Instance.FullName);
 
             // 解凍が終わった元ファイルを移動。
-            File.Move(this.ExpansionGoFilePath, Path.Combine(ExpansionWentDirectory.Instance.FullName, Path.GetFileName(this.ExpansionGoFilePath)));
+            this.ExpansionGoFile.Move(this.ExpansionWentFile.FullName);
 
             return true;
         }

@@ -50,7 +50,7 @@ namespace Grayscale.CsaOpener
                 List<string> expansionOutputDirectories;
 
                 // ループの回った回数が０回になるまで繰り返す。
-                while (expandedCount+ readCount+ mergedCount > 0 && merged)
+                while (expandedCount + readCount + mergedCount > 0 && merged)
                 {
                     // 解凍フェーズ。
                     expandedCount = ExpansionPhase.ExpandLittleIt();
@@ -190,7 +190,7 @@ namespace Grayscale.CsaOpener
                 var num4 = rand.Next();
 
                 // Trace.WriteLine("Merge rpmove obj(Write1)...");
-                var path = Path.Combine(RpmRecordDirectory.Instance.FullName, $"{num1}-{num2}-{num3}-{num4}-rbox.json");
+                var path = PathHelper.Combine(RpmRecordDirectory.Instance.FullName, $"{num1}-{num2}-{num3}-{num4}-rbox.json");
                 if (!File.Exists(path))
                 {
                     new TraceableFile(path).WriteAllText(content);
@@ -235,15 +235,15 @@ namespace Grayscale.CsaOpener
                 switch (Path.GetExtension(eatingGoFile).ToUpper())
                 {
                     case ".CSA":
-                        anyFile = new CsaFile(string.Empty, eatingGoFile);
+                        anyFile = new CsaFile(new TraceableFile(string.Empty), eatingGoFile);
                         break;
 
                     case ".KIF":
-                        anyFile = new KifFile(string.Empty, eatingGoFile);
+                        anyFile = new KifFile(new TraceableFile(string.Empty), eatingGoFile);
                         break;
 
                     default:
-                        anyFile = new UnexpectedFile(string.Empty);
+                        anyFile = new UnexpectedFile(new TraceableFile(string.Empty));
                         Rest++;
                         break;
                 }

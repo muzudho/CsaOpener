@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
+    using Grayscale.CsaOpener.Commons;
 
     /// <summary>
     /// ディレクトリ階層が深くて困る。
@@ -59,7 +60,7 @@
         {
             var joinedName = $"{Directory.GetParent(file).Name}$%{Path.GetFileName(file)}";
             var parentParentDirectory = Directory.GetParent(Directory.GetParent(file).FullName).FullName;
-            var destination = Path.Combine(parentParentDirectory, joinedName);
+            var destination = PathHelper.Combine(parentParentDirectory, joinedName);
 
             Trace.WriteLine($"Rename  : {file} -> {destination}.");
             File.Move(file, destination);

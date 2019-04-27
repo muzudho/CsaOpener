@@ -3,6 +3,7 @@
     using System.Diagnostics;
     using System.IO;
     using Grayscale.CsaOpener.Location;
+    using Grayscale.CsaOpener.Commons;
 
     /// <summary>
     /// 予期しない形式のファイル。
@@ -12,9 +13,9 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="UnexpectedFile"/> class.
         /// </summary>
-        /// <param name="expansionGoFilePath">解凍を待っているファイルパス。</param>
-        public UnexpectedFile(string expansionGoFilePath)
-            : base(expansionGoFilePath)
+        /// <param name="expansionGoFile">解凍を待っているファイル。</param>
+        public UnexpectedFile(TraceableFile expansionGoFile)
+            : base(expansionGoFile)
         {
             // Trace.WriteLine($"Unexpected file: {this.ExpansionGoFilePath}");
 
@@ -28,17 +29,14 @@
         /// <returns>展開に成功した。</returns>
         public override bool Expand()
         {
-            Trace.WriteLine($"Expand  : {this.ExpansionGoFilePath} -> None.");
-            if (string.IsNullOrWhiteSpace(this.ExpansionGoFilePath))
+            Trace.WriteLine($"Expand  : {this.ExpansionGoFile.FullName} -> None.");
+            if (string.IsNullOrWhiteSpace(this.ExpansionGoFile.FullName))
             {
                 return false;
             }
 
-            var wentDir = Path.Combine(ExpansionWentDirectory.Instance.FullName, Path.GetFileName(this.ExpansionGoFilePath));
-            // Trace.WriteLine($"Evasion: {this.ExpansionGoFilePath} -> {wentDir}");
-
             // 無理だった元ファイルを移動。
-            File.Move(this.ExpansionGoFilePath, wentDir);
+            this.ExpansionGoFile.Move(this.ExpansionWentFile.FullName);
 
             return true;
         }

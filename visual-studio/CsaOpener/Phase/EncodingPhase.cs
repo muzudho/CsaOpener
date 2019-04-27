@@ -77,7 +77,7 @@
                         }
 
                         // 出力ファイル
-                        var outputFile = Path.Combine(FomationOutputDirectory.Instance.FullName, Path.GetFileName(textFile));
+                        var outputFile = PathHelper.Combine(FomationOutputDirectory.Instance.FullName, Path.GetFileName(textFile));
                         Trace.WriteLine($"outputFile: {outputFile}");
 
                         using (FileStream fs2 = new FileStream(outputFile, FileMode.Create))
@@ -96,8 +96,8 @@
                         // InputFilePath   = C:\shogi-record\go\cooking\floodgate\2008\wdoor+floodgate-900-0+a+gps500+20080803103002.csa とかいうファイルパスになっている。
                         var belowPath = textFile.Substring(FomationGoDirectory.Instance.FullName.Length);
 
-                        // var wentDir = Path.Combine(FormationWentPath, Directory.GetParent(inputFile).Name);
-                        var wentFile = new TraceableFile(Path.Combine(FomationWentDirectory.Instance.FullName, belowPath.TrimStart('/', '\\')));
+                        // var wentDir = PathHelper.Combine(FormationWentPath, Directory.GetParent(inputFile).Name);
+                        var wentFile = new TraceableFile(PathHelper.Combine(FomationWentDirectory.Instance.FullName, belowPath));
                         Trace.WriteLine($"FomationWentDirectory.Instance.FullName: '{FomationWentDirectory.Instance.FullName}'. belowPath: '{belowPath}'. wentFile.FullName: '{wentFile.FullName}'.");
                         wentFile.CreateParentDirectory();
 

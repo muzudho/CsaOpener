@@ -13,27 +13,27 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="CsaFile"/> class.
         /// </summary>
-        /// <param name="expansionGoFilePath">解凍を待っているファイルパス。</param>
+        /// <param name="expansionGoFile">解凍を待っているファイル。</param>
         /// <param name="eatingGoFilePath">棋譜読取を待っているファイルパス。</param>
-        public CsaFile(string expansionGoFilePath, string eatingGoFilePath)
-            : base(expansionGoFilePath, eatingGoFilePath)
+        public CsaFile(TraceableFile expansionGoFile, string eatingGoFilePath)
+            : base(expansionGoFile, eatingGoFilePath)
         {
             // 解凍先ファイル。
-            if (!string.IsNullOrWhiteSpace(this.ExpansionGoFilePath))
+            if (!string.IsNullOrWhiteSpace(this.ExpansionGoFile.FullName))
             {
                 // Trace.WriteLine($"Csa exp: {this.ExpansionGoFilePath}");
 
                 // そのままコピーすると名前がぶつかってしまう☆（＾～＾）
-                var wrappingDir = new TraceableDirectory(Path.Combine(ExpansionOutputDirectory.Instance.FullName, $"copied-{Path.GetFileNameWithoutExtension(this.ExpansionGoFilePath)}"));
+                var wrappingDir = new TraceableDirectory(PathHelper.Combine(ExpansionOutputDirectory.Instance.FullName, $"copied-{Path.GetFileNameWithoutExtension(this.ExpansionGoFile.FullName)}"));
                 wrappingDir.Create();
-                this.ExpansionOutputFile = Path.Combine(wrappingDir.FullName, Path.GetFileName(this.ExpansionGoFilePath));
+                this.ExpansionOutputFile = PathHelper.Combine(wrappingDir.FullName, Path.GetFileName(this.ExpansionGoFile.FullName));
             }
 
             // 棋譜読取を待っているファイルパス。
             if (!string.IsNullOrWhiteSpace(this.EatingGoFilePath))
             {
                 // Trace.WriteLine($"Kif eat: {this.EatingGoFilePath}");
-                this.EatingWentFilePath = Path.Combine(EatingWentDirectory.Instance.FullName, Directory.GetParent(this.EatingGoFilePath).Name, Path.GetFileName(this.EatingGoFilePath));
+                this.EatingWentFilePath = PathHelper.Combine(EatingWentDirectory.Instance.FullName, Directory.GetParent(this.EatingGoFilePath).Name, Path.GetFileName(this.EatingGoFilePath));
 
                 // 拡張子は .tapefrag
                 var headLen = EatingGoDirectory.Instance.FullName.Length;
@@ -44,7 +44,7 @@
                     middlePath = middlePath.Substring(1);
                 }
 
-                this.EatingOutputFilePath = Path.Combine(EatingOutputDirectory.Instance.FullName, middlePath, $"{Path.GetFileNameWithoutExtension(this.EatingGoFilePath)}.tapefrag").Replace(@"\", "/");
+                this.EatingOutputFilePath = PathHelper.Combine(EatingOutputDirectory.Instance.FullName, middlePath, $"{Path.GetFileNameWithoutExtension(this.EatingGoFilePath)}.tapefrag").Replace(@"\", "/");
 
                 // Trace.WriteLine($"config.EatingOutputPath: {config.EatingOutputPath}.");
                 // Trace.WriteLine($"headLen: {headLen}, footLen: {footLen}, middlePath: {middlePath}, Output: {this.EatingOutputFilePath}.");
@@ -57,17 +57,17 @@
         /// <returns>展開に成功した。</returns>
         public override bool Expand()
         {
-            Trace.WriteLine($"Expand  : {this.ExpansionGoFilePath} -> {this.ExpansionOutputFile}");
-            if (string.IsNullOrWhiteSpace(this.ExpansionGoFilePath))
+            Trace.WriteLine($"Expand  : {this.ExpansionGoFile.FullName} -> {this.ExpansionOutputFile}");
+            if (string.IsNullOrWhiteSpace(this.ExpansionGoFile.FullName))
             {
                 return false;
             }
 
             // 成果物の作成。
-            File.Copy(this.ExpansionGoFilePath, this.ExpansionOutputFile, true);
+            this.ExpansionGoFile.Copy(this.ExpansionOutputFile, true);
 
             // 解凍が終わった元ファイルを移動。
-            File.Move(this.ExpansionGoFilePath, Path.Combine(ExpansionWentDirectory.Instance.FullName, Path.GetFileName(this.ExpansionGoFilePath)));
+            this.ExpansionGoFile.Move(this.ExpansionWentFile.FullName);
 
             return true;
         }
@@ -80,9 +80,9 @@
             int returnCode = CommonsLib.ReadGameRecord(this.EatingGoFilePath, this.EatingOutputFilePath);
 
             // 終わった元ファイルを移動。
-            var dir = new TraceableDirectory(Path.Combine(EatingWentDirectory.Instance.FullName, Directory.GetParent(this.EatingGoFilePath).Name));
+            var dir = new TraceableDirectory(PathHelper.Combine(EatingWentDirectory.Instance.FullName, Directory.GetParent(this.EatingGoFilePath).Name));
             dir.Create();
-            var destFile = Path.Combine(dir.FullName, Path.GetFileName(this.EatingGoFilePath));
+            var destFile = PathHelper.Combine(dir.FullName, Path.GetFileName(this.EatingGoFilePath));
             File.Move(this.EatingGoFilePath, destFile);
         }
     }

@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.IO;
+    using Grayscale.CsaOpener.Commons;
     using Grayscale.CsaOpener.Location;
 
     /// <summary>
@@ -31,15 +32,17 @@
 
             // 圧縮ファイルを 3つ 解凍する
             var count = 0;
-            foreach (string expansionGoFile in expansionGoFiles)
+            foreach (string expansionGoFileFullName in expansionGoFiles)
             {
+                var expansionGoFile = new TraceableFile(expansionGoFileFullName);
+
                 if (count > 3)
                 {
                     break;
                 }
 
                 AbstractFile anyFile;
-                switch (Path.GetExtension(expansionGoFile).ToUpperInvariant())
+                switch (Path.GetExtension(expansionGoFile.FullName).ToUpperInvariant())
                 {
                     case ".7Z":
                         anyFile = new SevenZipFile(expansionGoFile);

@@ -38,8 +38,21 @@
         /// <param name="destFile">移動先。</param>
         public void Move(string destFile)
         {
+            new TraceableFile(destFile).CreateParentDirectory();
+
             Trace.WriteLine($"Move    : '{this.FullName}' --> '{destFile}'...");
             System.IO.File.Move(this.FullName, destFile);
+        }
+
+        /// <summary>
+        /// コピー。
+        /// </summary>
+        /// <param name="destFile">コピー先。</param>
+        /// <param name="overwrite">上書き。</param>
+        public void Copy(string destFile, bool overwrite = false)
+        {
+            Trace.WriteLine($"Copy    : '{this.FullName}' --> '{destFile}'...");
+            System.IO.File.Copy(this.FullName, destFile, overwrite);
         }
 
         /// <summary>
