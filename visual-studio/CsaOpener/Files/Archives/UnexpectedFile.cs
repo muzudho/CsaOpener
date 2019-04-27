@@ -1,9 +1,9 @@
 ﻿namespace Grayscale.CsaOpener
 {
     using System.Diagnostics;
-    using System.IO;
-    using Grayscale.CsaOpener.Location;
+    using Grayscale.CsaOpener.CommonAction;
     using Grayscale.CsaOpener.Commons;
+    using Grayscale.CsaOpener.Location;
 
     /// <summary>
     /// 予期しない形式のファイル。
@@ -34,6 +34,9 @@
             {
                 return false;
             }
+
+            // ディレクトリーを浅くします。
+            PathFlat.Search(FileSystem.ExpansionOutputDirectory.FullName);
 
             // 無理だった元ファイルを移動。
             this.ExpansionGoFile.Move(this.ExpansionWentFile);

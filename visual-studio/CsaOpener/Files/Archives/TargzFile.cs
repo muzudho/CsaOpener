@@ -2,10 +2,11 @@
 {
     using System.Diagnostics;
     using System.IO;
+    using Grayscale.CsaOpener.CommonAction;
+    using Grayscale.CsaOpener.Commons;
     using Grayscale.CsaOpener.Location;
     using ICSharpCode.SharpZipLib.GZip;
     using ICSharpCode.SharpZipLib.Tar;
-    using Grayscale.CsaOpener.Commons;
 
     /// <summary>
     /// Tar.Gz形式棋譜ファイル。、
@@ -28,7 +29,7 @@
         /// <returns>展開に成功した。</returns>
         public override bool Expand()
         {
-            Trace.WriteLine($"Expand  : {this.ExpansionGoFile.FullName} -> {ExpansionOutputDirectory.Instance.FullName}");
+            Trace.WriteLine($"Expand  : {this.ExpansionGoFile.FullName} -> {FileSystem.ExpansionOutputDirectory.FullName}");
             if (string.IsNullOrWhiteSpace(this.ExpansionGoFile.FullName))
             {
                 return false;
@@ -40,10 +41,13 @@
                 {
                     using (var tarArchive = TarArchive.CreateInputTarArchive(gzipStream))
                     {
-                        tarArchive.ExtractContents(ExpansionOutputDirectory.Instance.FullName);
+                        tarArchive.ExtractContents(FileSystem.ExpansionOutputDirectory.FullName);
                     }
                 }
             }
+
+            // ディレクトリーを浅くします。
+            PathFlat.Search(FileSystem.ExpansionOutputDirectory.FullName);
 
             // 解凍が終わった元ファイルを移動。
             this.ExpansionGoFile.Move(this.ExpansionWentFile);

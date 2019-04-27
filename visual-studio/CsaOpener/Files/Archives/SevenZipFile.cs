@@ -2,7 +2,7 @@
 {
     using System;
     using System.Diagnostics;
-    using System.IO;
+    using Grayscale.CsaOpener.CommonAction;
     using Grayscale.CsaOpener.Commons;
     using Grayscale.CsaOpener.Location;
 
@@ -30,19 +30,16 @@
         {
             try
             {
-                Trace.WriteLine($"Expand  : {this.ExpansionGoFile.FullName} -> {ExpansionOutputDirectory.Instance.FullName}");
+                Trace.WriteLine($"Expand  : {this.ExpansionGoFile.FullName} -> {FileSystem.ExpansionOutputDirectory.FullName}");
                 if (string.IsNullOrWhiteSpace(this.ExpansionGoFile.FullName))
                 {
                     return false;
                 }
 
-                SevenZManager.fnExtract(this.ExpansionGoFile.FullName, ExpansionOutputDirectory.Instance.FullName);
+                SevenZManager.fnExtract(this.ExpansionGoFile.FullName, FileSystem.ExpansionOutputDirectory.FullName);
 
-                /*
-                var wentDir = new TraceableDirectory(PathHelper.Combine(ExpansionWentDirectory.Instance.FullName, Directory.GetParent(this.ExpansionGoFile.FullName).Name));
-                wentDir.Create();
-                var wentFile = PathHelper.Combine(wentDir.FullName, Path.GetFileName(this.ExpansionGoFile.FullName));
-                */
+                // ディレクトリーを浅くします。
+                PathFlat.Search(FileSystem.ExpansionOutputDirectory.FullName);
 
                 // 解凍が終わった元ファイルを移動。
                 this.ExpansionGoFile.Move(this.ExpansionWentFile);

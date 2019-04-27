@@ -65,7 +65,7 @@ namespace Grayscale.CsaOpener
                     //if (new System.Random().Next() % 3 == 0)
                     //{
                     // JSON作成フェーズ。
-                    (mergedCount, merged) = MergeLittleRpmoveObj(false);
+                    (mergedCount, merged) = MergeTapefrag(false);
                     //}
 
                     Trace.WriteLine($"expandedCount: {expandedCount}, readCount: {readCount}, mergedCount: {mergedCount}.");
@@ -83,7 +83,7 @@ namespace Grayscale.CsaOpener
                     readCount = ReadLitterGameRecord();
 
                     // JSON作成フェーズ。
-                    (mergedCount, merged) = MergeLittleRpmoveObj(true);
+                    (mergedCount, merged) = MergeTapefrag(true);
 
                     Trace.WriteLine($"LAST: expandedCount: {expandedCount}, readCount: {readCount}, mergedCount: {mergedCount}.");
                 }
@@ -93,7 +93,7 @@ namespace Grayscale.CsaOpener
                     {
                         // このディレクトリ以下のディレクトリをすべて取得する
                         IEnumerable<string> subDirectories =
-                            System.IO.Directory.EnumerateDirectories(ExpansionGoDirectory.Instance.FullName, "*", System.IO.SearchOption.TopDirectoryOnly);
+                            System.IO.Directory.EnumerateDirectories(FileSystem.ExpansionGoDirectory.FullName, "*", System.IO.SearchOption.TopDirectoryOnly);
 
                         foreach (string subDir in subDirectories)
                         {
@@ -104,7 +104,7 @@ namespace Grayscale.CsaOpener
                     {
                         // このディレクトリ以下のディレクトリをすべて取得する
                         IEnumerable<string> subDirectories =
-                            System.IO.Directory.EnumerateDirectories(FomationGoDirectory.Instance.FullName, "*", System.IO.SearchOption.TopDirectoryOnly);
+                            System.IO.Directory.EnumerateDirectories(FileSystem.FomationGoDirectory.FullName, "*", System.IO.SearchOption.TopDirectoryOnly);
 
                         foreach (string subDir in subDirectories)
                         {
@@ -124,14 +124,14 @@ namespace Grayscale.CsaOpener
         /// </summary>
         /// <param name="isLast">余り。</param>
         /// <returns>ループが回った回数、マージを１つ以上行った。</returns>
-        public static (int, bool) MergeLittleRpmoveObj(bool isLast)
+        public static (int, bool) MergeTapefrag(bool isLast)
         {
-            Trace.WriteLine($"Merge   : isLast: {isLast}.");
+            Trace.WriteLine($"Merge   : Tapefrage isLast: {isLast}.");
 
             // 指定ディレクトリ以下のファイルをすべて取得する
             IEnumerable<string> tapefragFiles =
                 System.IO.Directory.EnumerateFiles(
-                    EatingOutputDirectory.Instance.FullName, "*.tapefrag", System.IO.SearchOption.AllDirectories);
+                    FileSystem.EatingOutputDirectory.FullName, "*.tapefrag", System.IO.SearchOption.AllDirectories);
 
             var count = 0;
 
@@ -213,12 +213,12 @@ namespace Grayscale.CsaOpener
         /// <returns>ループが回った回数。</returns>
         public static int ReadLitterGameRecord()
         {
-            Trace.WriteLine($"Start   : ReadLitterGameRecord. Directory: {EatingGoDirectory.Instance.FullName}.");
+            Trace.WriteLine($"ReadRec : Start... Directory: {FileSystem.EatingGoDirectory.FullName}.");
 
             // 指定ディレクトリ以下のファイルをすべて取得する
             IEnumerable<string> eatingGoFiles =
                 System.IO.Directory.EnumerateFiles(
-                    EatingGoDirectory.Instance.FullName, "*", System.IO.SearchOption.AllDirectories);
+                    FileSystem.EatingGoDirectory.FullName, "*", System.IO.SearchOption.AllDirectories);
 
             // 200件回す。
             var count = 0;

@@ -23,7 +23,8 @@
         /// <summary>
         /// Gets or sets a 解凍を待っているファイル。
         /// </summary>
-        public TraceableFile ExpansionGoFile {
+        public TraceableFile ExpansionGoFile
+        {
             get
             {
                 return this.expansionGoFileInstance;
@@ -32,7 +33,7 @@
             protected set
             {
                 this.expansionGoFileInstance = value;
-                this.ExpansionWentFile = new TraceableFile(PathHelper.Combine(ExpansionWentDirectory.Instance.FullName, Path.GetFileName(value.FullName)));
+                this.ExpansionWentFile = new TraceableFile(PathHelper.Combine(FileSystem.ExpansionWentDirectory.FullName, Path.GetFileName(value.FullName)));
             }
         }
 

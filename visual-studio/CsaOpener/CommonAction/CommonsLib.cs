@@ -3,6 +3,7 @@
     using System.Diagnostics;
     using System.IO;
     using System.Text;
+    using Grayscale.CsaOpener.Commons;
     using Grayscale.CsaOpener.Location;
 
     /// <summary>
@@ -13,10 +14,10 @@
         /// <summary>
         /// 棋譜を読み取ります。
         /// </summary>
-        /// <param name="input_file">読み取る棋譜ファイルのパス。</param>
-        /// <param name="output_file">出力先ファイルパス。</param>
+        /// <param name="inputFile">読み取る棋譜ファイル。</param>
+        /// <param name="outputFile">出力先ファイル。</param>
         /// <returns>リターン コード。</returns>
-        public static int ReadGameRecord(string input_file, string output_file)
+        public static int ReadGameRecord(TraceableFile inputFile, TraceableFile outputFile)
         {
             ProcessStartInfo info = new ProcessStartInfo();
 
@@ -25,7 +26,7 @@
             info.WorkingDirectory = Directory.GetParent(KifuwarabeWcsc29Config.Instance.kifuwarabe_wcsc29_exe_path_for_read_kifu).FullName;
 
             // コマンドライン引数を指定する
-            info.Arguments = $@"--input ""{input_file.Replace(@"\", "/")}"" --output ""{output_file.Replace(@"\", "/")}""";
+            info.Arguments = $@"--input ""{inputFile.FullName.Replace(@"\", "/")}"" --output ""{outputFile.FullName.Replace(@"\", "/")}""";
 
             // コンソール・ウィドウを開かない。
             info.CreateNoWindow = true;
@@ -33,6 +34,7 @@
             // シェル機能を使用しない
             info.UseShellExecute = false;
 
+            Trace.WriteLine($"Go      : Process {info.FileName} {info.Arguments}");
             var p = Process.Start(info);
 
             // タイムアウト時間（秒）。１棋譜に 1分も かからないだろう。
@@ -41,7 +43,7 @@
             var returnCode = p.ExitCode;
             if (returnCode != 0)
             {
-                Trace.WriteLine($"Eat: returnCode='{returnCode}' {info.FileName} {info.Arguments}");
+                Trace.WriteLine($"Error   : Process returnCode='{returnCode}' {info.FileName} {info.Arguments}");
             }
 
             return returnCode;

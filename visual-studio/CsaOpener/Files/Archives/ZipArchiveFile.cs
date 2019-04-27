@@ -1,10 +1,10 @@
 ﻿namespace Grayscale.CsaOpener
 {
     using System.Diagnostics;
-    using System.IO;
     using System.IO.Compression;
-    using Grayscale.CsaOpener.Location;
+    using Grayscale.CsaOpener.CommonAction;
     using Grayscale.CsaOpener.Commons;
+    using Grayscale.CsaOpener.Location;
 
     /// <summary>
     /// Zip圧縮ファイル。
@@ -27,8 +27,11 @@
         /// <returns>展開に成功した。</returns>
         public override bool Expand()
         {
-            Trace.WriteLine($"Expand  : {this.ExpansionGoFile.FullName} -> {ExpansionOutputDirectory.Instance.FullName}");
-            ZipFile.ExtractToDirectory(this.ExpansionGoFile.FullName, ExpansionOutputDirectory.Instance.FullName);
+            Trace.WriteLine($"Expand  : {this.ExpansionGoFile.FullName} -> {FileSystem.ExpansionOutputDirectory.FullName}");
+            ZipFile.ExtractToDirectory(this.ExpansionGoFile.FullName, FileSystem.ExpansionOutputDirectory.FullName);
+
+            // ディレクトリーを浅くします。
+            PathFlat.Search(FileSystem.ExpansionOutputDirectory.FullName);
 
             // 解凍が終わった元ファイルを移動。
             this.ExpansionGoFile.Move(this.ExpansionWentFile);

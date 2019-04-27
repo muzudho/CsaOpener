@@ -1,6 +1,7 @@
 ﻿namespace Grayscale.CsaOpener
 {
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.IO;
     using Grayscale.CsaOpener.Commons;
     using Grayscale.CsaOpener.Location;
@@ -21,14 +22,14 @@
         /// <returns>ループが回った回数。</returns>
         public static int ExpandLittleIt()
         {
+            Trace.WriteLine("Expand  : Start...");
+
             // 指定ディレクトリ以下のファイルをすべて取得する
             IEnumerable<string> expansionGoFiles =
                 System.IO.Directory.EnumerateFiles(
-                    ExpansionGoDirectory.Instance.FullName, "*", System.IO.SearchOption.AllDirectories);
+                    FileSystem.ExpansionGoDirectory.FullName, "*", System.IO.SearchOption.AllDirectories);
 
             Rest = 0;
-
-            // Trace.WriteLine("Expanding...");
 
             // 圧縮ファイルを 3つ 解凍する
             var count = 0;

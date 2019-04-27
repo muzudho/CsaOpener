@@ -1,8 +1,8 @@
 ﻿namespace Grayscale.CsaOpener
 {
+    using System.IO;
     using Grayscale.CsaOpener.Commons;
     using Grayscale.CsaOpener.Location;
-    using System.IO;
 
     /// <summary>
     /// 棋譜ファイル。
@@ -40,7 +40,8 @@
             private set
             {
                 this.eatingGoFileInstance = value;
-                this.EatingWentFile = new TraceableFile(PathHelper.Combine(EatingWentDirectory.Instance.FullName, Path.GetFileName(value.FullName)));
+                this.EatingWentFile = new TraceableFile(PathHelper.Combine(FileSystem.EatingWentDirectory.FullName, Path.GetFileName(value.FullName)));
+                this.EatingOutputFile = new TraceableFile(PathHelper.Combine(FileSystem.EatingOutputDirectory.FullName, $"{Path.GetFileNameWithoutExtension(value.FullName)}.tapefrag").Replace(@"\", "/"));
             }
         }
 
@@ -50,8 +51,8 @@
         public TraceableFile EatingWentFile { get; private set; }
 
         /// <summary>
-        /// Gets or sets a 棋譜読取出力先ファイルパス。
+        /// Gets a 棋譜読取出力先ファイルパス。
         /// </summary>
-        public string EatingOutputFilePath { get; protected set; }
+        public TraceableFile EatingOutputFile { get; private set; }
     }
 }
