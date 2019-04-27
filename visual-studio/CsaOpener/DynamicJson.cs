@@ -71,7 +71,6 @@ namespace Codeplex.Data
         }
 
         // private static methods
-
         private static dynamic ToValue(XElement element)
         {
             var type = (JsonType)Enum.Parse(typeof(JsonType), element.Attribute("type").Value);
@@ -176,7 +175,6 @@ namespace Codeplex.Data
         }
 
         // dynamic structure represents JavaScript Object/Array
-
         readonly XElement xml;
         readonly JsonType jsonType;
 

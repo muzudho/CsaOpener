@@ -8,7 +8,7 @@
     /// <summary>
     /// 何か所かで使うもの。
     /// </summary>
-    public static class Commons
+    public static class CommonsLib
     {
         /// <summary>
         /// 棋譜を読み取ります。
@@ -21,8 +21,8 @@
             ProcessStartInfo info = new ProcessStartInfo();
 
             // 起動する実行ファイルのパスを設定する
-            info.FileName = OpenerConfig.Instance.KifuwarabeWcsc29ExePath;
-            info.WorkingDirectory = Directory.GetParent(OpenerConfig.Instance.KifuwarabeWcsc29ExePath).FullName;
+            info.FileName = KifuwarabeWcsc29Config.Instance.kifuwarabe_wcsc29_exe_path_for_read_kifu;
+            info.WorkingDirectory = Directory.GetParent(KifuwarabeWcsc29Config.Instance.kifuwarabe_wcsc29_exe_path_for_read_kifu).FullName;
 
             // コマンドライン引数を指定する
             info.Arguments = $@"--input ""{input_file.Replace(@"\", "/")}"" --output ""{output_file.Replace(@"\", "/")}""";

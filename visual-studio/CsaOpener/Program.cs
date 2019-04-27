@@ -9,6 +9,7 @@ namespace Grayscale.CsaOpener
     using System.Runtime.InteropServices;
     using System.Text;
     using System.Threading;
+    using Grayscale.CsaOpener.Commons;
     using Grayscale.CsaOpener.Location;
 
     // [ソリューション エクスプローラー]のプロジェクトの下の[参照]を右クリック、
@@ -119,7 +120,7 @@ namespace Grayscale.CsaOpener
         }
 
         /// <summary>
-        /// RPM棋譜の断片（.rpmove ファイル）を600個ぐらい 適当にくっつけて JSONファイルにする。
+        /// RPM棋譜の断片（.tapefrag ファイル）を600個ぐらい 適当にくっつけて JSONファイルにする。
         /// </summary>
         /// <param name="isLast">余り。</param>
         /// <returns>ループが回った回数、マージを１つ以上行った。</returns>
@@ -128,22 +129,22 @@ namespace Grayscale.CsaOpener
             Trace.WriteLine($"Merge   : isLast: {isLast}.");
 
             // 指定ディレクトリ以下のファイルをすべて取得する
-            IEnumerable<string> rpmoveFiles =
+            IEnumerable<string> tapefragFiles =
                 System.IO.Directory.EnumerateFiles(
-                    EatingOutputDirectory.Instance.Path, "*.rpmove", System.IO.SearchOption.AllDirectories);
+                    EatingOutputDirectory.Instance.Path, "*.tapefrag", System.IO.SearchOption.AllDirectories);
 
             var count = 0;
 
             // まず、ファイルを 1～600個集める。
             var fileGroup = new List<string>();
-            foreach (string rpmoveFile in rpmoveFiles)
+            foreach (string tapefragFile in tapefragFiles)
             {
                 if (fileGroup.Count > 599)
                 {
                     break;
                 }
 
-                fileGroup.Add(rpmoveFile);
+                fileGroup.Add(tapefragFile);
                 count++;
             }
 
@@ -175,10 +176,10 @@ namespace Grayscale.CsaOpener
             var lastComma = content.LastIndexOf(',');
             content = content.Substring(0, lastComma);
 
-            // JSON形式として読めるように、配列のオブジェクトにする。
-            content = string.Concat(@"{""book"": [", content, "]}");
+            // JSON形式として読めるように、配列のオブジェクトにする。box は Rust言語の予約語なので、tape_box とした。
+            content = string.Concat(@"{""tape_box"": [", content, "]}");
 
-            // 拡張子を .rpmrec にして保存する。ファイル名は適当。
+            // 拡張子を .rbox にして保存する。ファイル名は適当。
             // ファイル名が被ってしまったら、今回はパス。
             {
                 // ランダムな正の数を４つ つなげて長くする。
@@ -189,13 +190,13 @@ namespace Grayscale.CsaOpener
                 var num4 = rand.Next();
 
                 // Trace.WriteLine("Merge rpmove obj(Write1)...");
-                var path = Path.Combine(RpmRecordDirectory.Instance.Path, $"{num1}-{num2}-{num3}-{num4}-rpmrec.json");
+                var path = Path.Combine(RpmRecordDirectory.Instance.Path, $"{num1}-{num2}-{num3}-{num4}-rbox.json");
                 if (!File.Exists(path))
                 {
-                    File.WriteAllText(path, content);
+                    new TraceableFile(path).WriteAllText(content);
 
                     // 結合が終わったファイルは消す。
-                    foreach (string rpmoveFile in rpmoveFiles)
+                    foreach (string rpmoveFile in tapefragFiles)
                     {
                         // Trace.WriteLine($"Remove: {rpmoveFile}");
                         File.Delete(rpmoveFile);

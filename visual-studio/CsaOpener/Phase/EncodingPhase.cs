@@ -97,7 +97,7 @@
 
                         // var wentDir = Path.Combine(FormationWentPath, Directory.GetParent(inputFile).Name);
                         var wentDir = Path.Combine(FomationWentDirectory.Instance.Path, belowPath);
-                        Commons.CreateDirectory(wentDir);
+                        CommonsLib.CreateDirectory(wentDir);
 
                         var wentFile = Path.Combine(wentDir, Path.GetFileName(textFile));
                         try

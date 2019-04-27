@@ -24,7 +24,7 @@
 
                 // そのままコピーすると名前がぶつかってしまう☆（＾～＾）
                 var wrappingDir = Path.Combine(ExpansionOutputDirectory.Instance.Path, $"copied-{Path.GetFileNameWithoutExtension(this.ExpansionGoFilePath)}");
-                Commons.CreateDirectory(wrappingDir);
+                CommonsLib.CreateDirectory(wrappingDir);
                 this.ExpansionOutputFile = Path.Combine(wrappingDir, Path.GetFileName(this.ExpansionGoFilePath));
             }
 
@@ -32,10 +32,9 @@
             if (!string.IsNullOrWhiteSpace(this.EatingGoFilePath))
             {
                 // Trace.WriteLine($"Kif eat: {this.EatingGoFilePath}");
-
                 this.EatingWentFilePath = Path.Combine(EatingWentDirectory.Instance.Path, Directory.GetParent(this.EatingGoFilePath).Name, Path.GetFileName(this.EatingGoFilePath));
 
-                // 拡張子は .rpmove
+                // 拡張子は .tapefrag
                 var headLen = EatingGoDirectory.Instance.Path.Length;
                 var footLen = Path.GetFileName(this.EatingGoFilePath).Length;
                 var middlePath = this.EatingGoFilePath.Substring(headLen, this.EatingGoFilePath.Length - headLen - footLen).Replace(@"\", "/");
@@ -44,7 +43,7 @@
                     middlePath = middlePath.Substring(1);
                 }
 
-                this.EatingOutputFilePath = Path.Combine(EatingOutputDirectory.Instance.Path, middlePath, $"{Path.GetFileNameWithoutExtension(this.EatingGoFilePath)}.rpmove").Replace(@"\", "/");
+                this.EatingOutputFilePath = Path.Combine(EatingOutputDirectory.Instance.Path, middlePath, $"{Path.GetFileNameWithoutExtension(this.EatingGoFilePath)}.tapefrag").Replace(@"\", "/");
 
                 // Trace.WriteLine($"config.EatingOutputPath: {config.EatingOutputPath}.");
                 // Trace.WriteLine($"headLen: {headLen}, footLen: {footLen}, middlePath: {middlePath}, Output: {this.EatingOutputFilePath}.");
@@ -77,11 +76,11 @@
         /// </summary>
         public override void ReadGameRecord()
         {
-            int returnCode = Commons.ReadGameRecord(this.EatingGoFilePath, this.EatingOutputFilePath);
+            int returnCode = CommonsLib.ReadGameRecord(this.EatingGoFilePath, this.EatingOutputFilePath);
 
             // 終わった元ファイルを移動。
             var dir = Path.Combine(EatingWentDirectory.Instance.Path, Directory.GetParent(this.EatingGoFilePath).Name);
-            Commons.CreateDirectory(dir);
+            CommonsLib.CreateDirectory(dir);
             File.Move(this.EatingGoFilePath, Path.Combine(EatingWentDirectory.Instance.Path, Directory.GetParent(this.EatingGoFilePath).Name, Path.GetFileName(this.EatingGoFilePath)));
         }
     }

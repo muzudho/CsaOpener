@@ -73,5 +73,10 @@
         /// Gets a マージ済み棋譜ファイル置き場。
         /// </summary>
         public string rpm_record { get; private set; }
+
+        /// <summary>
+        /// Gets a 棋譜を読み取るための実行ファイルへのパス。
+        /// </summary>
+        public string kifuwarabe_wcsc29_exe_path_for_read_kifu { get; private set; }
     }
 }

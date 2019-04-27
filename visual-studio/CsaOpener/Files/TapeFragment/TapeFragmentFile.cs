@@ -1,15 +1,15 @@
 ﻿namespace Grayscale.CsaOpener.Files.RpmObj
 {
     /// <summary>
-    /// 拡張子が .rpmove のファイル。
+    /// 拡張子が .tapefrag のファイル。
     /// </summary>
-    public class RpmObjFile
+    public class TapeFragmentFile
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="RpmObjFile"/> class.
+        /// Initializes a new instance of the <see cref="TapeFragmentFile"/> class.
         /// </summary>
         /// <param name="filePath">ファイルパス。</param>
-        public RpmObjFile(string filePath)
+        public TapeFragmentFile(string filePath)
         {
             this.FilePath = filePath;
         }

@@ -67,7 +67,8 @@
   <ItemGroup>
     <Compile Include="Arguments.cs" />
     <Compile Include="CommonAction\PathFlat.cs" />
-    <Compile Include="Commons.cs" />
+    <Compile Include="CommonsLib.cs" />
+    <Compile Include="Commons\TraceableFile.cs" />
     <Compile Include="Config\KifuwarabeWcsc29Config.cs" />
     <Compile Include="Config\OpenerConfig.cs" />
     <Compile Include="DynamicJson.cs" />
@@ -80,7 +81,7 @@
     <Compile Include="Files\RecordArchives\TargzFile.cs" />
     <Compile Include="Files\RecordArchives\UnexpectedFile.cs" />
     <Compile Include="Files\RecordArchives\ZipArchiveFile.cs" />
-    <Compile Include="Files\RpmObj\RpmObjFile.cs" />
+    <Compile Include="Files\TapeFragment\TapeFragmentFile.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Lib\LogRotation.cs" />
     <Compile Include="Lib\LzhManager.cs" />

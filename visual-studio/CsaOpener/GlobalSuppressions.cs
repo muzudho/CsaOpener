@@ -5,3 +5,5 @@
 
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.NamingRules", "SA1300:Element must begin with upper-case letter", Justification = "<保留中>", Scope = "member", Target = "~P:Grayscale.CsaOpener.KifuwarabeWcsc29Config.Directories.go")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.NamingRules", "SA1300:Element must begin with upper-case letter", Justification = "<保留中>", Scope = "member", Target = "~P:Grayscale.CsaOpener.KifuwarabeWcsc29Config.Directories.went")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.NamingRules", "SA1300:Element must begin with upper-case letter", Justification = "<保留中>", Scope = "member", Target = "~P:Grayscale.CsaOpener.KifuwarabeWcsc29Config.expansion")]
+

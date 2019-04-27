@@ -38,7 +38,7 @@
                 SevenZManager.fnExtract(this.ExpansionGoFilePath, ExpansionOutputDirectory.Instance.Path);
 
                 var wentDir = Path.Combine(ExpansionWentDirectory.Instance.Path, Directory.GetParent(this.ExpansionGoFilePath).Name);
-                Commons.CreateDirectory(wentDir);
+                CommonsLib.CreateDirectory(wentDir);
                 var wentFile = Path.Combine(wentDir, Path.GetFileName(this.ExpansionGoFilePath));
 
                 // 解凍が終わった元ファイルを移動。
