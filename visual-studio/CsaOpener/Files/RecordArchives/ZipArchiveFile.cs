@@ -31,7 +31,7 @@
             ZipFile.ExtractToDirectory(this.ExpansionGoFile.FullName, ExpansionOutputDirectory.Instance.FullName);
 
             // 解凍が終わった元ファイルを移動。
-            this.ExpansionGoFile.Move(this.ExpansionWentFile.FullName);
+            this.ExpansionGoFile.Move(this.ExpansionWentFile);
 
             return true;
         }

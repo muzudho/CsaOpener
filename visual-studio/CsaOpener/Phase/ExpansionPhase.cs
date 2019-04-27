@@ -49,11 +49,11 @@
                         break;
 
                     case ".CSA":
-                        anyFile = new CsaFile(expansionGoFile, string.Empty);
+                        anyFile = new CsaFile(expansionGoFile, new TraceableFile(string.Empty));
                         break;
 
                     case ".KIF":
-                        anyFile = new KifFile(expansionGoFile, string.Empty);
+                        anyFile = new KifFile(expansionGoFile, new TraceableFile(string.Empty));
                         break;
 
                     case ".LZH":

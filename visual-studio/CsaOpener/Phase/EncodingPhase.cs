@@ -103,7 +103,7 @@
 
                         try
                         {
-                            new TraceableFile(textFile).Move(wentFile.FullName);
+                            new TraceableFile(textFile).Move(wentFile);
                         }
                         catch (IOException e)
                         {

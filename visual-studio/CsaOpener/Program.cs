@@ -235,11 +235,11 @@ namespace Grayscale.CsaOpener
                 switch (Path.GetExtension(eatingGoFile).ToUpper())
                 {
                     case ".CSA":
-                        anyFile = new CsaFile(new TraceableFile(string.Empty), eatingGoFile);
+                        anyFile = new CsaFile(new TraceableFile(string.Empty), new TraceableFile(eatingGoFile));
                         break;
 
                     case ".KIF":
-                        anyFile = new KifFile(new TraceableFile(string.Empty), eatingGoFile);
+                        anyFile = new KifFile(new TraceableFile(string.Empty), new TraceableFile(eatingGoFile));
                         break;
 
                     default:

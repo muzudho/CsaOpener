@@ -36,12 +36,12 @@
         /// 移動。
         /// </summary>
         /// <param name="destFile">移動先。</param>
-        public void Move(string destFile)
+        public void Move(TraceableFile destFile)
         {
-            new TraceableFile(destFile).CreateParentDirectory();
+            new TraceableFile(destFile.FullName).CreateParentDirectory();
 
-            Trace.WriteLine($"Move    : '{this.FullName}' --> '{destFile}'...");
-            System.IO.File.Move(this.FullName, destFile);
+            Trace.WriteLine($"Move    : '{this.FullName}' --> '{destFile.FullName}'...");
+            System.IO.File.Move(this.FullName, destFile.FullName);
         }
 
         /// <summary>
@@ -49,10 +49,10 @@
         /// </summary>
         /// <param name="destFile">コピー先。</param>
         /// <param name="overwrite">上書き。</param>
-        public void Copy(string destFile, bool overwrite = false)
+        public void Copy(TraceableFile destFile, bool overwrite = false)
         {
-            Trace.WriteLine($"Copy    : '{this.FullName}' --> '{destFile}'...");
-            System.IO.File.Copy(this.FullName, destFile, overwrite);
+            Trace.WriteLine($"Copy    : '{this.FullName}' --> '{destFile.FullName}'...");
+            System.IO.File.Copy(this.FullName, destFile.FullName, overwrite);
         }
 
         /// <summary>

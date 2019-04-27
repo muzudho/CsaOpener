@@ -36,7 +36,7 @@
             }
 
             // 無理だった元ファイルを移動。
-            this.ExpansionGoFile.Move(this.ExpansionWentFile.FullName);
+            this.ExpansionGoFile.Move(this.ExpansionWentFile);
 
             return true;
         }

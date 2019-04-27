@@ -32,12 +32,12 @@
             protected set
             {
                 this.expansionGoFileInstance = value;
-                this.ExpansionWentFile = new TraceableFile(PathHelper.Combine(ExpansionWentDirectory.Instance.FullName, Path.GetFileName(this.ExpansionGoFile.FullName)));
+                this.ExpansionWentFile = new TraceableFile(PathHelper.Combine(ExpansionWentDirectory.Instance.FullName, Path.GetFileName(value.FullName)));
             }
         }
 
         /// <summary>
-        /// Gets or sets a 解凍が終わったファイル。
+        /// Gets a 解凍が終わったファイル。
         /// </summary>
         public TraceableFile ExpansionWentFile { get; private set; }
 
