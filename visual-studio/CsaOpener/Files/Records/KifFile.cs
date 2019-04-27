@@ -24,7 +24,7 @@
                 // Trace.WriteLine($"Kif exp: {this.ExpansionGoFilePath}");
 
                 // そのままコピーすると名前がぶつかってしまう☆（＾～＾）
-                var wrappingDir = new TraceableDirectory( Path.Combine(ExpansionOutputDirectory.Instance.Path, $"copied-{Path.GetFileNameWithoutExtension(this.ExpansionGoFilePath)}"));
+                var wrappingDir = new TraceableDirectory( Path.Combine(ExpansionOutputDirectory.Instance.FullName, $"copied-{Path.GetFileNameWithoutExtension(this.ExpansionGoFilePath)}"));
                 wrappingDir.Create();
                 this.ExpansionGoFilePath = Path.Combine(wrappingDir.FullName, Path.GetFileName(this.ExpansionGoFilePath));
             }
@@ -34,10 +34,10 @@
             {
                 // Trace.WriteLine($"Kif eat: {this.EatingGoFilePath}");
 
-                this.EatingWentFilePath = Path.Combine(ExpansionWentDirectory.Instance.Path, Directory.GetParent(this.EatingGoFilePath).Name, Path.GetFileName(this.EatingGoFilePath));
+                this.EatingWentFilePath = Path.Combine(ExpansionWentDirectory.Instance.FullName, Directory.GetParent(this.EatingGoFilePath).Name, Path.GetFileName(this.EatingGoFilePath));
 
                 // 拡張子は .tapefrag
-                var headLen = EatingGoDirectory.Instance.Path.Length;
+                var headLen = EatingGoDirectory.Instance.FullName.Length;
                 var footLen = Path.GetFileName(this.EatingGoFilePath).Length;
                 var middlePath = this.EatingGoFilePath.Substring(headLen, this.EatingGoFilePath.Length - headLen - footLen).Replace(@"\", "/");
                 if (middlePath[0] == '/')
@@ -45,7 +45,7 @@
                     middlePath = middlePath.Substring(1);
                 }
 
-                this.EatingOutputFilePath = Path.Combine(EatingOutputDirectory.Instance.Path, middlePath, $"{Path.GetFileNameWithoutExtension(this.EatingGoFilePath)}.tapefrag").Replace(@"\", "/");
+                this.EatingOutputFilePath = Path.Combine(EatingOutputDirectory.Instance.FullName, middlePath, $"{Path.GetFileNameWithoutExtension(this.EatingGoFilePath)}.tapefrag").Replace(@"\", "/");
 
                 // Trace.WriteLine($"config.EatingOutputPath: {config.EatingOutputPath}.");
                 // Trace.WriteLine($"headLen: {headLen}, footLen: {footLen}, middlePath: {middlePath}, Output: {this.EatingOutputFilePath}.");
@@ -67,7 +67,7 @@
             File.Copy(this.ExpansionGoFilePath, this.ExpansionGoFilePath, true);
 
             // 解凍が終わった元ファイルを移動。
-            File.Move(this.ExpansionGoFilePath, Path.Combine(ExpansionWentDirectory.Instance.Path, Path.GetFileName(this.ExpansionGoFilePath)));
+            File.Move(this.ExpansionGoFilePath, Path.Combine(ExpansionWentDirectory.Instance.FullName, Path.GetFileName(this.ExpansionGoFilePath)));
 
             return true;
         }
@@ -80,7 +80,7 @@
             int returnCode = CommonsLib.ReadGameRecord(this.EatingGoFilePath, this.EatingOutputFilePath);
 
             // 終わった元ファイルを移動。
-            var dir = new TraceableDirectory( Path.Combine(EatingWentDirectory.Instance.Path, Directory.GetParent(this.EatingGoFilePath).Name));
+            var dir = new TraceableDirectory( Path.Combine(EatingWentDirectory.Instance.FullName, Directory.GetParent(this.EatingGoFilePath).Name));
             dir.Create();
             File.Move(this.EatingGoFilePath, Path.Combine(dir.FullName, Path.GetFileName(this.EatingGoFilePath)));
         }

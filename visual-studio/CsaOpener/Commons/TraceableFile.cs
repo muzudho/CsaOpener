@@ -17,6 +17,9 @@
             this.FullName = file;
         }
 
+        /// <summary>
+        /// Gets a フル・パス。
+        /// </summary>
         public string FullName { get; private set; }
 
         /// <summary>
@@ -46,6 +49,15 @@
         {
             Trace.WriteLine($"Move    : '{this.FullName}'...");
             System.IO.File.Delete(this.FullName);
+        }
+
+        /// <summary>
+        /// 親ディレクトリの作成。
+        /// </summary>
+        public void CreateParentDirectory()
+        {
+            var wentParentDir = new TraceableDirectory(System.IO.Directory.GetParent(this.FullName).FullName);
+            wentParentDir.Create();
         }
     }
 }

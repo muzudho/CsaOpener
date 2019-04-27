@@ -30,15 +30,15 @@
         {
             try
             {
-                Trace.WriteLine($"Expand  : {this.ExpansionGoFilePath} -> {ExpansionOutputDirectory.Instance.Path}");
+                Trace.WriteLine($"Expand  : {this.ExpansionGoFilePath} -> {ExpansionOutputDirectory.Instance.FullName}");
                 if (string.IsNullOrWhiteSpace(this.ExpansionGoFilePath))
                 {
                     return false;
                 }
 
-                SevenZManager.fnExtract(this.ExpansionGoFilePath, ExpansionOutputDirectory.Instance.Path);
+                SevenZManager.fnExtract(this.ExpansionGoFilePath, ExpansionOutputDirectory.Instance.FullName);
 
-                var wentDir = new TraceableDirectory( Path.Combine(ExpansionWentDirectory.Instance.Path, Directory.GetParent(this.ExpansionGoFilePath).Name));
+                var wentDir = new TraceableDirectory( Path.Combine(ExpansionWentDirectory.Instance.FullName, Directory.GetParent(this.ExpansionGoFilePath).Name));
                 wentDir.Create();
                 var wentFile = Path.Combine(wentDir.FullName, Path.GetFileName(this.ExpansionGoFilePath));
 

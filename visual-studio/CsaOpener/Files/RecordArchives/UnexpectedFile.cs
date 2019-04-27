@@ -34,7 +34,7 @@
                 return false;
             }
 
-            var wentDir = Path.Combine(ExpansionWentDirectory.Instance.Path, Path.GetFileName(this.ExpansionGoFilePath));
+            var wentDir = Path.Combine(ExpansionWentDirectory.Instance.FullName, Path.GetFileName(this.ExpansionGoFilePath));
             // Trace.WriteLine($"Evasion: {this.ExpansionGoFilePath} -> {wentDir}");
 
             // 無理だった元ファイルを移動。

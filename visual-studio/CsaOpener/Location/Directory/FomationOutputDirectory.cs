@@ -1,13 +1,14 @@
 ﻿namespace Grayscale.CsaOpener.Location
 {
     using System.IO;
+    using Grayscale.CsaOpener.Commons;
 
     /// <summary>
     /// ディレクトリ。
     /// </summary>
     public class FomationOutputDirectory
     {
-        private static FomationOutputDirectory thisInstance;
+        private static TraceableDirectory thisInstance;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FomationOutputDirectory"/> class.
@@ -19,29 +20,18 @@
         /// <summary>
         /// Gets a このインスタンス。
         /// </summary>
-        public static FomationOutputDirectory Instance
+        public static TraceableDirectory Instance
         {
             get
             {
                 if (thisInstance == null)
                 {
-                    thisInstance = new FomationOutputDirectory();
-                    if (!Directory.Exists(thisInstance.Path))
-                    {
-                        Directory.CreateDirectory(thisInstance.Path);
-                    }
+                    thisInstance = new TraceableDirectory(KifuwarabeWcsc29Config.Instance.formation.output);
+                    thisInstance.Create();
                 }
 
                 return thisInstance;
             }
-        }
-
-        /// <summary>
-        /// Gets a パス。
-        /// </summary>
-        public string Path
-        {
-            get { return KifuwarabeWcsc29Config.Instance.formation.output; }
         }
     }
 }

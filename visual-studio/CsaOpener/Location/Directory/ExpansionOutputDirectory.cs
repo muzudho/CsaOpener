@@ -1,13 +1,14 @@
 ﻿namespace Grayscale.CsaOpener.Location
 {
     using System.IO;
+    using Grayscale.CsaOpener.Commons;
 
     /// <summary>
     /// ディレクトリ。
     /// </summary>
     public class ExpansionOutputDirectory
     {
-        private static ExpansionOutputDirectory thisInstance;
+        private static TraceableDirectory thisInstance;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ExpansionOutputDirectory"/> class.
@@ -19,29 +20,18 @@
         /// <summary>
         /// Gets a このインスタンス。
         /// </summary>
-        public static ExpansionOutputDirectory Instance
+        public static TraceableDirectory Instance
         {
             get
             {
                 if (thisInstance == null)
                 {
-                    thisInstance = new ExpansionOutputDirectory();
-                    if (!Directory.Exists(thisInstance.Path))
-                    {
-                        Directory.CreateDirectory(thisInstance.Path);
-                    }
+                    thisInstance = new TraceableDirectory(KifuwarabeWcsc29Config.Instance.expansion.output);
+                    thisInstance.Create();
                 }
 
                 return thisInstance;
             }
-        }
-
-        /// <summary>
-        /// Gets a パス。
-        /// </summary>
-        public string Path
-        {
-            get { return KifuwarabeWcsc29Config.Instance.expansion.output; }
         }
     }
 }

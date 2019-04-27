@@ -20,12 +20,12 @@
         public static int ExecuteEncode()
         {
             var encodedCount = 0;
-            Trace.WriteLine($"Entry   : '{ExpansionOutputDirectory.Instance.Path}' directory.");
+            Trace.WriteLine($"Entry   : '{ExpansionOutputDirectory.Instance.FullName}' directory.");
 
             // 指定ディレクトリ以下のファイルをすべて取得する
             IEnumerable<string> files =
                 System.IO.Directory.EnumerateFiles(
-                    ExpansionOutputDirectory.Instance.Path, "*", System.IO.SearchOption.AllDirectories);
+                    ExpansionOutputDirectory.Instance.FullName, "*", System.IO.SearchOption.AllDirectories);
 
             // Trace.WriteLine("Expanding...");
 
@@ -77,7 +77,7 @@
                         }
 
                         // 出力ファイル
-                        var outputFile = Path.Combine(FomationOutputDirectory.Instance.Path, Path.GetFileName(textFile));
+                        var outputFile = Path.Combine(FomationOutputDirectory.Instance.FullName, Path.GetFileName(textFile));
                         Trace.WriteLine($"outputFile: {outputFile}");
 
                         using (FileStream fs2 = new FileStream(outputFile, FileMode.Create))
@@ -94,14 +94,12 @@
                         // 終わったファイルを移動。
                         // ExpantionGoPath = C:\shogi-record\go\hunting
                         // InputFilePath   = C:\shogi-record\go\cooking\floodgate\2008\wdoor+floodgate-900-0+a+gps500+20080803103002.csa とかいうファイルパスになっている。
-                        var belowPath = textFile.Substring(FomationGoDirectory.Instance.Path.Length);
+                        var belowPath = textFile.Substring(FomationGoDirectory.Instance.FullName.Length);
 
                         // var wentDir = Path.Combine(FormationWentPath, Directory.GetParent(inputFile).Name);
                         var wentFile = new TraceableFile(Path.Combine(FomationWentDirectory.Instance.FullName, belowPath.TrimStart('/', '\\')));
                         Trace.WriteLine($"FomationWentDirectory.Instance.FullName: '{FomationWentDirectory.Instance.FullName}'. belowPath: '{belowPath}'. wentFile.FullName: '{wentFile.FullName}'.");
-
-                        var wentParentDir = new TraceableDirectory(System.IO.Directory.GetParent(wentFile.FullName).FullName);
-                        wentParentDir.Create();
+                        wentFile.CreateParentDirectory();
 
                         try
                         {

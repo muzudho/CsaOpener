@@ -1,13 +1,14 @@
 ﻿namespace Grayscale.CsaOpener.Location
 {
     using System.IO;
+    using Grayscale.CsaOpener.Commons;
 
     /// <summary>
     /// ディレクトリ。
     /// </summary>
     public class EatingWentDirectory
     {
-        private static EatingWentDirectory thisInstance;
+        private static TraceableDirectory thisInstance;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EatingWentDirectory"/> class.
@@ -19,31 +20,17 @@
         /// <summary>
         /// Gets a このインスタンス。
         /// </summary>
-        public static EatingWentDirectory Instance
+        public static TraceableDirectory Instance
         {
             get
             {
                 if (thisInstance == null)
                 {
-                    thisInstance = new EatingWentDirectory();
-                    if (!Directory.Exists(thisInstance.Path))
-                    {
-                        Directory.CreateDirectory(thisInstance.Path);
-                    }
+                    thisInstance = new TraceableDirectory(KifuwarabeWcsc29Config.Instance.eating.went);
+                    thisInstance.Create();
                 }
 
                 return thisInstance;
-            }
-        }
-
-        /// <summary>
-        /// Gets a パス。
-        /// </summary>
-        public string Path
-        {
-            get
-            {
-                return KifuwarabeWcsc29Config.Instance.eating.went;
             }
         }
     }

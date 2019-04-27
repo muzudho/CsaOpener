@@ -93,7 +93,7 @@ namespace Grayscale.CsaOpener
                     {
                         // このディレクトリ以下のディレクトリをすべて取得する
                         IEnumerable<string> subDirectories =
-                            System.IO.Directory.EnumerateDirectories(ExpansionGoDirectory.Instance.Path, "*", System.IO.SearchOption.TopDirectoryOnly);
+                            System.IO.Directory.EnumerateDirectories(ExpansionGoDirectory.Instance.FullName, "*", System.IO.SearchOption.TopDirectoryOnly);
 
                         foreach (string subDir in subDirectories)
                         {
@@ -104,7 +104,7 @@ namespace Grayscale.CsaOpener
                     {
                         // このディレクトリ以下のディレクトリをすべて取得する
                         IEnumerable<string> subDirectories =
-                            System.IO.Directory.EnumerateDirectories(FomationGoDirectory.Instance.Path, "*", System.IO.SearchOption.TopDirectoryOnly);
+                            System.IO.Directory.EnumerateDirectories(FomationGoDirectory.Instance.FullName, "*", System.IO.SearchOption.TopDirectoryOnly);
 
                         foreach (string subDir in subDirectories)
                         {
@@ -131,7 +131,7 @@ namespace Grayscale.CsaOpener
             // 指定ディレクトリ以下のファイルをすべて取得する
             IEnumerable<string> tapefragFiles =
                 System.IO.Directory.EnumerateFiles(
-                    EatingOutputDirectory.Instance.Path, "*.tapefrag", System.IO.SearchOption.AllDirectories);
+                    EatingOutputDirectory.Instance.FullName, "*.tapefrag", System.IO.SearchOption.AllDirectories);
 
             var count = 0;
 
@@ -190,7 +190,7 @@ namespace Grayscale.CsaOpener
                 var num4 = rand.Next();
 
                 // Trace.WriteLine("Merge rpmove obj(Write1)...");
-                var path = Path.Combine(RpmRecordDirectory.Instance.Path, $"{num1}-{num2}-{num3}-{num4}-rbox.json");
+                var path = Path.Combine(RpmRecordDirectory.Instance.FullName, $"{num1}-{num2}-{num3}-{num4}-rbox.json");
                 if (!File.Exists(path))
                 {
                     new TraceableFile(path).WriteAllText(content);
@@ -213,12 +213,12 @@ namespace Grayscale.CsaOpener
         /// <returns>ループが回った回数。</returns>
         public static int ReadLitterGameRecord()
         {
-            Trace.WriteLine($"Start   : ReadLitterGameRecord. Directory: {EatingGoDirectory.Instance.Path}.");
+            Trace.WriteLine($"Start   : ReadLitterGameRecord. Directory: {EatingGoDirectory.Instance.FullName}.");
 
             // 指定ディレクトリ以下のファイルをすべて取得する
             IEnumerable<string> eatingGoFiles =
                 System.IO.Directory.EnumerateFiles(
-                    EatingGoDirectory.Instance.Path, "*", System.IO.SearchOption.AllDirectories);
+                    EatingGoDirectory.Instance.FullName, "*", System.IO.SearchOption.AllDirectories);
 
             // 200件回す。
             var count = 0;
