@@ -46,17 +46,5 @@
 
             return returnCode;
         }
-
-        /// <summary>
-        /// ディレクトリーがなければ作るぜ☆（＾～＾）
-        /// </summary>
-        /// <param name="dir">パス。</param>
-        public static void CreateDirectory(string dir)
-        {
-            if (!Directory.Exists(dir))
-            {
-                Directory.CreateDirectory(dir);
-            }
-        }
     }
 }

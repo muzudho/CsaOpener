@@ -68,6 +68,7 @@
     <Compile Include="Arguments.cs" />
     <Compile Include="CommonAction\PathFlat.cs" />
     <Compile Include="CommonsLib.cs" />
+    <Compile Include="Commons\TraceableDirectory.cs" />
     <Compile Include="Commons\TraceableFile.cs" />
     <Compile Include="Config\KifuwarabeWcsc29Config.cs" />
     <Compile Include="Config\OpenerConfig.cs" />

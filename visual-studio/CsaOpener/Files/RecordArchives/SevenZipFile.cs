@@ -3,6 +3,7 @@
     using System;
     using System.Diagnostics;
     using System.IO;
+    using Grayscale.CsaOpener.Commons;
     using Grayscale.CsaOpener.Location;
 
     /// <summary>
@@ -37,9 +38,9 @@
 
                 SevenZManager.fnExtract(this.ExpansionGoFilePath, ExpansionOutputDirectory.Instance.Path);
 
-                var wentDir = Path.Combine(ExpansionWentDirectory.Instance.Path, Directory.GetParent(this.ExpansionGoFilePath).Name);
-                CommonsLib.CreateDirectory(wentDir);
-                var wentFile = Path.Combine(wentDir, Path.GetFileName(this.ExpansionGoFilePath));
+                var wentDir = new TraceableDirectory( Path.Combine(ExpansionWentDirectory.Instance.Path, Directory.GetParent(this.ExpansionGoFilePath).Name));
+                wentDir.Create();
+                var wentFile = Path.Combine(wentDir.FullName, Path.GetFileName(this.ExpansionGoFilePath));
 
                 // 解凍が終わった元ファイルを移動。
                 File.Move(this.ExpansionGoFilePath, wentFile);

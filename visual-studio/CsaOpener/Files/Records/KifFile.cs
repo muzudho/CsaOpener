@@ -2,6 +2,7 @@
 {
     using System.Diagnostics;
     using System.IO;
+    using Grayscale.CsaOpener.Commons;
     using Grayscale.CsaOpener.Location;
 
     /// <summary>
@@ -23,9 +24,9 @@
                 // Trace.WriteLine($"Kif exp: {this.ExpansionGoFilePath}");
 
                 // そのままコピーすると名前がぶつかってしまう☆（＾～＾）
-                var wrappingDir = Path.Combine(ExpansionOutputDirectory.Instance.Path, $"copied-{Path.GetFileNameWithoutExtension(this.ExpansionGoFilePath)}");
-                CommonsLib.CreateDirectory(wrappingDir);
-                this.ExpansionGoFilePath = Path.Combine(wrappingDir, Path.GetFileName(this.ExpansionGoFilePath));
+                var wrappingDir = new TraceableDirectory( Path.Combine(ExpansionOutputDirectory.Instance.Path, $"copied-{Path.GetFileNameWithoutExtension(this.ExpansionGoFilePath)}"));
+                wrappingDir.Create();
+                this.ExpansionGoFilePath = Path.Combine(wrappingDir.FullName, Path.GetFileName(this.ExpansionGoFilePath));
             }
 
             // 棋譜読取を待っているファイルパス。
@@ -79,9 +80,9 @@
             int returnCode = CommonsLib.ReadGameRecord(this.EatingGoFilePath, this.EatingOutputFilePath);
 
             // 終わった元ファイルを移動。
-            var dir = Path.Combine(EatingWentDirectory.Instance.Path, Directory.GetParent(this.EatingGoFilePath).Name);
-            CommonsLib.CreateDirectory(dir);
-            File.Move(this.EatingGoFilePath, Path.Combine(dir, Path.GetFileName(this.EatingGoFilePath)));
+            var dir = new TraceableDirectory( Path.Combine(EatingWentDirectory.Instance.Path, Directory.GetParent(this.EatingGoFilePath).Name));
+            dir.Create();
+            File.Move(this.EatingGoFilePath, Path.Combine(dir.FullName, Path.GetFileName(this.EatingGoFilePath)));
         }
     }
 }

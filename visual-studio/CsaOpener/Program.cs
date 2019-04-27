@@ -198,8 +198,7 @@ namespace Grayscale.CsaOpener
                     // 結合が終わったファイルは消す。
                     foreach (string rpmoveFile in tapefragFiles)
                     {
-                        // Trace.WriteLine($"Remove: {rpmoveFile}");
-                        File.Delete(rpmoveFile);
+                        new TraceableFile(rpmoveFile).Delete();
                     }
                 }
             }
@@ -281,8 +280,7 @@ namespace Grayscale.CsaOpener
                 if (Directory.GetFiles(dir, "*", SearchOption.AllDirectories).Length == 0)
                 {
                     // ファイルがなければ削除する。
-                    Trace.WriteLine($"Delete dir: {dir}.");
-                    Directory.Delete(dir);
+                    new TraceableDirectory(dir).Delete(false);
                 }
             }
             catch (UnauthorizedAccessException e)

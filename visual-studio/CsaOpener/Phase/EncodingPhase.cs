@@ -4,6 +4,7 @@
     using System.Diagnostics;
     using System.IO;
     using System.Text;
+    using Grayscale.CsaOpener.Commons;
     using Grayscale.CsaOpener.Location;
 
     /// <summary>
@@ -96,17 +97,19 @@
                         var belowPath = textFile.Substring(FomationGoDirectory.Instance.Path.Length);
 
                         // var wentDir = Path.Combine(FormationWentPath, Directory.GetParent(inputFile).Name);
-                        var wentDir = Path.Combine(FomationWentDirectory.Instance.Path, belowPath);
-                        CommonsLib.CreateDirectory(wentDir);
+                        var wentFile = new TraceableFile(Path.Combine(FomationWentDirectory.Instance.FullName, belowPath.TrimStart('/', '\\')));
+                        Trace.WriteLine($"FomationWentDirectory.Instance.FullName: '{FomationWentDirectory.Instance.FullName}'. belowPath: '{belowPath}'. wentFile.FullName: '{wentFile.FullName}'.");
 
-                        var wentFile = Path.Combine(wentDir, Path.GetFileName(textFile));
+                        var wentParentDir = new TraceableDirectory(System.IO.Directory.GetParent(wentFile.FullName).FullName);
+                        wentParentDir.Create();
+
                         try
                         {
-                            File.Move(textFile, wentFile);
+                            new TraceableFile(textFile).Move(wentFile.FullName);
                         }
                         catch (IOException e)
                         {
-                            Trace.WriteLine($"Move    : {textFile} --> {wentFile}, {e}");
+                            Trace.WriteLine(e);
                         }
                     }
 
