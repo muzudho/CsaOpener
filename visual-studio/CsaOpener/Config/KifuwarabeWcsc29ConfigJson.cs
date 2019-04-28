@@ -2,32 +2,13 @@
 {
     using System.IO;
     using Codeplex.Data;
+    using Grayscale.CsaOpener.Location;
 
     /// <summary>
     /// 設定。
     /// </summary>
-    public class KifuwarabeWcsc29Config
+    public class KifuwarabeWcsc29ConfigJson
     {
-        private static KifuwarabeWcsc29Config thisInstance;
-
-        /// <summary>
-        /// Gets a ゲームエンジンの設定ファイル。
-        /// </summary>
-        /// <returns>ゲームエンジンの設定。</returns>
-        public static KifuwarabeWcsc29Config Instance
-        {
-            get
-            {
-                if (thisInstance == null)
-                {
-                    var json = DynamicJson.Parse(File.ReadAllText(OpenerConfig.Instance.KifuwarabeWcsc29ConfigPath));
-                    thisInstance = json.Deserialize<KifuwarabeWcsc29Config>();
-                }
-
-                return thisInstance;
-            }
-        }
-
         /// <summary>
         /// ディレクトリー。
         /// </summary>

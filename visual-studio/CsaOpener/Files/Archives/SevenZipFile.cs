@@ -30,16 +30,16 @@
         {
             try
             {
-                Trace.WriteLine($"Expand  : {this.ExpansionGoFile.FullName} -> {FileSystem.ExpansionOutputDirectory.FullName}");
+                Trace.WriteLine($"Expand  : {this.ExpansionGoFile.FullName} -> {LocationMaster.ExpansionOutputDirectory.FullName}");
                 if (string.IsNullOrWhiteSpace(this.ExpansionGoFile.FullName))
                 {
                     return false;
                 }
 
-                SevenZManager.fnExtract(this.ExpansionGoFile.FullName, FileSystem.ExpansionOutputDirectory.FullName);
+                SevenZManager.fnExtract(this.ExpansionGoFile.FullName, LocationMaster.ExpansionOutputDirectory.FullName);
 
                 // ディレクトリーを浅くします。
-                PathFlat.Search(FileSystem.ExpansionOutputDirectory.FullName);
+                PathFlat.GoFlat(LocationMaster.ExpansionOutputDirectory.FullName);
 
                 // 解凍が終わった元ファイルを移動。
                 this.ExpansionGoFile.Move(this.ExpansionWentFile);

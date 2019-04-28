@@ -66,13 +66,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Arguments.cs" />
-    <Compile Include="CommonAction\PathFlat.cs" />
+    <Compile Include="Commons\PathFlat.cs" />
     <Compile Include="CommonAction\CommonsLib.cs" />
     <Compile Include="Commons\PathHelper.cs" />
     <Compile Include="Commons\TraceableDirectory.cs" />
     <Compile Include="Commons\TraceableFile.cs" />
-    <Compile Include="Config\KifuwarabeWcsc29Config.cs" />
-    <Compile Include="Config\OpenerConfig.cs" />
+    <Compile Include="Config\KifuwarabeWcsc29ConfigJson.cs" />
+    <Compile Include="Config\OpenerConfigJson.cs" />
     <Compile Include="DynamicJson.cs" />
     <Compile Include="Files\AbstractArchiveFile.cs" />
     <Compile Include="Files\AbstractFile.cs" />
@@ -88,8 +88,8 @@
     <Compile Include="Lib\LogRotation.cs" />
     <Compile Include="Lib\LzhManager.cs" />
     <Compile Include="Lib\OldLogRemover.cs" />
-    <Compile Include="Location\Directory\FileSystem.cs" />
-    <Compile Include="Location\Directory\RpmRecordDirectory.cs" />
+    <Compile Include="Location\LocationMaster.cs" />
+    <Compile Include="Location\TapeBoxJson.cs" />
     <Compile Include="Phase\EncodingPhase.cs" />
     <Compile Include="Phase\ExpansionPhase.cs" />
     <Compile Include="Program.cs" />

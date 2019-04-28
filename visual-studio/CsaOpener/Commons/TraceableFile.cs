@@ -1,7 +1,7 @@
 ﻿namespace Grayscale.CsaOpener.Commons
 {
     using System.Diagnostics;
-    using System.IO;
+    using System;
 
     /// <summary>
     /// ログを出すファイル。
@@ -30,6 +30,16 @@
         {
             Trace.WriteLine($"Write   : '{this.FullName}'...");
             System.IO.File.WriteAllText(this.FullName, contents);
+        }
+
+        /// <summary>
+        /// 読込み。
+        /// </summary>
+        /// <returns>内容。</returns>
+        public string ReadAllText()
+        {
+            Trace.WriteLine($"Read    : '{this.FullName}'...");
+            return System.IO.File.ReadAllText(this.FullName);
         }
 
         /// <summary>
@@ -69,8 +79,19 @@
         /// </summary>
         public void CreateParentDirectory()
         {
-            var wentParentDir = new TraceableDirectory(System.IO.Directory.GetParent(this.FullName).FullName);
-            wentParentDir.Create();
+            var parentFullName = string.Empty;
+
+            try
+            {
+                parentFullName = System.IO.Directory.GetParent(this.FullName).FullName;
+                var wentParentDir = new TraceableDirectory(parentFullName);
+                wentParentDir.Create();
+            }
+            catch (NotSupportedException e)
+            {
+                Trace.WriteLine($"ThisFullName: '{this.FullName}'. FullName: '{parentFullName}'. {e}");
+                throw;
+            }
         }
     }
 }

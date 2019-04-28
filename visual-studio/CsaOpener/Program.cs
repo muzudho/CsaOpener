@@ -93,7 +93,7 @@ namespace Grayscale.CsaOpener
                     {
                         // このディレクトリ以下のディレクトリをすべて取得する
                         IEnumerable<string> subDirectories =
-                            System.IO.Directory.EnumerateDirectories(FileSystem.ExpansionGoDirectory.FullName, "*", System.IO.SearchOption.TopDirectoryOnly);
+                            System.IO.Directory.EnumerateDirectories(LocationMaster.ExpansionGoDirectory.FullName, "*", System.IO.SearchOption.TopDirectoryOnly);
 
                         foreach (string subDir in subDirectories)
                         {
@@ -104,7 +104,7 @@ namespace Grayscale.CsaOpener
                     {
                         // このディレクトリ以下のディレクトリをすべて取得する
                         IEnumerable<string> subDirectories =
-                            System.IO.Directory.EnumerateDirectories(FileSystem.FomationGoDirectory.FullName, "*", System.IO.SearchOption.TopDirectoryOnly);
+                            System.IO.Directory.EnumerateDirectories(LocationMaster.FomationGoDirectory.FullName, "*", System.IO.SearchOption.TopDirectoryOnly);
 
                         foreach (string subDir in subDirectories)
                         {
@@ -131,26 +131,26 @@ namespace Grayscale.CsaOpener
             // 指定ディレクトリ以下のファイルをすべて取得する
             IEnumerable<string> tapefragFiles =
                 System.IO.Directory.EnumerateFiles(
-                    FileSystem.EatingOutputDirectory.FullName, "*.tapefrag", System.IO.SearchOption.AllDirectories);
+                    LocationMaster.EatingOutputDirectory.FullName, "*.tapefrag", System.IO.SearchOption.AllDirectories);
 
             var count = 0;
 
             // まず、ファイルを 1～600個集める。
-            var fileGroup = new List<string>();
+            var usedTapefragFiles = new List<TraceableFile>();
             foreach (string tapefragFile in tapefragFiles)
             {
-                if (fileGroup.Count > 599)
+                if (usedTapefragFiles.Count > 599)
                 {
                     break;
                 }
 
-                fileGroup.Add(tapefragFile);
+                usedTapefragFiles.Add(new TraceableFile(tapefragFile));
                 count++;
             }
 
             if (!isLast && count < 400)
             {
-                Trace.WriteLine($"Break: 数: Count: {count}, グループ: {fileGroup.Count} < 400。マージをパス。");
+                Trace.WriteLine($"Break: 数: Count: {count}, グループ: {usedTapefragFiles.Count} < 400。マージをパス。");
 
                 // 400件も溜まってなければ、まだマージしない。
                 return (count, false);
@@ -158,9 +158,9 @@ namespace Grayscale.CsaOpener
 
             // Trace.WriteLine("Merge rpmove obj(B)...");
             var builder = new StringBuilder();
-            foreach (var file in fileGroup)
+            foreach (var file in usedTapefragFiles)
             {
-                builder.AppendLine(File.ReadAllText(file));
+                builder.AppendLine(file.ReadAllText());
             }
 
             if (builder.Length < 1)
@@ -182,23 +182,16 @@ namespace Grayscale.CsaOpener
             // 拡張子を .rbox にして保存する。ファイル名は適当。
             // ファイル名が被ってしまったら、今回はパス。
             {
-                // ランダムな正の数を４つ つなげて長くする。
-                var rand = new System.Random();
-                var num1 = rand.Next();
-                var num2 = rand.Next();
-                var num3 = rand.Next();
-                var num4 = rand.Next();
-
-                // Trace.WriteLine("Merge rpmove obj(Write1)...");
-                var path = PathHelper.Combine(RpmRecordDirectory.Instance.FullName, $"{num1}-{num2}-{num3}-{num4}-rbox.json");
-                if (!File.Exists(path))
+                // ランダムな名前のファイル。
+                var rboxFile = TapeBoxJson.CreateTapeBoxFileAtRandom();
+                if (!File.Exists(rboxFile.FullName))
                 {
-                    new TraceableFile(path).WriteAllText(content);
+                    new TraceableFile(rboxFile.FullName).WriteAllText(content);
 
                     // 結合が終わったファイルは消す。
-                    foreach (string rpmoveFile in tapefragFiles)
+                    foreach (var file in usedTapefragFiles)
                     {
-                        new TraceableFile(rpmoveFile).Delete();
+                        file.Delete();
                     }
                 }
             }
@@ -213,12 +206,12 @@ namespace Grayscale.CsaOpener
         /// <returns>ループが回った回数。</returns>
         public static int ReadLitterGameRecord()
         {
-            Trace.WriteLine($"ReadRec : Start... Directory: {FileSystem.EatingGoDirectory.FullName}.");
+            Trace.WriteLine($"ReadRec : Start... Directory: {LocationMaster.EatingGoDirectory.FullName}.");
 
             // 指定ディレクトリ以下のファイルをすべて取得する
             IEnumerable<string> eatingGoFiles =
                 System.IO.Directory.EnumerateFiles(
-                    FileSystem.EatingGoDirectory.FullName, "*", System.IO.SearchOption.AllDirectories);
+                    LocationMaster.EatingGoDirectory.FullName, "*", System.IO.SearchOption.AllDirectories);
 
             // 200件回す。
             var count = 0;

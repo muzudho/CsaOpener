@@ -1,7 +1,6 @@
 ﻿namespace Grayscale.CsaOpener.Commons
 {
     using System.Diagnostics;
-    using System.IO;
 
     /// <summary>
     /// ログを出すディレクトリー。
@@ -17,6 +16,9 @@
             this.FullName = fullName;
         }
 
+        /// <summary>
+        /// Gets a フル・パス。
+        /// </summary>
         public string FullName { get; private set; }
 
         /// <summary>

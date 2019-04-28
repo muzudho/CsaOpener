@@ -29,7 +29,7 @@
         /// <returns>展開に成功した。</returns>
         public override bool Expand()
         {
-            Trace.WriteLine($"Expand  : {this.ExpansionGoFile.FullName} -> {FileSystem.ExpansionOutputDirectory.FullName}");
+            Trace.WriteLine($"Expand  : {this.ExpansionGoFile.FullName} -> {LocationMaster.ExpansionOutputDirectory.FullName}");
             if (string.IsNullOrWhiteSpace(this.ExpansionGoFile.FullName))
             {
                 return false;
@@ -41,13 +41,13 @@
                 {
                     using (var tarArchive = TarArchive.CreateInputTarArchive(gzipStream))
                     {
-                        tarArchive.ExtractContents(FileSystem.ExpansionOutputDirectory.FullName);
+                        tarArchive.ExtractContents(LocationMaster.ExpansionOutputDirectory.FullName);
                     }
                 }
             }
 
             // ディレクトリーを浅くします。
-            PathFlat.Search(FileSystem.ExpansionOutputDirectory.FullName);
+            PathFlat.GoFlat(LocationMaster.ExpansionOutputDirectory.FullName);
 
             // 解凍が終わった元ファイルを移動。
             this.ExpansionGoFile.Move(this.ExpansionWentFile);

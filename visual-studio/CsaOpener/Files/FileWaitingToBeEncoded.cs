@@ -12,8 +12,8 @@
         private FileWaitingToBeEncoded(TraceableFile file)
         {
             this.GoFile = file;
-            this.WentFile = new TraceableFile(PathHelper.Combine(FileSystem.FomationWentDirectory.FullName, Path.GetFileName(file.FullName)));
-            this.OutputFile = new TraceableFile(PathHelper.Combine(FileSystem.FomationOutputDirectory.FullName, Path.GetFileName(file.FullName)));
+            this.WentFile = new TraceableFile(PathHelper.Combine(LocationMaster.FomationWentDirectory.FullName, Path.GetFileName(file.FullName)));
+            this.OutputFile = new TraceableFile(PathHelper.Combine(LocationMaster.FomationOutputDirectory.FullName, Path.GetFileName(file.FullName)));
         }
 
         /// <summary>

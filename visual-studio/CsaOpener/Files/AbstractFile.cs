@@ -33,7 +33,7 @@
             protected set
             {
                 this.expansionGoFileInstance = value;
-                this.ExpansionWentFile = new TraceableFile(PathHelper.Combine(FileSystem.ExpansionWentDirectory.FullName, Path.GetFileName(value.FullName)));
+                this.ExpansionWentFile = new TraceableFile(PathHelper.Combine(LocationMaster.ExpansionWentDirectory.FullName, Path.GetFileName(value.FullName)));
             }
         }
 
