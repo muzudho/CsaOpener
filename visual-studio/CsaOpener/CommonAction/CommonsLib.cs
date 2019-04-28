@@ -41,10 +41,12 @@
             p.WaitForExit(60 * 1000);
 
             var returnCode = p.ExitCode;
+            /*
             if (returnCode != 0)
             {
-                Trace.WriteLine($"Error   : Process returnCode='{returnCode}' {info.FileName} {info.Arguments}");
             }
+            */
+            Trace.WriteLine($"Returned: Process returnCode: {returnCode}.");
 
             return returnCode;
         }

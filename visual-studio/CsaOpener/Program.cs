@@ -126,10 +126,10 @@ namespace Grayscale.CsaOpener
         /// <returns>ループが回った回数、マージを１つ以上行った。</returns>
         public static (int, bool) MergeTapefrag(bool isLast)
         {
-            Trace.WriteLine($"Merge   : Tapefrage isLast: {isLast}.");
+            Trace.WriteLine($"Merge   : Start. Tapefrage isLast: {isLast}.");
 
             // 指定ディレクトリ以下のファイルをすべて取得する
-            IEnumerable<string> tapefragFiles =
+            IEnumerable<string> tapefragFileFullNames =
                 System.IO.Directory.EnumerateFiles(
                     LocationMaster.EatingOutputDirectory.FullName, "*.tapefrag", System.IO.SearchOption.AllDirectories);
 
@@ -137,14 +137,14 @@ namespace Grayscale.CsaOpener
 
             // まず、ファイルを 1～600個集める。
             var usedTapefragFiles = new List<TraceableFile>();
-            foreach (string tapefragFile in tapefragFiles)
+            foreach (string tapefragFileFullName in tapefragFileFullNames)
             {
                 if (usedTapefragFiles.Count > 599)
                 {
                     break;
                 }
 
-                usedTapefragFiles.Add(new TraceableFile(tapefragFile));
+                usedTapefragFiles.Add(new TraceableFile(tapefragFileFullName));
                 count++;
             }
 
@@ -156,28 +156,29 @@ namespace Grayscale.CsaOpener
                 return (count, false);
             }
 
-            // Trace.WriteLine("Merge rpmove obj(B)...");
-            var builder = new StringBuilder();
+            Trace.WriteLine($"Merge   : File count: {count}.");
+
+            var tepeBoxBuilder = new StringBuilder();
             foreach (var file in usedTapefragFiles)
             {
-                builder.AppendLine(file.ReadAllText());
+                tepeBoxBuilder.AppendLine(file.ReadAllText());
             }
 
-            if (builder.Length < 1)
+            if (tepeBoxBuilder.Length < 1)
             {
-                // Trace.WriteLine($"fileGroup.Count: {fileGroup.Count}, builder.Length: {builder.Length}");
+                Trace.WriteLine($"Merge   : Empty file, Break. fileGroup.Count: {usedTapefragFiles.Count}, builder.Length: {tepeBoxBuilder.Length}");
 
                 // 空ファイルを読み込んでいたら無限ループしてしまう。 0 を返す。
                 return (0, true);
             }
 
             // 最後のコンマを除去する。
-            var content = builder.ToString();
-            var lastComma = content.LastIndexOf(',');
-            content = content.Substring(0, lastComma);
+            var tapeBoxContent = tepeBoxBuilder.ToString();
+            var lastComma = tapeBoxContent.LastIndexOf(',');
+            tapeBoxContent = tapeBoxContent.Substring(0, lastComma);
 
             // JSON形式として読めるように、配列のオブジェクトにする。box は Rust言語の予約語なので、tape_box とした。
-            content = string.Concat(@"{""tape_box"": [", content, "]}");
+            tapeBoxContent = string.Concat(@"{""tape_box"": [", tapeBoxContent, "]}");
 
             // 拡張子を .rbox にして保存する。ファイル名は適当。
             // ファイル名が被ってしまったら、今回はパス。
@@ -186,13 +187,17 @@ namespace Grayscale.CsaOpener
                 var rboxFile = TapeBoxJson.CreateTapeBoxFileAtRandom();
                 if (!File.Exists(rboxFile.FullName))
                 {
-                    new TraceableFile(rboxFile.FullName).WriteAllText(content);
+                    new TraceableFile(rboxFile.FullName).WriteAllText(tapeBoxContent);
 
                     // 結合が終わったファイルは消す。
                     foreach (var file in usedTapefragFiles)
                     {
                         file.Delete();
                     }
+                }
+                else
+                {
+                    Trace.WriteLine("Merge fail. Randome name fail. '{}'.", rboxFile.FullName);
                 }
             }
 
