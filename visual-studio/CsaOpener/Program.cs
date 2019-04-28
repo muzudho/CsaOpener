@@ -59,7 +59,7 @@ namespace Grayscale.CsaOpener
                     EncodingPhase.ExecuteEncode();
 
                     // 棋譜読取フェーズ。
-                    readCount = ReadLitterGameRecord();
+                    readCount = ReadSomeGameRecords();
 
                     // たまに行う程度。
                     //if (new System.Random().Next() % 3 == 0)
@@ -80,7 +80,7 @@ namespace Grayscale.CsaOpener
                     EncodingPhase.ExecuteEncode();
 
                     // 棋譜読取フェーズ。
-                    readCount = ReadLitterGameRecord();
+                    readCount = ReadSomeGameRecords();
 
                     // JSON作成フェーズ。
                     (mergedCount, merged) = MergeTapefrag(true);
@@ -209,7 +209,7 @@ namespace Grayscale.CsaOpener
         /// 少し棋譜を読み取る。
         /// </summary>
         /// <returns>ループが回った回数。</returns>
-        public static int ReadLitterGameRecord()
+        public static int ReadSomeGameRecords()
         {
             Trace.WriteLine($"ReadRec : Start... Directory: {LocationMaster.EatingGoDirectory.FullName}.");
 
@@ -222,7 +222,7 @@ namespace Grayscale.CsaOpener
             var count = 0;
             foreach (string eatingGoFile in eatingGoFiles)
             {
-                Trace.WriteLine($"Entry   : eatingGoFile: {eatingGoFile}.");
+                Trace.WriteLine($"ReadRec : eatingGoFile: {eatingGoFile}.");
 
                 if (count > 199)
                 {
@@ -252,7 +252,7 @@ namespace Grayscale.CsaOpener
                 count++;
             }
 
-            Trace.WriteLine("End     : ReadLitterGameRecord.");
+            Trace.WriteLine("ReadRec : End.");
             return count;
         }
 

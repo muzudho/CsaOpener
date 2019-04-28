@@ -20,7 +20,7 @@
             var num3 = rand.Next();
             var num4 = rand.Next();
 
-            return new TraceableFile(PathHelper.Combine(LocationMaster.RpmRecordDirectory.FullName, $"{num1}-{num2}-{num3}-{num4}-rbox.json"));
+            return new TraceableFile(PathHelper.Combine(LocationMaster.TrainingDirectory.FullName, $"{num1}-{num2}-{num3}-{num4}-rbox.json"));
         }
     }
 }

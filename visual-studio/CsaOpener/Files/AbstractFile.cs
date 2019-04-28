@@ -56,7 +56,7 @@
         /// </summary>
         public virtual void ReadGameRecord()
         {
-            // OpenerConfig.Instance
+            // TODO OpenerConfig.Instance
         }
     }
 }

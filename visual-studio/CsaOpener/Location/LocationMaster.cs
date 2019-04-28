@@ -56,8 +56,8 @@
             EatingOutputDirectory.Create();
 
             // 成果物ディレクトリー。
-            RpmRecordDirectory = new TraceableDirectory(LocationMaster.Kw29ConfJson.rpm_record);
-            RpmRecordDirectory.Create();
+            TrainingDirectory = new TraceableDirectory(LocationMaster.Kw29ConfJson.training);
+            TrainingDirectory.Create();
         }
 
         /// <summary>
@@ -108,7 +108,7 @@
         /// <summary>
         /// Gets a 成果物ディレクトリー。
         /// </summary>
-        public static TraceableDirectory RpmRecordDirectory { get; private set; }
+        public static TraceableDirectory TrainingDirectory { get; private set; }
 
         /// <summary>
         /// Gets a 設定ファイル。

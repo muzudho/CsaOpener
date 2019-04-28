@@ -46,14 +46,19 @@
         public Directories eating { get; private set; }
 
         /// <summary>
-        /// Gets a 学習済みパス。
+        /// Gets a 記録用パス。
         /// </summary>
         public string learning { get; private set; }
 
         /// <summary>
+        /// Gets a テープ断片用パス。
+        /// </summary>
+        public string tape_fragments { get; private set; }
+
+        /// <summary>
         /// Gets a マージ済み棋譜ファイル置き場。
         /// </summary>
-        public string rpm_record { get; private set; }
+        public string training { get; private set; }
 
         /// <summary>
         /// Gets a 棋譜を読み取るための実行ファイルへのパス。
