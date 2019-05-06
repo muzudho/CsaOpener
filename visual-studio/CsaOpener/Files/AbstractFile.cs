@@ -52,9 +52,9 @@
         }
 
         /// <summary>
-        /// 棋譜を読み取る。
+        /// 任意の棋譜をRPMに変換する。
         /// </summary>
-        public virtual void ReadGameRecord()
+        public virtual void ConvertAnyFileToRpm()
         {
             // TODO OpenerConfig.Instance
         }

@@ -43,14 +43,14 @@ namespace Grayscale.CsaOpener
                  */
 
                 // 同じフェーズをずっとやっていても１つも完成しないので、少しずつやって、ばらけさせる。
-                var expandedCount = 1;
-                var readCount = 0;
+                var expandedCount = 1; // ループの初回入るように。
+                var convertedCount = 0;
                 var mergedCount = 0;
-                var merged = false;
+                var merged = true; // ループの初回入るように。
                 List<string> expansionOutputDirectories;
 
                 // ループの回った回数が０回になるまで繰り返す。
-                while (expandedCount + readCount + mergedCount > 0 && merged)
+                while (expandedCount + convertedCount + mergedCount > 0 && merged)
                 {
                     // 解凍フェーズ。
                     expandedCount = ExpansionPhase.ExpandLittleIt();
@@ -58,8 +58,8 @@ namespace Grayscale.CsaOpener
                     // TODO フォルダーを探索して、棋譜のエンコーディングを変換。
                     EncodingPhase.ExecuteEncode();
 
-                    // 棋譜読取フェーズ。
-                    readCount = ReadSomeGameRecords();
+                    // 棋譜RPM変換フェーズ。
+                    convertedCount = ConvertSomeFilesToRpm();
 
                     // たまに行う程度。
                     //if (new System.Random().Next() % 3 == 0)
@@ -68,7 +68,7 @@ namespace Grayscale.CsaOpener
                     (mergedCount, merged) = MergeTapefrag(false);
                     //}
 
-                    Trace.WriteLine($"expandedCount: {expandedCount}, readCount: {readCount}, mergedCount: {mergedCount}.");
+                    Trace.WriteLine($"expandedCount: {expandedCount}, readCount: {convertedCount}, mergedCount: {mergedCount}.");
                 }
 
                 // 最後の余りに対応する１回。
@@ -79,13 +79,13 @@ namespace Grayscale.CsaOpener
                     // TODO フォルダーを探索して、棋譜のエンコーディングを変換。
                     EncodingPhase.ExecuteEncode();
 
-                    // 棋譜読取フェーズ。
-                    readCount = ReadSomeGameRecords();
+                    // 棋譜RPM変換フェーズ。
+                    convertedCount = ConvertSomeFilesToRpm();
 
                     // JSON作成フェーズ。
                     (mergedCount, merged) = MergeTapefrag(true);
 
-                    Trace.WriteLine($"LAST: expandedCount: {expandedCount}, readCount: {readCount}, mergedCount: {mergedCount}.");
+                    Trace.WriteLine($"LAST: expandedCount: {expandedCount}, readCount: {convertedCount}, mergedCount: {mergedCount}.");
                 }
 
                 // 空の go のサブ・ディレクトリは削除。
@@ -206,12 +206,12 @@ namespace Grayscale.CsaOpener
         }
 
         /// <summary>
-        /// 少し棋譜を読み取る。
+        /// いくつかの棋譜をRPMに変換。
         /// </summary>
         /// <returns>ループが回った回数。</returns>
-        public static int ReadSomeGameRecords()
+        public static int ConvertSomeFilesToRpm()
         {
-            Trace.WriteLine($"ReadRec : Start... Directory: {LocationMaster.EatingGoDirectory.FullName}.");
+            Trace.WriteLine($"ToRpm   : Start... Directory: {LocationMaster.EatingGoDirectory.FullName}.");
 
             // 指定ディレクトリ以下のファイルをすべて取得する
             IEnumerable<string> eatingGoFiles =
@@ -222,7 +222,7 @@ namespace Grayscale.CsaOpener
             var count = 0;
             foreach (string eatingGoFile in eatingGoFiles)
             {
-                Trace.WriteLine($"ReadRec : eatingGoFile: {eatingGoFile}.");
+                Trace.WriteLine($"ToRpm   : eatingGoFile: {eatingGoFile}.");
 
                 if (count > 199)
                 {
@@ -246,13 +246,13 @@ namespace Grayscale.CsaOpener
                         break;
                 }
 
-                // 棋譜読取フェーズ。
-                anyFile.ReadGameRecord();
+                // 棋譜をRPMに変換。
+                anyFile.ConvertAnyFileToRpm();
 
                 count++;
             }
 
-            Trace.WriteLine("ReadRec : End.");
+            Trace.WriteLine("ToRpm   : End.");
             return count;
         }
 

@@ -7,11 +7,11 @@
     /// <summary>
     /// 設定の内容。
     /// </summary>
-    public class OpenerConfigJson
+    public class AppConfigJson
     {
         /// <summary>
         /// Gets a 設定ファイルへのパス。
         /// </summary>
-        public string kifuwarabe_wcsc29_config_path { get; set; }
+        public string kifuwarabe_wcsc29_master_config_path { get; set; }
     }
 }

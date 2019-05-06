@@ -54,9 +54,9 @@
         /// <summary>
         /// 棋譜を読み取る。
         /// </summary>
-        public override void ReadGameRecord()
+        public override void ConvertAnyFileToRpm()
         {
-            int returnCode = CommonsLib.ReadGameRecord(this.EatingGoFile, this.EatingOutputFile);
+            int returnCode = RustExe.ConvertAnyFileToRpm(this.EatingGoFile, this.EatingOutputFile);
 
             // 終わった元ファイルを移動。
             this.EatingGoFile.Move(this.EatingWentFile);

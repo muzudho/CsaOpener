@@ -12,14 +12,14 @@
         static LocationMaster()
         {
             // このアプリケーション.exeと同じディレクトリに置いてある設定ファイル。
-            MyAppConf = new TraceableFile(PathHelper.Combine(AppDomain.CurrentDomain.BaseDirectory.TrimEnd('\\'), "./config.json"));
+            MyAppConf = new TraceableFile(PathHelper.Combine(AppDomain.CurrentDomain.BaseDirectory.TrimEnd('\\'), "./app-config.json"));
             {
                 var json = DynamicJson.Parse(LocationMaster.MyAppConf.ReadAllText());
-                MyAppConfJson = json.Deserialize<OpenerConfigJson>();
+                MyAppConfJson = json.Deserialize<AppConfigJson>();
             }
 
             // ゲームエンジンの設定ファイル。
-            Kw29Conf = new TraceableFile(LocationMaster.MyAppConfJson.kifuwarabe_wcsc29_config_path);
+            Kw29Conf = new TraceableFile(LocationMaster.MyAppConfJson.kifuwarabe_wcsc29_master_config_path);
             {
                 var json = DynamicJson.Parse(LocationMaster.Kw29Conf.ReadAllText());
                 Kw29ConfJson = json.Deserialize<KifuwarabeWcsc29ConfigJson>();
@@ -123,7 +123,7 @@
         /// <summary>
         /// Gets a このアプリケーション.exeと同じディレクトリに置いてある設定ファイルの内容。
         /// </summary>
-        public static OpenerConfigJson MyAppConfJson { get; private set; }
+        public static AppConfigJson MyAppConfJson { get; private set; }
 
         /// <summary>
         /// Gets a ゲームエンジンの設定ファイルの内容。

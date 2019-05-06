@@ -7,9 +7,9 @@
     using Grayscale.CsaOpener.Location;
 
     /// <summary>
-    /// 何か所かで使うもの。
+    /// Rust言語のプログラムで作った 実行ファイルを利用☆（＾～＾）
     /// </summary>
-    public static class CommonsLib
+    public static class RustExe
     {
         /// <summary>
         /// 棋譜を読み取ります。
@@ -17,7 +17,7 @@
         /// <param name="inputFile">読み取る棋譜ファイル。</param>
         /// <param name="outputFile">出力先ファイル。</param>
         /// <returns>リターン コード。</returns>
-        public static int ReadGameRecord(TraceableFile inputFile, TraceableFile outputFile)
+        public static int ConvertAnyFileToRpm(TraceableFile inputFile, TraceableFile outputFile)
         {
             ProcessStartInfo info = new ProcessStartInfo();
 
