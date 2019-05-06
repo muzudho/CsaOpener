@@ -1,7 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<RuleSet Name="CsaOpener の規則" Description="CsaOpener.csproj のコード分析の規則です。" ToolsVersion="16.0">
-  <IncludeAll Action="Warning" />
-  <Rules AnalyzerId="StyleCop.Analyzers" RuleNamespace="StyleCop.Analyzers">
-    <Rule Id="SA1633" Action="None" />
-  </Rules>
-</RuleSet>
