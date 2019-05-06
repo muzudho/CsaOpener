@@ -65,14 +65,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Arguments.cs" />
+    <Compile Include="Parameter\RawArguments.cs" />
     <Compile Include="Commons\PathFlat.cs" />
     <Compile Include="CommonAction\RustExe.cs" />
     <Compile Include="Commons\PathHelper.cs" />
     <Compile Include="Commons\TraceableDirectory.cs" />
     <Compile Include="Commons\TraceableFile.cs" />
-    <Compile Include="Config\KifuwarabeWcsc29ConfigJson.cs" />
-    <Compile Include="Config\AppConfigJson.cs" />
+    <Compile Include="Parameter\Config\KifuwarabeWcsc29ConfigJson.cs" />
+    <Compile Include="Parameter\Config\AppConfigJson.cs" />
     <Compile Include="DynamicJson.cs" />
     <Compile Include="Files\AbstractArchiveFile.cs" />
     <Compile Include="Files\AbstractFile.cs" />

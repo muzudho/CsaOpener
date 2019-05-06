@@ -36,11 +36,9 @@ namespace Grayscale.ShogiKifuConverter
         {
             LogRotation.Logging(() =>
             {
-                /*
                 // Command line arguments.
-                var arguments = Arguments.Load(args);
-                Trace.WriteLine($"Input directory: '{arguments.Input}', Output directory: '{arguments.Output}'.");
-                 */
+                var arguments = RawArguments.Load(args);
+                Trace.WriteLine($"Expand: '{arguments.Expand}', Encode: '{arguments.Encode}', Convert: '{arguments.Convert}'.");
 
                 // 同じフェーズをずっとやっていても１つも完成しないので、少しずつやって、ばらけさせる。
                 var expandedCount = 1; // ループの初回入るように。
@@ -52,38 +50,62 @@ namespace Grayscale.ShogiKifuConverter
                 // ループの回った回数が０回になるまで繰り返す。
                 while (expandedCount + convertedCount + mergedCount > 0 && merged)
                 {
-                    // 解凍フェーズ。
-                    expandedCount = ExpansionPhase.ExpandLittleIt();
+                    if (arguments.Expand)
+                    {
+                        // 解凍フェーズ。
+                        expandedCount = ExpansionPhase.ExpandLittleIt();
+                    }
 
-                    // TODO フォルダーを探索して、棋譜のエンコーディングを変換。
-                    EncodingPhase.ExecuteEncode();
+                    if (arguments.Encode)
+                    {
+                        // TODO フォルダーを探索して、棋譜のエンコーディングを変換。
+                        EncodingPhase.ExecuteEncode();
+                    }
 
-                    // 棋譜RPM変換フェーズ。
-                    convertedCount = ConvertSomeFilesToRpm();
+                    if (arguments.Convert)
+                    {
+                        // 棋譜RPM変換フェーズ。
+                        convertedCount = ConvertSomeFilesToRpm();
+                    }
 
-                    // たまに行う程度。
-                    //if (new System.Random().Next() % 3 == 0)
-                    //{
-                    // JSON作成フェーズ。
-                    (mergedCount, merged) = MergeTapefragFiles(false);
-                    //}
+                    if (arguments.Merge)
+                    {
+                        // たまに行う程度。
+                        //if (new System.Random().Next() % 3 == 0)
+                        //{
+                        // JSON作成フェーズ。
+                        (mergedCount, merged) = MergeTapefragFiles(false);
+                        //}
+                    }
 
                     Trace.WriteLine($"expandedCount: {expandedCount}, readCount: {convertedCount}, mergedCount: {mergedCount}.");
                 }
 
                 // 最後の余りに対応する１回。
                 {
-                    // 解凍フェーズ。
-                    expandedCount = ExpansionPhase.ExpandLittleIt();
+                    if (arguments.Expand)
+                    {
+                        // 解凍フェーズ。
+                        expandedCount = ExpansionPhase.ExpandLittleIt();
+                    }
 
-                    // TODO フォルダーを探索して、棋譜のエンコーディングを変換。
-                    EncodingPhase.ExecuteEncode();
+                    if (arguments.Encode)
+                    {
+                        // TODO フォルダーを探索して、棋譜のエンコーディングを変換。
+                        EncodingPhase.ExecuteEncode();
+                    }
 
-                    // 棋譜RPM変換フェーズ。
-                    convertedCount = ConvertSomeFilesToRpm();
+                    if (arguments.Convert)
+                    {
+                        // 棋譜RPM変換フェーズ。
+                        convertedCount = ConvertSomeFilesToRpm();
+                    }
 
-                    // JSON作成フェーズ。
-                    (mergedCount, merged) = MergeTapefragFiles(true);
+                    if (arguments.Merge)
+                    {
+                        // JSON作成フェーズ。
+                        (mergedCount, merged) = MergeTapefragFiles(true);
+                    }
 
                     Trace.WriteLine($"LAST: expandedCount: {expandedCount}, readCount: {convertedCount}, mergedCount: {mergedCount}.");
                 }
