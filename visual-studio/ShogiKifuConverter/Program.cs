@@ -65,7 +65,7 @@ namespace Grayscale.ShogiKifuConverter
                     //if (new System.Random().Next() % 3 == 0)
                     //{
                     // JSON作成フェーズ。
-                    (mergedCount, merged) = MergeTapefrag(false);
+                    (mergedCount, merged) = MergeTapefragFiles(false);
                     //}
 
                     Trace.WriteLine($"expandedCount: {expandedCount}, readCount: {convertedCount}, mergedCount: {mergedCount}.");
@@ -83,7 +83,7 @@ namespace Grayscale.ShogiKifuConverter
                     convertedCount = ConvertSomeFilesToRpm();
 
                     // JSON作成フェーズ。
-                    (mergedCount, merged) = MergeTapefrag(true);
+                    (mergedCount, merged) = MergeTapefragFiles(true);
 
                     Trace.WriteLine($"LAST: expandedCount: {expandedCount}, readCount: {convertedCount}, mergedCount: {mergedCount}.");
                 }
@@ -124,7 +124,7 @@ namespace Grayscale.ShogiKifuConverter
         /// </summary>
         /// <param name="isLast">余り。</param>
         /// <returns>ループが回った回数、マージを１つ以上行った。</returns>
-        public static (int, bool) MergeTapefrag(bool isLast)
+        public static (int, bool) MergeTapefragFiles(bool isLast)
         {
             Trace.WriteLine($"Merge   : Start. Tapefrage isLast: {isLast}.");
 
@@ -158,22 +158,22 @@ namespace Grayscale.ShogiKifuConverter
 
             Trace.WriteLine($"Merge   : File count: {count}.");
 
-            var tepeBoxBuilder = new StringBuilder();
-            foreach (var file in usedTapefragFiles)
+            var tepeFragmentsBuilder = new StringBuilder();
+            foreach (var tapeFragmentsFile in usedTapefragFiles)
             {
-                tepeBoxBuilder.AppendLine(file.ReadAllText());
+                tepeFragmentsBuilder.AppendLine(tapeFragmentsFile.ReadAllText());
             }
 
-            if (tepeBoxBuilder.Length < 1)
+            if (tepeFragmentsBuilder.Length < 1)
             {
-                Trace.WriteLine($"Merge   : Empty file, Break. fileGroup.Count: {usedTapefragFiles.Count}, builder.Length: {tepeBoxBuilder.Length}");
+                Trace.WriteLine($"Merge   : Empty file, Break. fileGroup.Count: {usedTapefragFiles.Count}, builder.Length: {tepeFragmentsBuilder.Length}");
 
                 // 空ファイルを読み込んでいたら無限ループしてしまう。 0 を返す。
                 return (0, true);
             }
 
             // 最後のコンマを除去する。
-            var tapeBoxContent = tepeBoxBuilder.ToString();
+            var tapeBoxContent = tepeFragmentsBuilder.ToString();
             var lastComma = tapeBoxContent.LastIndexOf(',');
             tapeBoxContent = tapeBoxContent.Substring(0, lastComma);
 
