@@ -74,7 +74,7 @@ namespace Grayscale.ShogiKifuConverter
                         //if (new System.Random().Next() % 3 == 0)
                         //{
                         // JSON作成フェーズ。
-                        (mergedCount, merged) = MergeTapefragFiles(false);
+                        (mergedCount, merged) = MergeTapesfragFiles(false);
                         //}
                     }
 
@@ -104,7 +104,7 @@ namespace Grayscale.ShogiKifuConverter
                     if (arguments.Merge)
                     {
                         // JSON作成フェーズ。
-                        (mergedCount, merged) = MergeTapefragFiles(true);
+                        (mergedCount, merged) = MergeTapesfragFiles(true);
                     }
 
                     Trace.WriteLine($"LAST: expandedCount: {expandedCount}, readCount: {convertedCount}, mergedCount: {mergedCount}.");
@@ -142,37 +142,37 @@ namespace Grayscale.ShogiKifuConverter
         }
 
         /// <summary>
-        /// RPM棋譜の断片（.tapefrag ファイル）を600個ぐらい 適当にくっつけて JSONファイルにする。
+        /// RPM棋譜の断片（.tapesfrag ファイル）を600個ぐらい 適当にくっつけて JSONファイルにする。
         /// </summary>
         /// <param name="isLast">余り。</param>
         /// <returns>ループが回った回数、マージを１つ以上行った。</returns>
-        public static (int, bool) MergeTapefragFiles(bool isLast)
+        public static (int, bool) MergeTapesfragFiles(bool isLast)
         {
-            Trace.WriteLine($"Merge   : Start. Tapefrage isLast: {isLast}.");
+            Trace.WriteLine($"Merge   : Start. Tapesfrage isLast: {isLast}.");
 
             // 指定ディレクトリ以下のファイルをすべて取得する
-            IEnumerable<string> tapefragFileFullNames =
+            IEnumerable<string> tapesfragFileFullNames =
                 System.IO.Directory.EnumerateFiles(
-                    LocationMaster.EatingOutputDirectory.FullName, "*.tapefrag", System.IO.SearchOption.AllDirectories);
+                    LocationMaster.EatingOutputDirectory.FullName, "*.tapesfrag", System.IO.SearchOption.AllDirectories);
 
             var count = 0;
 
             // まず、ファイルを 1～600個集める。
-            var usedTapefragFiles = new List<TraceableFile>();
-            foreach (string tapefragFileFullName in tapefragFileFullNames)
+            var usedTapesfragFiles = new List<TraceableFile>();
+            foreach (string tapesfragFileFullName in tapesfragFileFullNames)
             {
-                if (usedTapefragFiles.Count > 599)
+                if (usedTapesfragFiles.Count > 599)
                 {
                     break;
                 }
 
-                usedTapefragFiles.Add(new TraceableFile(tapefragFileFullName));
+                usedTapesfragFiles.Add(new TraceableFile(tapesfragFileFullName));
                 count++;
             }
 
             if (!isLast && count < 400)
             {
-                Trace.WriteLine($"Break: 数: Count: {count}, グループ: {usedTapefragFiles.Count} < 400。マージをパス。");
+                Trace.WriteLine($"Break: 数: Count: {count}, グループ: {usedTapesfragFiles.Count} < 400。マージをパス。");
 
                 // 400件も溜まってなければ、まだマージしない。
                 return (count, false);
@@ -181,14 +181,15 @@ namespace Grayscale.ShogiKifuConverter
             Trace.WriteLine($"Merge   : File count: {count}.");
 
             var tepeFragmentsBuilder = new StringBuilder();
-            foreach (var tapeFragmentsFile in usedTapefragFiles)
+            foreach (var tapesFragmentsFile in usedTapesfragFiles)
             {
-                tepeFragmentsBuilder.AppendLine(tapeFragmentsFile.ReadAllText());
+                // JSONのオブジェクトの末尾にカンマが付いている。
+                tepeFragmentsBuilder.AppendLine(tapesFragmentsFile.ReadAllText());
             }
 
             if (tepeFragmentsBuilder.Length < 1)
             {
-                Trace.WriteLine($"Merge   : Empty file, Break. fileGroup.Count: {usedTapefragFiles.Count}, builder.Length: {tepeFragmentsBuilder.Length}");
+                Trace.WriteLine($"Merge   : Empty file, Break. fileGroup.Count: {usedTapesfragFiles.Count}, builder.Length: {tepeFragmentsBuilder.Length}");
 
                 // 空ファイルを読み込んでいたら無限ループしてしまう。 0 を返す。
                 return (0, true);
@@ -212,7 +213,7 @@ namespace Grayscale.ShogiKifuConverter
                     new TraceableFile(rboxFile.FullName).WriteAllText(tapeBoxContent);
 
                     // 結合が終わったファイルは消す。
-                    foreach (var file in usedTapefragFiles)
+                    foreach (var file in usedTapesfragFiles)
                     {
                         file.Delete();
                     }

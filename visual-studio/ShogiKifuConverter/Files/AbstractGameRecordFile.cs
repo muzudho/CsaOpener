@@ -41,7 +41,7 @@
             {
                 this.eatingGoFileInstance = value;
                 this.EatingWentFile = new TraceableFile(PathHelper.Combine(LocationMaster.EatingWentDirectory.FullName, Path.GetFileName(value.FullName)));
-                this.EatingOutputFile = new TraceableFile(PathHelper.Combine(LocationMaster.EatingOutputDirectory.FullName, $"{Path.GetFileNameWithoutExtension(value.FullName)}.tapefrag").Replace(@"\", "/"));
+                this.EatingOutputFile = new TraceableFile(PathHelper.Combine(LocationMaster.EatingOutputDirectory.FullName, $"{Path.GetFileNameWithoutExtension(value.FullName)}.tapesfrag").Replace(@"\", "/"));
             }
         }
 

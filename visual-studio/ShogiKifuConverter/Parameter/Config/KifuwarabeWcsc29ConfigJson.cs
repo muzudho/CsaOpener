@@ -53,7 +53,7 @@
         /// <summary>
         /// Gets a テープ断片用パス。
         /// </summary>
-        public string tape_fragments { get; private set; }
+        public string tapes_fragments { get; private set; }
 
         /// <summary>
         /// Gets a マージ済み棋譜ファイル置き場。
