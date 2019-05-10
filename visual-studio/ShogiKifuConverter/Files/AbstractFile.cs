@@ -54,9 +54,11 @@
         /// <summary>
         /// 任意の棋譜をRPMに変換する。
         /// </summary>
-        public virtual void ConvertAnyFileToRpm()
+        /// <returns>成功。</returns>
+        public virtual bool ConvertAnyFileToRpm()
         {
             // TODO OpenerConfig.Instance
+            return false;
         }
     }
 }

@@ -54,12 +54,19 @@
         /// <summary>
         /// 棋譜を読み取る。
         /// </summary>
-        public override void ConvertAnyFileToRpm()
+        /// <returns>成功。</returns>
+        public override bool ConvertAnyFileToRpm()
         {
             int returnCode = RustExe.ConvertAnyFileToRpm(this.EatingGoFile, this.EatingOutputFile);
 
-            // 終わった元ファイルを移動。
-            this.EatingGoFile.Move(this.EatingWentFile);
+            if (returnCode == 0)
+            {
+                // 終わった元ファイルを移動。
+                this.EatingGoFile.Move(this.EatingWentFile);
+                return true;
+            }
+
+            return false;
         }
     }
 }

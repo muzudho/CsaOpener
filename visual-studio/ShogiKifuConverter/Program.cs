@@ -231,7 +231,7 @@ namespace Grayscale.ShogiKifuConverter
         /// <summary>
         /// いくつかの棋譜をRPMに変換。
         /// </summary>
-        /// <returns>ループが回った回数。</returns>
+        /// <returns>成功件数。</returns>
         public static int ConvertSomeFilesToRpm()
         {
             Trace.WriteLine($"ToRpm   : Start... Directory: {LocationMaster.EatingGoDirectory.FullName}.");
@@ -242,12 +242,12 @@ namespace Grayscale.ShogiKifuConverter
                     LocationMaster.EatingGoDirectory.FullName, "*", System.IO.SearchOption.AllDirectories);
 
             // 200件回す。
-            var count = 0;
+            var suceedCount = 0;
             foreach (string eatingGoFile in eatingGoFiles)
             {
                 Trace.WriteLine($"ToRpm   : eatingGoFile: {eatingGoFile}.");
 
-                if (count > 199)
+                if (suceedCount > 199)
                 {
                     break;
                 }
@@ -270,13 +270,14 @@ namespace Grayscale.ShogiKifuConverter
                 }
 
                 // 棋譜をRPMに変換。
-                anyFile.ConvertAnyFileToRpm();
-
-                count++;
+                if (anyFile.ConvertAnyFileToRpm())
+                {
+                    suceedCount++;
+                }
             }
 
             Trace.WriteLine("ToRpm   : End.");
-            return count;
+            return suceedCount;
         }
 
         /// <summary>
