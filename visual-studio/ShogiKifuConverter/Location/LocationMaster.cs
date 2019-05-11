@@ -22,7 +22,7 @@
             Kw29Conf = new TraceableFile(LocationMaster.MyAppConfJson.kifuwarabe_wcsc29_master_config_path);
             {
                 var json = DynamicJson.Parse(LocationMaster.Kw29Conf.ReadAllText());
-                Kw29ConfJson = json.Deserialize<KifuwarabeWcsc29ConfigJson>();
+                Kw29ConfJson = json.Deserialize<KifuwarabeWcsc29MasterConfigJson>();
             }
 
             // 解凍フェーズ。
@@ -128,6 +128,6 @@
         /// <summary>
         /// Gets a ゲームエンジンの設定ファイルの内容。
         /// </summary>
-        public static KifuwarabeWcsc29ConfigJson Kw29ConfJson { get; private set; }
+        public static KifuwarabeWcsc29MasterConfigJson Kw29ConfJson { get; private set; }
     }
 }

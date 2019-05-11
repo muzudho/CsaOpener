@@ -7,7 +7,7 @@
     /// <summary>
     /// 設定。
     /// </summary>
-    public class KifuwarabeWcsc29ConfigJson
+    public class KifuwarabeWcsc29MasterConfigJson
     {
         /// <summary>
         /// ディレクトリー。
@@ -59,6 +59,11 @@
         /// Gets a マージ済み棋譜ファイル置き場。
         /// </summary>
         public string training { get; private set; }
+
+        /// <summary>
+        /// Gets a 定跡の置き場。
+        /// </summary>
+        public string book { get; private set; }
 
         /// <summary>
         /// Gets a 棋譜を読み取るための実行ファイルへのパス。
