@@ -203,14 +203,14 @@ namespace Grayscale.ShogiKifuConverter
             // JSON形式として読めるように、配列のオブジェクトにする。box は Rust言語の予約語なので、tape_box とした。
             tapeBoxContent = string.Concat(@"{""tape_box"": [", tapeBoxContent, "]}");
 
-            // 拡張子を .rbox にして保存する。ファイル名は適当。
+            // ファイル名は適当。
             // ファイル名が被ってしまったら、今回はパス。
             {
                 // ランダムな名前のファイル。
-                var rboxFile = TapeBoxJson.CreateTapeBoxFileAtRandom();
-                if (!File.Exists(rboxFile.FullName))
+                var tapeBoxFile = TapeBoxJson.CreateTapeBoxFileAtRandom();
+                if (!File.Exists(tapeBoxFile.FullName))
                 {
-                    new TraceableFile(rboxFile.FullName).WriteAllText(tapeBoxContent);
+                    new TraceableFile(tapeBoxFile.FullName).WriteAllText(tapeBoxContent);
 
                     // 結合が終わったファイルは消す。
                     foreach (var file in usedTapesfragFiles)
@@ -220,7 +220,7 @@ namespace Grayscale.ShogiKifuConverter
                 }
                 else
                 {
-                    Trace.WriteLine("Merge fail. Randome name fail. '{}'.", rboxFile.FullName);
+                    Trace.WriteLine("Merge fail. Randome name fail. '{}'.", tapeBoxFile.FullName);
                 }
             }
 

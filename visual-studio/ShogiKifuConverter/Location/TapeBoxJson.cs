@@ -3,14 +3,14 @@
     using Grayscale.ShogiKifuConverter.Commons;
 
     /// <summary>
-    /// .rbox ファイル。
+    /// テープ・ボックス・ファイル。
     /// </summary>
     public static class TapeBoxJson
     {
         /// <summary>
-        /// ランダム名の .rbox ファイルを自動生成。
+        /// ランダム名のテープ・ボックス・ファイルを自動生成。
         /// </summary>
-        /// <returns>.rboxファイル。</returns>
+        /// <returns>テープ・ボックス・ファイル。</returns>
         public static TraceableFile CreateTapeBoxFileAtRandom()
         {
             // ランダムな正の数を４つ つなげて長くする。
@@ -20,7 +20,7 @@
             var num3 = rand.Next();
             var num4 = rand.Next();
 
-            return new TraceableFile(PathHelper.Combine(LocationMaster.TrainingDirectory.FullName, $"{num1}-{num2}-{num3}-{num4}-rbox.json"));
+            return new TraceableFile(PathHelper.Combine(LocationMaster.TrainingDirectory.FullName, $"{num1}-{num2}-{num3}-{num4}-tape-box.json"));
         }
     }
 }
