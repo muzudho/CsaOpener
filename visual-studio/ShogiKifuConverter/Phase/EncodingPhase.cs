@@ -18,14 +18,14 @@
         /// <returns>ループが回った回数。</returns>
         public static int ExecuteEncode()
         {
-            Trace.WriteLine($"Encode  : '{LocationMaster.ExpansionOutputDirectory.FullName}' directory.");
+            Trace.WriteLine($"Encode  : '{LocationMaster.ConverterExpandDirectory.FullName}' directory.");
 
             var encodedCount = 0;
 
             // 指定ディレクトリ以下のファイルをすべて取得する
             IEnumerable<string> files =
                 System.IO.Directory.EnumerateFiles(
-                    LocationMaster.ExpansionOutputDirectory.FullName, "*", System.IO.SearchOption.AllDirectories);
+                    LocationMaster.ConverterExpandDirectory.FullName, "*", System.IO.SearchOption.AllDirectories);
 
             // Trace.WriteLine("Expanding...");
 

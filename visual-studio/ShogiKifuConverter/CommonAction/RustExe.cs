@@ -22,8 +22,8 @@
             ProcessStartInfo info = new ProcessStartInfo();
 
             // 起動する実行ファイルのパスを設定する
-            info.FileName = LocationMaster.Kw29ConfJson.kifuwarabe_wcsc29_exe_path_for_read_kifu;
-            info.WorkingDirectory = Directory.GetParent(LocationMaster.Kw29ConfJson.kifuwarabe_wcsc29_exe_path_for_read_kifu).FullName;
+            info.FileName = LocationMaster.Kw29MasterConfJson.kifuwarabe_wcsc29_exe_path_for_read_kifu;
+            info.WorkingDirectory = Directory.GetParent(LocationMaster.Kw29MasterConfJson.kifuwarabe_wcsc29_exe_path_for_read_kifu).FullName;
 
             // コマンドライン引数を指定する
             info.Arguments = $@"--input ""{inputFile.FullName.Replace(@"\", "/")}"" --output ""{Path.Combine(Directory.GetParent(outputFile.FullName).FullName, Path.GetFileNameWithoutExtension(outputFile.FullName)).Replace(@"\", "/")}""";

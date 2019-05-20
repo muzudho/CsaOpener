@@ -33,14 +33,8 @@
             protected set
             {
                 this.expansionGoFileInstance = value;
-                this.ExpansionWentFile = new TraceableFile(PathHelper.Combine(LocationMaster.ExpansionWentDirectory.FullName, Path.GetFileName(value.FullName)));
             }
         }
-
-        /// <summary>
-        /// Gets a 解凍が終わったファイル。
-        /// </summary>
-        public TraceableFile ExpansionWentFile { get; private set; }
 
         /// <summary>
         /// 解凍する。

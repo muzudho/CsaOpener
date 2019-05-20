@@ -19,44 +19,41 @@
             }
 
             // ゲームエンジンの設定ファイル。
-            Kw29Conf = new TraceableFile(LocationMaster.MyAppConfJson.kifuwarabe_wcsc29_master_config_path);
+            Kw29MasterConf = new TraceableFile(LocationMaster.MyAppConfJson.kifuwarabe_wcsc29_master_config_path);
             {
-                var json = DynamicJson.Parse(LocationMaster.Kw29Conf.ReadAllText());
-                Kw29ConfJson = json.Deserialize<KifuwarabeWcsc29MasterConfigJson>();
+                var json = DynamicJson.Parse(LocationMaster.Kw29MasterConf.ReadAllText());
+                Kw29MasterConfJson = json.Deserialize<KifuwarabeWcsc29MasterConfigJson>();
             }
 
             // 解凍フェーズ。
-            ExpansionGoDirectory = new TraceableDirectory(LocationMaster.Kw29ConfJson.expansion.go);
-            ExpansionGoDirectory.Create();
+            ConverterInputDirectory = new TraceableDirectory(LocationMaster.Kw29MasterConfJson.converter_input);
+            ConverterInputDirectory.Create();
 
-            ExpansionWentDirectory = new TraceableDirectory(LocationMaster.Kw29ConfJson.expansion.went);
-            ExpansionWentDirectory.Create();
-
-            ExpansionOutputDirectory = new TraceableDirectory(LocationMaster.Kw29ConfJson.expansion.output);
-            ExpansionOutputDirectory.Create();
+            ConverterExpandDirectory = new TraceableDirectory(LocationMaster.Kw29MasterConfJson.converter_expand);
+            ConverterExpandDirectory.Create();
 
             // エンコーディング・フェーズ。
-            FomationGoDirectory = new TraceableDirectory(LocationMaster.Kw29ConfJson.formation.go);
+            FomationGoDirectory = new TraceableDirectory(LocationMaster.Kw29MasterConfJson.formation.go);
             FomationGoDirectory.Create();
 
-            FomationWentDirectory = new TraceableDirectory(LocationMaster.Kw29ConfJson.formation.went);
+            FomationWentDirectory = new TraceableDirectory(LocationMaster.Kw29MasterConfJson.formation.went);
             FomationWentDirectory.Create();
 
-            FomationOutputDirectory = new TraceableDirectory(LocationMaster.Kw29ConfJson.formation.output);
+            FomationOutputDirectory = new TraceableDirectory(LocationMaster.Kw29MasterConfJson.formation.output);
             FomationOutputDirectory.Create();
 
             // 棋譜読取フェーズ。
-            EatingGoDirectory = new TraceableDirectory(LocationMaster.Kw29ConfJson.eating.go);
+            EatingGoDirectory = new TraceableDirectory(LocationMaster.Kw29MasterConfJson.eating.go);
             EatingGoDirectory.Create();
 
-            EatingWentDirectory = new TraceableDirectory(LocationMaster.Kw29ConfJson.eating.went);
+            EatingWentDirectory = new TraceableDirectory(LocationMaster.Kw29MasterConfJson.eating.went);
             EatingWentDirectory.Create();
 
-            EatingOutputDirectory = new TraceableDirectory(LocationMaster.Kw29ConfJson.eating.output);
+            EatingOutputDirectory = new TraceableDirectory(LocationMaster.Kw29MasterConfJson.eating.output);
             EatingOutputDirectory.Create();
 
             // 成果物ディレクトリー。
-            TrainingDirectory = new TraceableDirectory(LocationMaster.Kw29ConfJson.training);
+            TrainingDirectory = new TraceableDirectory(LocationMaster.Kw29MasterConfJson.training);
             TrainingDirectory.Create();
         }
 
@@ -78,17 +75,12 @@
         /// <summary>
         /// Gets a 解凍待ちディレクトリー。
         /// </summary>
-        public static TraceableDirectory ExpansionGoDirectory { get; private set; }
-
-        /// <summary>
-        /// Gets a 解凍済みディレクトリー。
-        /// </summary>
-        public static TraceableDirectory ExpansionWentDirectory { get; private set; }
+        public static TraceableDirectory ConverterInputDirectory { get; private set; }
 
         /// <summary>
         /// Gets a 解凍の成果ディレクトリー。
         /// </summary>
-        public static TraceableDirectory ExpansionOutputDirectory { get; private set; }
+        public static TraceableDirectory ConverterExpandDirectory { get; private set; }
 
         /// <summary>
         /// Gets a エンコーディング待ちディレクトリー。
@@ -113,7 +105,7 @@
         /// <summary>
         /// Gets a 設定ファイル。
         /// </summary>
-        public static TraceableFile Kw29Conf { get; private set; }
+        public static TraceableFile Kw29MasterConf { get; private set; }
 
         /// <summary>
         /// Gets a このアプリケーション.exeと同じディレクトリに置いてある設定ファイル。
@@ -128,6 +120,6 @@
         /// <summary>
         /// Gets a ゲームエンジンの設定ファイルの内容。
         /// </summary>
-        public static KifuwarabeWcsc29MasterConfigJson Kw29ConfJson { get; private set; }
+        public static KifuwarabeWcsc29MasterConfigJson Kw29MasterConfJson { get; private set; }
     }
 }

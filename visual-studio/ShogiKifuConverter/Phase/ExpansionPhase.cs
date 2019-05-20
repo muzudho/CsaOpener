@@ -27,7 +27,7 @@
             // 指定ディレクトリ以下のファイルをすべて取得する
             IEnumerable<string> expansionGoFiles =
                 System.IO.Directory.EnumerateFiles(
-                    LocationMaster.ExpansionGoDirectory.FullName, "*", System.IO.SearchOption.AllDirectories);
+                    LocationMaster.ConverterInputDirectory.FullName, "*", System.IO.SearchOption.AllDirectories);
 
             Rest = 0;
 

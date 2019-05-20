@@ -26,19 +26,19 @@
         /// <returns>展開に成功した。</returns>
         public override bool Expand()
         {
-            Trace.WriteLine($"Expand  : {this.ExpansionGoFile.FullName} -> {LocationMaster.ExpansionOutputDirectory.FullName}");
+            Trace.WriteLine($"Expand  : {this.ExpansionGoFile.FullName} -> {LocationMaster.ConverterExpandDirectory.FullName}");
             if (string.IsNullOrWhiteSpace(this.ExpansionGoFile.FullName))
             {
                 return false;
             }
 
-            LzhManager.fnExtract(this.ExpansionGoFile.FullName, LocationMaster.ExpansionOutputDirectory.FullName);
+            LzhManager.fnExtract(this.ExpansionGoFile.FullName, LocationMaster.ConverterExpandDirectory.FullName);
 
             // ディレクトリーを浅くします。
-            PathFlat.GoFlat(LocationMaster.ExpansionOutputDirectory.FullName);
+            PathFlat.GoFlat(LocationMaster.ConverterExpandDirectory.FullName);
 
-            // 解凍が終わった元ファイルを移動。
-            this.ExpansionGoFile.Move(this.ExpansionWentFile);
+            // 解凍が終わった元ファイルは削除。
+            this.ExpansionGoFile.Delete();
 
             return true;
         }

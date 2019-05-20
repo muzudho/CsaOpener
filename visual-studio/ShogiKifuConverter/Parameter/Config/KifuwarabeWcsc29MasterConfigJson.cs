@@ -10,6 +10,26 @@
     public class KifuwarabeWcsc29MasterConfigJson
     {
         /// <summary>
+        /// Gets a 変換器の入力フォルダー。
+        /// </summary>
+        public string converter_input { get; private set; }
+
+        /// <summary>
+        /// Gets a 変換器の解凍中フォルダー。
+        /// </summary>
+        public string converter_expand { get; private set; }
+
+        /// <summary>
+        /// Gets a 変換器の作業中フォルダー。
+        /// </summary>
+        public string converter_working { get; private set; }
+
+        /// <summary>
+        /// Gets a 変換器の出力フォルダー。
+        /// </summary>
+        public string converter_output { get; private set; }
+
+        /// <summary>
         /// ディレクトリー。
         /// </summary>
         public class Directories
@@ -29,11 +49,6 @@
             /// </summary>
             public string output { get; set; }
         }
-
-        /// <summary>
-        /// Gets a 解凍。
-        /// </summary>
-        public Directories expansion { get; private set; }
 
         /// <summary>
         /// Gets a エンコーディング変換。

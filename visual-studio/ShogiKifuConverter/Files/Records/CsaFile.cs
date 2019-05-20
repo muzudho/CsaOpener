@@ -45,8 +45,8 @@
             // 成果物の作成。
             this.ExpansionGoFile.Copy(this.ExpansionOutputFile, true);
 
-            // 解凍が終わった元ファイルを移動。
-            this.ExpansionGoFile.Move(this.ExpansionWentFile);
+            // 解凍が終わった元ファイルは削除。
+            this.ExpansionGoFile.Delete();
 
             return true;
         }

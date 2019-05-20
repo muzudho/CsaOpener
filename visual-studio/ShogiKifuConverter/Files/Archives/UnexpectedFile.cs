@@ -36,10 +36,10 @@
             }
 
             // ディレクトリーを浅くします。
-            PathFlat.GoFlat(LocationMaster.ExpansionOutputDirectory.FullName);
+            PathFlat.GoFlat(LocationMaster.ConverterExpandDirectory.FullName);
 
-            // 無理だった元ファイルを移動。
-            this.ExpansionGoFile.Move(this.ExpansionWentFile);
+            // 無理だった元ファイルは削除。
+            this.ExpansionGoFile.Delete();
 
             return true;
         }
