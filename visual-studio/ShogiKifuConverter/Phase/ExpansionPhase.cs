@@ -22,7 +22,7 @@
         /// <returns>ループが回った回数。</returns>
         public static int ExpandLittleIt()
         {
-            Trace.WriteLine("Expand  : Start...");
+            Trace.WriteLine($"{LogHelper.Stamp}Expand  : Start...");
 
             // 指定ディレクトリ以下のファイルをすべて取得する
             IEnumerable<string> expansionGoFiles =
@@ -83,7 +83,7 @@
                 count++;
             }
 
-            // Trace.WriteLine($"むり1: {Rest}");
+            // Trace.WriteLine($"{LogHelper.Stamp}むり1: {Rest}");
             return (count);
         }
     }

@@ -38,7 +38,7 @@
         /// <param name="directoryLikeUmbrella">このディレクトリーの下をフラットにする。このディレクトリー自身は残す。</param>
         public static void GoFlat(string directoryLikeUmbrella)
         {
-            Trace.WriteLine($"GoFlat  : {directoryLikeUmbrella}.");
+            Trace.WriteLine($"{LogHelper.Stamp}GoFlat  : {directoryLikeUmbrella}.");
 
             // 傘の下の中間ディレクトリーたち。こいつらが消える。
             IEnumerable<string> intermediateDirectories =
@@ -109,7 +109,7 @@
             var parentParentDirectory = Directory.GetParent(Directory.GetParent(file.FullName).FullName).FullName;
 
             // 親の親ディレクトリーの下に さっきくっつけた名前。衝突したら Move が例外を投げる。
-            Trace.WriteLine($"parentParentDirectory: '{parentParentDirectory}', joinedName: '{joinedName}'.");
+            Trace.WriteLine($"{LogHelper.Stamp}parentParentDirectory: '{parentParentDirectory}', joinedName: '{joinedName}'.");
             var destination = new TraceableFile(PathHelper.Combine(parentParentDirectory, joinedName));
 
             // 古い名前から、新しい名前へ移動。

@@ -4,6 +4,7 @@
     using System.Diagnostics;
     using System.IO;
     using System.Text;
+    using Grayscale.ShogiKifuConverter.Commons;
     using Grayscale.ShogiKifuConverter.Location;
 
     /// <summary>
@@ -18,7 +19,7 @@
         /// <returns>ループが回った回数。</returns>
         public static int ExecuteEncode()
         {
-            Trace.WriteLine($"Encode  : '{LocationMaster.ConverterExpandDirectory.FullName}' directory.");
+            Trace.WriteLine($"{LogHelper.Stamp}Encode  : '{LocationMaster.ConverterExpandDirectory.FullName}' directory.");
 
             var encodedCount = 0;
 
@@ -46,7 +47,7 @@
             }
 
         next:
-            Trace.WriteLine("End     : Encoding.");
+            Trace.WriteLine("{LogHelper.Stamp}End     : Encoding.");
             return encodedCount;
         }
 
@@ -58,7 +59,7 @@
         private static bool EncodingOfTextFile(FileWaitingToBeEncoded fileW)
         {
             var encoded = false;
-            Trace.WriteLine($"Encode  : エンコーディング変換対象: {fileW.GoFile.FullName}");
+            Trace.WriteLine($"{LogHelper.Stamp}Encode  : エンコーディング変換対象: {fileW.GoFile.FullName}");
             switch (Path.GetExtension(fileW.GoFile.FullName).ToUpperInvariant())
             {
                 case ".CSA":
@@ -79,7 +80,7 @@
                         }
 
                         // 出力ファイル
-                        Trace.WriteLine($"outputFile: {fileW.OutputFile.FullName}");
+                        Trace.WriteLine($"{LogHelper.Stamp}outputFile: {fileW.OutputFile.FullName}");
 
                         using (FileStream fs2 = new FileStream(fileW.OutputFile.FullName, FileMode.Create))
                         {
@@ -123,7 +124,7 @@
                     break;
             }
 
-            Trace.WriteLine("Encode  : End.");
+            Trace.WriteLine("{LogHelper.Stamp}Encode  : End.");
             return encoded;
         }
     }

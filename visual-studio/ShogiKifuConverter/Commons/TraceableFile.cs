@@ -28,7 +28,7 @@
         /// <param name="contents">内容。</param>
         public void WriteAllText(string contents)
         {
-            Trace.WriteLine($"Write   : '{this.FullName}'...");
+            Trace.WriteLine($"{LogHelper.Stamp}Write   : '{this.FullName}'...");
             System.IO.File.WriteAllText(this.FullName, contents);
         }
 
@@ -38,7 +38,7 @@
         /// <returns>内容。</returns>
         public string ReadAllText()
         {
-            Trace.WriteLine($"Read    : '{this.FullName}'...");
+            Trace.WriteLine($"{LogHelper.Stamp}Read    : '{this.FullName}'...");
             return System.IO.File.ReadAllText(this.FullName);
         }
 
@@ -50,7 +50,7 @@
         {
             new TraceableFile(destFile.FullName).CreateParentDirectory();
 
-            Trace.WriteLine($"Move    : '{this.FullName}' --> '{destFile.FullName}'...");
+            Trace.WriteLine($"{LogHelper.Stamp}Move    : '{this.FullName}' --> '{destFile.FullName}'...");
             System.IO.File.Move(this.FullName, destFile.FullName);
         }
 
@@ -61,7 +61,7 @@
         /// <param name="overwrite">上書き。</param>
         public void Copy(TraceableFile destFile, bool overwrite = false)
         {
-            Trace.WriteLine($"Copy    : '{this.FullName}' --> '{destFile.FullName}'...");
+            Trace.WriteLine($"{LogHelper.Stamp}Copy    : '{this.FullName}' --> '{destFile.FullName}'...");
             System.IO.File.Copy(this.FullName, destFile.FullName, overwrite);
         }
 
@@ -70,7 +70,7 @@
         /// </summary>
         public void Delete()
         {
-            Trace.WriteLine($"Move    : '{this.FullName}'...");
+            Trace.WriteLine($"{LogHelper.Stamp}Move    : '{this.FullName}'...");
             System.IO.File.Delete(this.FullName);
         }
 
@@ -89,7 +89,7 @@
             }
             catch (NotSupportedException e)
             {
-                Trace.WriteLine($"ThisFullName: '{this.FullName}'. FullName: '{parentFullName}'. {e}");
+                Trace.WriteLine($"{LogHelper.Stamp}ThisFullName: '{this.FullName}'. FullName: '{parentFullName}'. {e}");
                 throw;
             }
         }

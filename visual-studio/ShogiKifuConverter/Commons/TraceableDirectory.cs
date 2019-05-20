@@ -27,7 +27,7 @@
         /// <param name="recursive">中身があっても消す。</param>
         public void Delete(bool recursive)
         {
-            Trace.WriteLine($"Move    : '{this.FullName}' directory ...");
+            Trace.WriteLine($"{LogHelper.Stamp}Move    : '{this.FullName}' directory ...");
             System.IO.Directory.Delete(this.FullName, recursive);
         }
 
@@ -36,9 +36,9 @@
         /// </summary>
         public void Create()
         {
-            Trace.WriteLine($"Create  : '{this.FullName}' directory ...");
             if (!System.IO.Directory.Exists(this.FullName))
             {
+                Trace.WriteLine($"{LogHelper.Stamp}Create  : '{this.FullName}' directory ...");
                 System.IO.Directory.CreateDirectory(this.FullName);
             }
         }

@@ -65,6 +65,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commons\LogHelper.cs" />
     <Compile Include="Parameter\RawArguments.cs" />
     <Compile Include="Commons\PathFlat.cs" />
     <Compile Include="CommonAction\RustExe.cs" />

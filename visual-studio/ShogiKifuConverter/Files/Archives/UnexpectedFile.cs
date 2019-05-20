@@ -29,7 +29,7 @@
         /// <returns>展開に成功した。</returns>
         public override bool Expand()
         {
-            Trace.WriteLine($"Expand  : {this.ExpansionGoFile.FullName} -> None.");
+            Trace.WriteLine($"{LogHelper.Stamp}Expand  : {this.ExpansionGoFile.FullName} -> None.");
             if (string.IsNullOrWhiteSpace(this.ExpansionGoFile.FullName))
             {
                 return false;
