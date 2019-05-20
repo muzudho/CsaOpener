@@ -38,7 +38,7 @@ namespace Grayscale.ShogiKifuConverter
             {
                 // Command line arguments.
                 var arguments = RawArguments.Load(args);
-                Trace.WriteLine($"Expand: '{arguments.Expand}', Encode: '{arguments.Encode}', Convert: '{arguments.Convert}'.");
+                Trace.WriteLine($"{LogHelper.Stamp}Expand  : '{arguments.Expand}', Encode: '{arguments.Encode}', Convert: '{arguments.Convert}'.");
 
                 // 同じフェーズをずっとやっていても１つも完成しないので、少しずつやって、ばらけさせる。
                 var expandedCount = 1; // ループの初回入るように。
@@ -78,7 +78,7 @@ namespace Grayscale.ShogiKifuConverter
                         //}
                     }
 
-                    Trace.WriteLine($"expandedCount: {expandedCount}, readCount: {convertedCount}, mergedCount: {mergedCount}.");
+                    Trace.WriteLine($"{LogHelper.Stamp}Result  : expandedCount: {expandedCount}, readCount: {convertedCount}, mergedCount: {mergedCount}.");
                 }
 
                 // 最後の余りに対応する１回。
@@ -107,7 +107,7 @@ namespace Grayscale.ShogiKifuConverter
                         (mergedCount, merged) = MergeTapesfragFiles(true);
                     }
 
-                    Trace.WriteLine($"LAST: expandedCount: {expandedCount}, readCount: {convertedCount}, mergedCount: {mergedCount}.");
+                    Trace.WriteLine($"{LogHelper.Stamp}LAST    : expandedCount: {expandedCount}, readCount: {convertedCount}, mergedCount: {mergedCount}.");
                 }
 
                 // 空の go のサブ・ディレクトリは削除。
@@ -136,7 +136,7 @@ namespace Grayscale.ShogiKifuConverter
                 }
 
                 int sleepSeconds = 60;
-                Trace.WriteLine($"Finished. sleep: {sleepSeconds} sec.");
+                Trace.WriteLine($"{LogHelper.Stamp}Finished: sleep={sleepSeconds} sec.");
                 Thread.Sleep(sleepSeconds * 1000);
             });
         }
@@ -148,7 +148,7 @@ namespace Grayscale.ShogiKifuConverter
         /// <returns>ループが回った回数、マージを１つ以上行った。</returns>
         public static (int, bool) MergeTapesfragFiles(bool isLast)
         {
-            Trace.WriteLine($"Merge   : Start. Tapesfrage isLast: {isLast}.");
+            Trace.WriteLine($"{LogHelper.Stamp}Merge   : Start. Tapesfrage isLast: {isLast}.");
 
             // 指定ディレクトリ以下のファイルをすべて取得する
             IEnumerable<string> tapesfragFileFullNames =
@@ -172,13 +172,13 @@ namespace Grayscale.ShogiKifuConverter
 
             if (!isLast && count < 400)
             {
-                Trace.WriteLine($"Break: 数: Count: {count}, グループ: {usedTapesfragFiles.Count} < 400。マージをパス。");
+                Trace.WriteLine($"{LogHelper.Stamp}Break   : 数: Count: {count}, グループ: {usedTapesfragFiles.Count} < 400。マージをパス。");
 
                 // 400件も溜まってなければ、まだマージしない。
                 return (count, false);
             }
 
-            Trace.WriteLine($"Merge   : File count: {count}.");
+            Trace.WriteLine($"{LogHelper.Stamp}Merge   : File count: {count}.");
 
             var tepeFragmentsBuilder = new StringBuilder();
             foreach (var tapesFragmentsFile in usedTapesfragFiles)
@@ -189,7 +189,7 @@ namespace Grayscale.ShogiKifuConverter
 
             if (tepeFragmentsBuilder.Length < 1)
             {
-                Trace.WriteLine($"Merge   : Empty file, Break. fileGroup.Count: {usedTapesfragFiles.Count}, builder.Length: {tepeFragmentsBuilder.Length}");
+                Trace.WriteLine($"{LogHelper.Stamp}Merge   : Empty file, Break. fileGroup.Count: {usedTapesfragFiles.Count}, builder.Length: {tepeFragmentsBuilder.Length}");
 
                 // 空ファイルを読み込んでいたら無限ループしてしまう。 0 を返す。
                 return (0, true);
@@ -234,7 +234,7 @@ namespace Grayscale.ShogiKifuConverter
         /// <returns>成功件数。</returns>
         public static int ConvertSomeFilesToRpm()
         {
-            Trace.WriteLine($"ToRpm   : Start... Directory: {LocationMaster.EatingGoDirectory.FullName}.");
+            Trace.WriteLine($"{LogHelper.Stamp}ToRpm   : Start... Directory: {LocationMaster.EatingGoDirectory.FullName}.");
 
             // 指定ディレクトリ以下のファイルをすべて取得する
             IEnumerable<string> eatingGoFiles =
@@ -245,7 +245,7 @@ namespace Grayscale.ShogiKifuConverter
             var suceedCount = 0;
             foreach (string eatingGoFile in eatingGoFiles)
             {
-                Trace.WriteLine($"ToRpm   : eatingGoFile: {eatingGoFile}.");
+                Trace.WriteLine($"{LogHelper.Stamp}ToRpm   : eatingGoFile: {eatingGoFile}.");
 
                 if (suceedCount > 199)
                 {
@@ -276,7 +276,7 @@ namespace Grayscale.ShogiKifuConverter
                 }
             }
 
-            Trace.WriteLine("ToRpm   : End.");
+            Trace.WriteLine($"{LogHelper.Stamp}ToRpm   : End.");
             return suceedCount;
         }
 

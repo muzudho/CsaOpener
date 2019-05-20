@@ -53,8 +53,9 @@
 
             // 傘の直下のファイルは既にフラットなのでやる必要なし。
             // ここまでで、フラットになっている。
+            /*
             // ファイルの頭に、傘を付けていく。
-            Trace.WriteLine($"GoRename: {directoryLikeUmbrella}.");
+            Trace.WriteLine($"{LogHelper.Stamp}GoRename: {directoryLikeUmbrella}.");
             IEnumerable<string> fileNames =
                 System.IO.Directory.EnumerateFiles(
                     directoryLikeUmbrella, "*", System.IO.SearchOption.TopDirectoryOnly);
@@ -64,9 +65,10 @@
                 // Ｃ＃のメソッド名は、ノード名なのか、フルパスなのか、はっきりわかるように名付けてほしい。最後のノード名は、ファイル名を取るメソッドで代用した。
                 var joinedName = $"{directoryLikeUmbrella}\\{Path.GetFileName(directoryLikeUmbrella)}$%{Path.GetFileName(fileName)}";
 
-                // リネーム☆ 運用で衝突を避けるが、衝突すれば Move が例外を投げる。
-                new TraceableFile(fileName).Move(new TraceableFile(joinedName));
+                // リネーム☆ 衝突したら上書き。
+                new TraceableFile(fileName).Move(new TraceableFile(joinedName), true);
             }
+            */
         }
 
         /// <summary>
@@ -113,7 +115,7 @@
             var destination = new TraceableFile(PathHelper.Combine(parentParentDirectory, joinedName));
 
             // 古い名前から、新しい名前へ移動。
-            file.Move(destination);
+            file.Move(destination, true);
         }
     }
 }

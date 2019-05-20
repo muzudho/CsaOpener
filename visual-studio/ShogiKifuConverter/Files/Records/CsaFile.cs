@@ -62,7 +62,7 @@
             if (returnCode == 0)
             {
                 // 終わった元ファイルを移動。
-                this.EatingGoFile.Move(this.EatingWentFile);
+                this.EatingGoFile.Move(this.EatingWentFile, true);
                 return true;
             }
 

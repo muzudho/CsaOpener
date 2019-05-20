@@ -2,7 +2,6 @@
 {
     using System.Diagnostics;
     using System.IO;
-    using System.Text;
     using Grayscale.ShogiKifuConverter.Commons;
     using Grayscale.ShogiKifuConverter.Location;
 
@@ -34,7 +33,7 @@
             // シェル機能を使用しない
             info.UseShellExecute = false;
 
-            Trace.WriteLine($"Go      : Process {info.FileName} {info.Arguments}");
+            Trace.WriteLine($"{LogHelper.Stamp}Go      : Process {info.FileName} {info.Arguments}");
             var p = Process.Start(info);
 
             // タイムアウト時間（秒）。１棋譜に 1分も かからないだろう。
@@ -46,7 +45,7 @@
             {
             }
             */
-            Trace.WriteLine($"Returned: Process returnCode: {returnCode}.");
+            Trace.WriteLine($"{LogHelper.Stamp}Returned: Process returnCode: {returnCode}.");
 
             return returnCode;
         }

@@ -47,7 +47,7 @@
             }
 
         next:
-            Trace.WriteLine("{LogHelper.Stamp}End     : Encoding.");
+            Trace.WriteLine($"{LogHelper.Stamp}End     : Encoding.");
             return encodedCount;
         }
 
@@ -108,7 +108,7 @@
 
                         try
                         {
-                            fileW.GoFile.Move(fileW.WentFile);
+                            fileW.GoFile.Move(fileW.WentFile, true);
                         }
                         catch (IOException e)
                         {
@@ -124,7 +124,7 @@
                     break;
             }
 
-            Trace.WriteLine("{LogHelper.Stamp}Encode  : End.");
+            Trace.WriteLine($"{LogHelper.Stamp}Encode  : End.");
             return encoded;
         }
     }

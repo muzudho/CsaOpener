@@ -1,5 +1,6 @@
 ﻿namespace Grayscale.ShogiKifuConverter
 {
+    using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO.Compression;
     using Grayscale.ShogiKifuConverter.CommonAction;
@@ -28,6 +29,13 @@
         public override bool Expand()
         {
             Trace.WriteLine($"{LogHelper.Stamp}Expand  : {this.ExpansionGoFile.FullName} -> {LocationMaster.ConverterExpandDirectory.FullName}");
+
+            /*
+            // 既存なら削除。
+            var file = new TraceableFile(LocationMaster.ConverterExpandDirectory.FullName);
+            file.Delete();
+            */
+
             ZipFile.ExtractToDirectory(this.ExpansionGoFile.FullName, LocationMaster.ConverterExpandDirectory.FullName);
 
             // ディレクトリーを浅くします。
@@ -35,6 +43,18 @@
 
             // 解凍が終わった元ファイルは削除。
             this.ExpansionGoFile.Delete();
+
+            // 解凍したとき作ったディレクトリーが残ってしまう。ディレクトリーは消す。
+            {
+                IEnumerable<string> restDirectories =
+                    System.IO.Directory.EnumerateDirectories(
+                        LocationMaster.ConverterExpandDirectory.FullName, "*", System.IO.SearchOption.TopDirectoryOnly);
+
+                foreach (var restDir in restDirectories)
+                {
+                    new TraceableDirectory(restDir).Delete(true);
+                }
+            }
 
             return true;
         }

@@ -46,11 +46,17 @@
         /// 移動。
         /// </summary>
         /// <param name="destFile">移動先。</param>
-        public void Move(TraceableFile destFile)
+        /// <param name="overwrite">上書き可。</param>
+        public void Move(TraceableFile destFile, bool overwrite)
         {
             new TraceableFile(destFile.FullName).CreateParentDirectory();
 
             Trace.WriteLine($"{LogHelper.Stamp}Move    : '{this.FullName}' --> '{destFile.FullName}'...");
+            if (overwrite)
+            {
+                destFile.Delete();
+            }
+
             System.IO.File.Move(this.FullName, destFile.FullName);
         }
 
@@ -70,7 +76,7 @@
         /// </summary>
         public void Delete()
         {
-            Trace.WriteLine($"{LogHelper.Stamp}Move    : '{this.FullName}'...");
+            Trace.WriteLine($"{LogHelper.Stamp}Delete  : '{this.FullName}'...");
             System.IO.File.Delete(this.FullName);
         }
 

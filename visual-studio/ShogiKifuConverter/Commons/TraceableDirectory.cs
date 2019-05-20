@@ -27,7 +27,7 @@
         /// <param name="recursive">中身があっても消す。</param>
         public void Delete(bool recursive)
         {
-            Trace.WriteLine($"{LogHelper.Stamp}Move    : '{this.FullName}' directory ...");
+            Trace.WriteLine($"{LogHelper.Stamp}Delete  : '{this.FullName}' directory ...");
             System.IO.Directory.Delete(this.FullName, recursive);
         }
 
