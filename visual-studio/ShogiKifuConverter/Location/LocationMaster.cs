@@ -30,12 +30,12 @@
             ConverterInputDirectory.Create();
 
             // 解凍済みディレクトリー。
-            ConverterExpandDirectory = new TraceableDirectory(LocationMaster.Kw29MasterConfJson.converter_expand);
-            ConverterExpandDirectory.Create();
+            ExpandedDirectory = new TraceableDirectory(LocationMaster.Kw29MasterConfJson.converter_expanded);
+            ExpandedDirectory.Create();
 
             // エンコーディング済みディレクトリー。
-            ConverterWorkingDirectory = new TraceableDirectory(LocationMaster.Kw29MasterConfJson.converter_working);
-            ConverterWorkingDirectory.Create();
+            ConverterEncodedDirectory = new TraceableDirectory(LocationMaster.Kw29MasterConfJson.converter_encoded);
+            ConverterEncodedDirectory.Create();
 
             // 変換済みディレクトリー。
             ConverterOutputDirectory = new TraceableDirectory(LocationMaster.Kw29MasterConfJson.converter_output);
@@ -58,12 +58,12 @@
         /// <summary>
         /// Gets a 解凍の成果ディレクトリー。
         /// </summary>
-        public static TraceableDirectory ConverterExpandDirectory { get; private set; }
+        public static TraceableDirectory ExpandedDirectory { get; private set; }
 
         /// <summary>
         /// Gets a 変換中ディレクトリー。
         /// </summary>
-        public static TraceableDirectory ConverterWorkingDirectory { get; private set; }
+        public static TraceableDirectory ConverterEncodedDirectory { get; private set; }
 
         /// <summary>
         /// Gets a 変換出力ディレクトリー。

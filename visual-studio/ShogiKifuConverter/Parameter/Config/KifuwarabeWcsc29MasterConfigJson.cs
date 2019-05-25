@@ -15,14 +15,14 @@
         public string converter_input { get; private set; }
 
         /// <summary>
-        /// Gets a 変換器の解凍中フォルダー。
+        /// Gets a 解凍済み棋譜のフォルダー。
         /// </summary>
-        public string converter_expand { get; private set; }
+        public string converter_expanded { get; private set; }
 
         /// <summary>
-        /// Gets a 変換器の作業中フォルダー。
+        /// Gets a エンコード済み棋譜のフォルダー。
         /// </summary>
-        public string converter_working { get; private set; }
+        public string converter_encoded { get; private set; }
 
         /// <summary>
         /// Gets a 変換器の出力フォルダー。

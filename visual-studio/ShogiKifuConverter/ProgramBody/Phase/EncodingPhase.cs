@@ -19,14 +19,13 @@
         /// <returns>ループが回った回数。</returns>
         public static int ExecuteEncode()
         {
-            // Trace.WriteLine($"{LogHelper.Stamp}Encode  : '{LocationMaster.ConverterExpandDirectory.FullName}' directory.");
-
+            // Trace.WriteLine($"{LogHelper.Stamp}Encode  : '{LocationMaster.ExpandedDirectory.FullName}' directory.");
             var encodedCount = 0;
 
             // 指定ディレクトリ以下のファイルをすべて取得する
             IEnumerable<string> files =
                 System.IO.Directory.EnumerateFiles(
-                    LocationMaster.ConverterExpandDirectory.FullName, "*", System.IO.SearchOption.AllDirectories);
+                    LocationMaster.ExpandedDirectory.FullName, "*", System.IO.SearchOption.AllDirectories);
 
             // Trace.WriteLine("Expanding...");
 
@@ -61,7 +60,7 @@
             // Trace.WriteLine($"{LogHelper.Stamp}ParentDirectory={parentDirectory}, Stem={stem}, ExtensionWithDot={extensionWithDot}.");
 
             // 出力先ディレクトリー。
-            var outputDir = LocationMaster.ConverterWorkingDirectory;
+            var outputDir = LocationMaster.ConverterEncodedDirectory;
 
             var encoded = false;
             switch (extensionWithDot.ToUpperInvariant())

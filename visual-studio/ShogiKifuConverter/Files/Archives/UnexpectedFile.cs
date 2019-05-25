@@ -36,7 +36,7 @@
             }
 
             // ディレクトリーを浅くします。
-            PathFlat.GoFlat(LocationMaster.ConverterExpandDirectory.FullName);
+            PathFlat.GoFlat(LocationMaster.ExpandedDirectory.FullName);
 
             // 無理だった元ファイルは削除。
             this.ExpansionGoFile.Delete();

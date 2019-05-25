@@ -9,17 +9,17 @@
     /// </summary>
     public class AbstractGameRecordFile : AbstractFile
     {
-        private TraceableFile eatingGoFileInstance;
+        private TraceableFile encodedFileInstance;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AbstractGameRecordFile"/> class.
         /// </summary>
-        /// <param name="expansionGoFile">解凍を待っているファイル。</param>
-        /// <param name="convertorWorkingFile">棋譜読取を待っているファイルパス。</param>
-        public AbstractGameRecordFile(TraceableFile expansionGoFile, TraceableFile convertorWorkingFile)
-            : base(expansionGoFile)
+        /// <param name="inputFile">解凍を待っているファイル。</param>
+        /// <param name="encodedFile">棋譜読取を待っているファイルパス。</param>
+        public AbstractGameRecordFile(TraceableFile inputFile, TraceableFile encodedFile)
+            : base(inputFile)
         {
-            this.ConvertorWorkingFile = convertorWorkingFile;
+            this.EncodedFile = encodedFile;
         }
 
         /// <summary>
@@ -30,23 +30,23 @@
         /// <summary>
         /// Gets a 棋譜読取を待っているファイル。
         /// </summary>
-        public TraceableFile ConvertorWorkingFile
+        public TraceableFile EncodedFile
         {
             get
             {
-                return this.eatingGoFileInstance;
+                return this.encodedFileInstance;
             }
 
             private set
             {
-                this.eatingGoFileInstance = value;
-                this.ConvertorOutputFile = new TraceableFile(PathHelper.Combine(LocationMaster.ConverterOutputDirectory.FullName, $"{Path.GetFileNameWithoutExtension(value.FullName)}.tapesfrag").Replace(@"\", "/"));
+                this.encodedFileInstance = value;
+                this.OutputFile = new TraceableFile(PathHelper.Combine(LocationMaster.ConverterOutputDirectory.FullName, $"{Path.GetFileNameWithoutExtension(value.FullName)}.tapesfrag").Replace(@"\", "/"));
             }
         }
 
         /// <summary>
         /// Gets a 出力先ファイルパス。
         /// </summary>
-        public TraceableFile ConvertorOutputFile { get; private set; }
+        public TraceableFile OutputFile { get; private set; }
     }
 }

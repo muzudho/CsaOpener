@@ -28,18 +28,18 @@
         /// <returns>展開に成功した。</returns>
         public override bool Expand()
         {
-            Trace.WriteLine($"{LogHelper.Stamp}Expand  : {this.ExpansionGoFile.FullName} -> {LocationMaster.ConverterExpandDirectory.FullName}");
+            Trace.WriteLine($"{LogHelper.Stamp}Expand  : {this.ExpansionGoFile.FullName} -> {LocationMaster.ExpandedDirectory.FullName}");
 
             /*
             // 既存なら削除。
-            var file = new TraceableFile(LocationMaster.ConverterExpandDirectory.FullName);
+            var file = new TraceableFile(LocationMaster.ExpandedDirectory.FullName);
             file.Delete();
             */
 
-            ZipFile.ExtractToDirectory(this.ExpansionGoFile.FullName, LocationMaster.ConverterExpandDirectory.FullName);
+            ZipFile.ExtractToDirectory(this.ExpansionGoFile.FullName, LocationMaster.ExpandedDirectory.FullName);
 
             // ディレクトリーを浅くします。
-            PathFlat.GoFlat(LocationMaster.ConverterExpandDirectory.FullName);
+            PathFlat.GoFlat(LocationMaster.ExpandedDirectory.FullName);
 
             // 解凍が終わった元ファイルは削除。
             this.ExpansionGoFile.Delete();
@@ -48,7 +48,7 @@
             {
                 IEnumerable<string> restDirectories =
                     System.IO.Directory.EnumerateDirectories(
-                        LocationMaster.ConverterExpandDirectory.FullName, "*", System.IO.SearchOption.TopDirectoryOnly);
+                        LocationMaster.ExpandedDirectory.FullName, "*", System.IO.SearchOption.TopDirectoryOnly);
 
                 foreach (var restDir in restDirectories)
                 {

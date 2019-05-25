@@ -138,7 +138,7 @@ namespace Grayscale.ShogiKifuConverter
                     {
                         // このディレクトリ以下のディレクトリをすべて取得する
                         IEnumerable<string> subDirectories =
-                            System.IO.Directory.EnumerateDirectories(LocationMaster.ConverterWorkingDirectory.FullName, "*", System.IO.SearchOption.TopDirectoryOnly);
+                            System.IO.Directory.EnumerateDirectories(LocationMaster.ConverterEncodedDirectory.FullName, "*", System.IO.SearchOption.TopDirectoryOnly);
 
                         foreach (string subDir in subDirectories)
                         {
@@ -246,12 +246,12 @@ namespace Grayscale.ShogiKifuConverter
         /// <returns>成功件数。</returns>
         public static int ConvertSomeFilesToRpm()
         {
-            Trace.WriteLine($"{LogHelper.Stamp}ToRpm   : Start... Directory: {LocationMaster.ConverterWorkingDirectory.FullName}.");
+            Trace.WriteLine($"{LogHelper.Stamp}ToRpm   : Start... Directory: {LocationMaster.ConverterEncodedDirectory.FullName}.");
 
             // 指定ディレクトリ以下のファイルをすべて取得する
             IEnumerable<string> eatingGoFiles =
                 System.IO.Directory.EnumerateFiles(
-                    LocationMaster.ConverterWorkingDirectory.FullName, "*", System.IO.SearchOption.AllDirectories);
+                    LocationMaster.ConverterEncodedDirectory.FullName, "*", System.IO.SearchOption.AllDirectories);
 
             // 200件回す。
             var suceedCount = 0;
