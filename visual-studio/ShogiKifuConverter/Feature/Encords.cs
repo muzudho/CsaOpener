@@ -58,7 +58,7 @@
             }
 
             // 出力ファイル
-            Trace.WriteLine($"{LogHelper.Stamp}outputFile: {outputFile.FullName}");
+            Trace.WriteLine($"{LogHelper.Stamp}Write   : {outputFile.FullName}");
 
             using (FileStream fs2 = new FileStream(outputFile.FullName, FileMode.Create))
             {

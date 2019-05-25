@@ -19,7 +19,7 @@
         /// <returns>ループが回った回数。</returns>
         public static int ExecuteEncode()
         {
-            Trace.WriteLine($"{LogHelper.Stamp}Encode  : '{LocationMaster.ConverterExpandDirectory.FullName}' directory.");
+            // Trace.WriteLine($"{LogHelper.Stamp}Encode  : '{LocationMaster.ConverterExpandDirectory.FullName}' directory.");
 
             var encodedCount = 0;
 
@@ -45,7 +45,7 @@
             }
 
         next:
-            Trace.WriteLine($"{LogHelper.Stamp}End     : Encoding.");
+            // Trace.WriteLine($"{LogHelper.Stamp}End     : Encoding.");
             return encodedCount;
         }
 
@@ -56,9 +56,9 @@
         /// <returns>エンコーディング変換した。</returns>
         private static bool EncodingOfTextFile(TraceableFile expandedFile)
         {
-            Trace.WriteLine($"{LogHelper.Stamp}Encode  : エンコーディング変換対象: {expandedFile.FullName}");
+            Trace.WriteLine($"{LogHelper.Stamp}Encode  : {expandedFile.FullName}");
             var (parentDirectory, stem, extensionWithDot) = PathHelper.DestructFileName(expandedFile.FullName);
-            Trace.WriteLine($"{LogHelper.Stamp}ParentDirectory={parentDirectory}, Stem={stem}, ExtensionWithDot={extensionWithDot}.");
+            // Trace.WriteLine($"{LogHelper.Stamp}ParentDirectory={parentDirectory}, Stem={stem}, ExtensionWithDot={extensionWithDot}.");
 
             // 出力先ディレクトリー。
             var outputDir = LocationMaster.ConverterWorkingDirectory;

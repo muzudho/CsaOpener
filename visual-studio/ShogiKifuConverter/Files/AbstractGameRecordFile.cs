@@ -15,11 +15,11 @@
         /// Initializes a new instance of the <see cref="AbstractGameRecordFile"/> class.
         /// </summary>
         /// <param name="expansionGoFile">解凍を待っているファイル。</param>
-        /// <param name="eatingGoFile">棋譜読取を待っているファイルパス。</param>
-        public AbstractGameRecordFile(TraceableFile expansionGoFile, TraceableFile eatingGoFile)
+        /// <param name="convertorWorkingFile">棋譜読取を待っているファイルパス。</param>
+        public AbstractGameRecordFile(TraceableFile expansionGoFile, TraceableFile convertorWorkingFile)
             : base(expansionGoFile)
         {
-            this.EatingGoFile = eatingGoFile;
+            this.ConvertorWorkingFile = convertorWorkingFile;
         }
 
         /// <summary>
@@ -30,7 +30,7 @@
         /// <summary>
         /// Gets a 棋譜読取を待っているファイル。
         /// </summary>
-        public TraceableFile EatingGoFile
+        public TraceableFile ConvertorWorkingFile
         {
             get
             {
@@ -40,19 +40,13 @@
             private set
             {
                 this.eatingGoFileInstance = value;
-                this.EatingWentFile = new TraceableFile(PathHelper.Combine(LocationMaster.EatingWentDirectory.FullName, Path.GetFileName(value.FullName)));
-                this.EatingOutputFile = new TraceableFile(PathHelper.Combine(LocationMaster.EatingOutputDirectory.FullName, $"{Path.GetFileNameWithoutExtension(value.FullName)}.tapesfrag").Replace(@"\", "/"));
+                this.ConvertorOutputFile = new TraceableFile(PathHelper.Combine(LocationMaster.ConverterOutputDirectory.FullName, $"{Path.GetFileNameWithoutExtension(value.FullName)}.tapesfrag").Replace(@"\", "/"));
             }
         }
 
         /// <summary>
-        /// Gets a 棋譜読取済ファイル。
+        /// Gets a 出力先ファイルパス。
         /// </summary>
-        public TraceableFile EatingWentFile { get; private set; }
-
-        /// <summary>
-        /// Gets a 棋譜読取出力先ファイルパス。
-        /// </summary>
-        public TraceableFile EatingOutputFile { get; private set; }
+        public TraceableFile ConvertorOutputFile { get; private set; }
     }
 }

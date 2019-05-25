@@ -42,14 +42,24 @@ namespace Grayscale.ShogiKifuConverter
 
                 // 同じフェーズをずっとやっていても１つも完成しないので、少しずつやって、ばらけさせる。
                 var expandedCount = 1; // ループの初回入るように。
+                var encodedCount = 0;
                 var convertedCount = 0;
                 var mergedCount = 0;
-                var merged = true; // ループの初回入るように。
-                List<string> expansionOutputDirectories;
+                var merged = false;
 
-                // ループの回った回数が０回になるまで繰り返す。
-                while (expandedCount + convertedCount + mergedCount > 0 && merged)
+                // List<string> expansionOutputDirectories;
+                // 処理が行われている間、繰り返す。
+                while (expandedCount + encodedCount + convertedCount + mergedCount > 0 || merged)
                 {
+                    Trace.WriteLine($"{LogHelper.Stamp}Program : Running...");
+
+                    // リセット。
+                    expandedCount = 0;
+                    encodedCount = 0;
+                    convertedCount = 0;
+                    mergedCount = 0;
+                    merged = false;
+
                     if (arguments.Expand)
                     {
                         // 解凍フェーズ。
@@ -59,7 +69,7 @@ namespace Grayscale.ShogiKifuConverter
                     if (arguments.Encode)
                     {
                         // TODO フォルダーを探索して、棋譜のエンコーディングを変換。
-                        EncodingPhase.ExecuteEncode();
+                        encodedCount = EncodingPhase.ExecuteEncode();
                     }
 
                     if (arguments.Convert)
@@ -78,11 +88,13 @@ namespace Grayscale.ShogiKifuConverter
                         //}
                     }
 
-                    Trace.WriteLine($"{LogHelper.Stamp}Result  : expandedCount: {expandedCount}, readCount: {convertedCount}, mergedCount: {mergedCount}.");
+                    Trace.WriteLine($"{LogHelper.Stamp}Result  : expandedCount: {expandedCount}, encodedCount: {encodedCount}, readCount: {convertedCount}, mergedCount: {mergedCount}.");
                 }
 
                 // 最後の余りに対応する１回。
                 {
+                    Trace.WriteLine($"{LogHelper.Stamp}Program : Last run...");
+
                     if (arguments.Expand)
                     {
                         // 解凍フェーズ。
@@ -153,7 +165,7 @@ namespace Grayscale.ShogiKifuConverter
             // 指定ディレクトリ以下のファイルをすべて取得する
             IEnumerable<string> tapesfragFileFullNames =
                 System.IO.Directory.EnumerateFiles(
-                    LocationMaster.EatingOutputDirectory.FullName, "*.tapesfrag", System.IO.SearchOption.AllDirectories);
+                    LocationMaster.ConverterOutputDirectory.FullName, "*.tapesfrag", System.IO.SearchOption.AllDirectories);
 
             var count = 0;
 
@@ -234,18 +246,18 @@ namespace Grayscale.ShogiKifuConverter
         /// <returns>成功件数。</returns>
         public static int ConvertSomeFilesToRpm()
         {
-            Trace.WriteLine($"{LogHelper.Stamp}ToRpm   : Start... Directory: {LocationMaster.EatingGoDirectory.FullName}.");
+            Trace.WriteLine($"{LogHelper.Stamp}ToRpm   : Start... Directory: {LocationMaster.ConverterWorkingDirectory.FullName}.");
 
             // 指定ディレクトリ以下のファイルをすべて取得する
             IEnumerable<string> eatingGoFiles =
                 System.IO.Directory.EnumerateFiles(
-                    LocationMaster.EatingGoDirectory.FullName, "*", System.IO.SearchOption.AllDirectories);
+                    LocationMaster.ConverterWorkingDirectory.FullName, "*", System.IO.SearchOption.AllDirectories);
 
             // 200件回す。
             var suceedCount = 0;
             foreach (string eatingGoFile in eatingGoFiles)
             {
-                Trace.WriteLine($"{LogHelper.Stamp}ToRpm   : eatingGoFile: {eatingGoFile}.");
+                Trace.WriteLine($"{LogHelper.Stamp}ToRpm   : [{eatingGoFile}].");
 
                 if (suceedCount > 199)
                 {

@@ -40,13 +40,7 @@
             p.WaitForExit(60 * 1000);
 
             var returnCode = p.ExitCode;
-            /*
-            if (returnCode != 0)
-            {
-            }
-            */
             Trace.WriteLine($"{LogHelper.Stamp}Returned: Process returnCode: {returnCode}.");
-
             return returnCode;
         }
     }

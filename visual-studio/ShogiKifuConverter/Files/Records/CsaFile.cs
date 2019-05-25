@@ -2,6 +2,7 @@
 {
     using System.Diagnostics;
     using Grayscale.ShogiKifuConverter.Commons;
+    using Grayscale.ShogiKifuConverter.Location;
 
     /// <summary>
     /// CSA形式棋譜ファイル。
@@ -57,15 +58,16 @@
         /// <returns>成功。</returns>
         public override bool ConvertAnyFileToRpm()
         {
-            int returnCode = RustExe.ConvertAnyFileToRpm(this.EatingGoFile, this.EatingOutputFile);
+            int returnCode = RustExe.ConvertAnyFileToRpm(this.ConvertorWorkingFile, this.ConvertorOutputFile);
 
             if (returnCode == 0)
             {
-                // 終わった元ファイルを移動。
-                this.EatingGoFile.Move(this.EatingWentFile, true);
+                // 終わった元ファイルを削除。
+                this.ConvertorWorkingFile.Delete();
                 return true;
             }
 
+            this.ConvertorWorkingFile.MoveTo(LocationMaster.ConverterErrorDirectory, true);
             return false;
         }
     }

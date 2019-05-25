@@ -30,30 +30,9 @@
         public string converter_output { get; private set; }
 
         /// <summary>
-        /// ディレクトリー。
+        /// Gets a 変換器のエラー出力フォルダー。
         /// </summary>
-        public class Directories
-        {
-            /// <summary>
-            /// Gets or sets a これからやるパス。
-            /// </summary>
-            public string go { get; set; }
-
-            /// <summary>
-            /// Gets or sets a やり終わったパス。
-            /// </summary>
-            public string went { get; set; }
-
-            /// <summary>
-            /// Gets or sets a 出力先のパス。
-            /// </summary>
-            public string output { get; set; }
-        }
-
-        /// <summary>
-        /// Gets a PRM棋譜に変換。
-        /// </summary>
-        public Directories eating { get; private set; }
+        public string converter_error { get; private set; }
 
         /// <summary>
         /// Gets a 記録用パス。

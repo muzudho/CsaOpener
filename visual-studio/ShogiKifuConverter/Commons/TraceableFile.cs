@@ -2,6 +2,7 @@
 {
     using System.Diagnostics;
     using System;
+    using System.IO;
 
     /// <summary>
     /// ログを出すファイル。
@@ -47,7 +48,7 @@
         /// </summary>
         /// <param name="destFile">移動先。</param>
         /// <param name="overwrite">上書き可。</param>
-        public void Move(TraceableFile destFile, bool overwrite)
+        public void MoveTo(TraceableFile destFile, bool overwrite)
         {
             new TraceableFile(destFile.FullName).CreateParentDirectory();
 
@@ -58,6 +59,21 @@
             }
 
             System.IO.File.Move(this.FullName, destFile.FullName);
+        }
+
+        /// <summary>
+        /// 移動。
+        /// </summary>
+        /// <param name="destDir">移動先。</param>
+        /// <param name="overwrite">上書き可。</param>
+        public void MoveTo(TraceableDirectory destDir, bool overwrite)
+        {
+            destDir.Create();
+            Trace.WriteLine($"{LogHelper.Stamp}Move    : '{this.FullName}' --into--> '{destDir.FullName}' directory...");
+
+            var dstFile = new TraceableFile(PathHelper.Combine(destDir.FullName, Path.GetFileName(this.FullName)));
+
+            this.MoveTo(dstFile, overwrite);
         }
 
         /// <summary>

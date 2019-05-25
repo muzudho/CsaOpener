@@ -115,7 +115,7 @@
             var destination = new TraceableFile(PathHelper.Combine(parentParentDirectory, joinedName));
 
             // 古い名前から、新しい名前へ移動。
-            file.Move(destination, true);
+            file.MoveTo(destination, true);
         }
     }
 }

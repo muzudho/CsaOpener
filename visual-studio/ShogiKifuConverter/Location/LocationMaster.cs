@@ -41,35 +41,14 @@
             ConverterOutputDirectory = new TraceableDirectory(LocationMaster.Kw29MasterConfJson.converter_output);
             ConverterOutputDirectory.Create();
 
-            // 棋譜読取フェーズ。
-            EatingGoDirectory = new TraceableDirectory(LocationMaster.Kw29MasterConfJson.eating.go);
-            EatingGoDirectory.Create();
-
-            EatingWentDirectory = new TraceableDirectory(LocationMaster.Kw29MasterConfJson.eating.went);
-            EatingWentDirectory.Create();
-
-            EatingOutputDirectory = new TraceableDirectory(LocationMaster.Kw29MasterConfJson.eating.output);
-            EatingOutputDirectory.Create();
+            // 変換エラー出力ディレクトリー。
+            ConverterErrorDirectory = new TraceableDirectory(LocationMaster.Kw29MasterConfJson.converter_error);
+            ConverterErrorDirectory.Create();
 
             // 成果物ディレクトリー。
             TrainingDirectory = new TraceableDirectory(LocationMaster.Kw29MasterConfJson.training);
             TrainingDirectory.Create();
         }
-
-        /// <summary>
-        /// Gets a 棋譜読取待ちディレクトリー。
-        /// </summary>
-        public static TraceableDirectory EatingGoDirectory { get; private set; }
-
-        /// <summary>
-        /// Gets a 棋譜読取済みディレクトリー。
-        /// </summary>
-        public static TraceableDirectory EatingWentDirectory { get; private set; }
-
-        /// <summary>
-        /// Gets a 棋譜読取成果ディレクトリー。
-        /// </summary>
-        public static TraceableDirectory EatingOutputDirectory { get; private set; }
 
         /// <summary>
         /// Gets a 解凍待ちディレクトリー。
@@ -90,6 +69,11 @@
         /// Gets a 変換出力ディレクトリー。
         /// </summary>
         public static TraceableDirectory ConverterOutputDirectory { get; private set; }
+
+        /// <summary>
+        /// Gets a 変換エラー出力ディレクトリー。
+        /// </summary>
+        public static TraceableDirectory ConverterErrorDirectory { get; private set; }
 
         /// <summary>
         /// Gets a 成果物ディレクトリー。
