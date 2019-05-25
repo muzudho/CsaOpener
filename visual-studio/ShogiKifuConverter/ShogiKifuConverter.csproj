@@ -73,7 +73,7 @@
     <Compile Include="Commons\PathHelper.cs" />
     <Compile Include="Commons\TraceableDirectory.cs" />
     <Compile Include="Commons\TraceableFile.cs" />
-    <Compile Include="Parameter\Config\KifuwarabeWcsc29MasterConfigJson.cs" />
+    <Compile Include="Parameter\Config\KifuwarabeWcsc29ConverterMasterConfigJson.cs" />
     <Compile Include="Parameter\Config\ExeConfigJson.cs" />
     <Compile Include="DynamicJson.cs" />
     <Compile Include="Files\AbstractArchiveFile.cs" />

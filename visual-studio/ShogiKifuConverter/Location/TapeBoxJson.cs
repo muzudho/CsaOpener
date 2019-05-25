@@ -10,8 +10,9 @@
         /// <summary>
         /// ランダム名のテープ・ボックス・ファイルを自動生成。
         /// </summary>
+        /// <param name="dir">保存先ディレクトリー。</param>
         /// <returns>テープ・ボックス・ファイル。</returns>
-        public static TraceableFile CreateTapeBoxFileAtRandom()
+        public static TraceableFile CreateTapeBoxFileAtRandom(TraceableDirectory dir)
         {
             // ランダムな正の数を４つ つなげて長くする。
             var rand = new System.Random();
@@ -20,7 +21,7 @@
             var num3 = rand.Next();
             var num4 = rand.Next();
 
-            return new TraceableFile(PathHelper.Combine(LocationMaster.TrainingDirectory.FullName, $"{num1}-{num2}-{num3}-{num4}-tape-box.json"));
+            return new TraceableFile(PathHelper.Combine(dir.FullName, $"{num1}-{num2}-{num3}-{num4}-tape-box.json"));
         }
     }
 }

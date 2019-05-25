@@ -18,35 +18,35 @@
             }
 
             // ゲームエンジンの設定ファイル。
-            Kw29MasterConf = new TraceableFile(LocationMaster.ExeConfJson.kifuwarabe_wcsc29_master_config_path);
+            Kw29MasterConf = new TraceableFile(LocationMaster.ExeConfJson.kifuwarabe_wcsc29_converter_master_config_path);
             {
                 var json = DynamicJson.Parse(LocationMaster.Kw29MasterConf.ReadAllText());
-                Kw29MasterConfJson = json.Deserialize<KifuwarabeWcsc29MasterConfigJson>();
+                Kw29MasterConfJson = json.Deserialize<KifuwarabeWcsc29ConverterMasterConfigJson>();
             }
 
             // 入力ディレクトリー。
-            InputDirectory = new TraceableDirectory(LocationMaster.Kw29MasterConfJson.converter_input);
+            InputDirectory = new TraceableDirectory(LocationMaster.Kw29MasterConfJson.input);
             InputDirectory.Create();
 
             // 解凍済みディレクトリー。
-            ExpandedDirectory = new TraceableDirectory(LocationMaster.Kw29MasterConfJson.converter_expanded);
+            ExpandedDirectory = new TraceableDirectory(LocationMaster.Kw29MasterConfJson.expanded);
             ExpandedDirectory.Create();
 
             // エンコーディング済みディレクトリー。
-            ConverterEncodedDirectory = new TraceableDirectory(LocationMaster.Kw29MasterConfJson.converter_encoded);
-            ConverterEncodedDirectory.Create();
+            EncodedDirectory = new TraceableDirectory(LocationMaster.Kw29MasterConfJson.encoded);
+            EncodedDirectory.Create();
 
-            // 変換済みディレクトリー。
-            ConverterOutputDirectory = new TraceableDirectory(LocationMaster.Kw29MasterConfJson.converter_output);
-            ConverterOutputDirectory.Create();
+            // 変換済みの棋譜ディレクトリー。
+            ConvertedDirectory = new TraceableDirectory(LocationMaster.Kw29MasterConfJson.converted);
+            ConvertedDirectory.Create();
+
+            // 棋譜を１つのファイルに詰め込んだファイルのディレクトリー。
+            JammedDirectory = new TraceableDirectory(LocationMaster.Kw29MasterConfJson.jammed);
+            JammedDirectory.Create();
 
             // 変換エラー出力ディレクトリー。
-            ConverterErrorDirectory = new TraceableDirectory(LocationMaster.Kw29MasterConfJson.converter_error);
-            ConverterErrorDirectory.Create();
-
-            // 成果物ディレクトリー。
-            TrainingDirectory = new TraceableDirectory(LocationMaster.Kw29MasterConfJson.training);
-            TrainingDirectory.Create();
+            ErrorDirectory = new TraceableDirectory(LocationMaster.Kw29MasterConfJson.error);
+            ErrorDirectory.Create();
         }
 
         /// <summary>
@@ -55,29 +55,29 @@
         public static TraceableDirectory InputDirectory { get; private set; }
 
         /// <summary>
-        /// Gets a 解凍の成果ディレクトリー。
+        /// Gets a 解凍済みの棋譜ディレクトリー。
         /// </summary>
         public static TraceableDirectory ExpandedDirectory { get; private set; }
 
         /// <summary>
-        /// Gets a 変換中ディレクトリー。
+        /// Gets a エンコード済みの棋譜ディレクトリー。
         /// </summary>
-        public static TraceableDirectory ConverterEncodedDirectory { get; private set; }
+        public static TraceableDirectory EncodedDirectory { get; private set; }
 
         /// <summary>
-        /// Gets a 変換出力ディレクトリー。
+        /// Gets a 棋譜変換済みの棋譜ディレクトリー。
         /// </summary>
-        public static TraceableDirectory ConverterOutputDirectory { get; private set; }
+        public static TraceableDirectory ConvertedDirectory { get; private set; }
+
+        /// <summary>
+        /// Gets a 棋譜を１つのファイルに詰め込んだファイルのディレクトリー。
+        /// </summary>
+        public static TraceableDirectory JammedDirectory { get; private set; }
 
         /// <summary>
         /// Gets a 変換エラー出力ディレクトリー。
         /// </summary>
-        public static TraceableDirectory ConverterErrorDirectory { get; private set; }
-
-        /// <summary>
-        /// Gets a 成果物ディレクトリー。
-        /// </summary>
-        public static TraceableDirectory TrainingDirectory { get; private set; }
+        public static TraceableDirectory ErrorDirectory { get; private set; }
 
         /// <summary>
         /// Gets a 設定ファイル。
@@ -97,6 +97,6 @@
         /// <summary>
         /// Gets a ゲームエンジンの設定ファイルの内容。
         /// </summary>
-        public static KifuwarabeWcsc29MasterConfigJson Kw29MasterConfJson { get; private set; }
+        public static KifuwarabeWcsc29ConverterMasterConfigJson Kw29MasterConfJson { get; private set; }
     }
 }

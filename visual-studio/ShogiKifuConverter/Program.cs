@@ -84,7 +84,7 @@ namespace Grayscale.ShogiKifuConverter
                         //if (new System.Random().Next() % 3 == 0)
                         //{
                         // JSON作成フェーズ。
-                        (mergedCount, merged) = MergeTapesfragFiles(false);
+                        (mergedCount, merged) = JamTapesfragFiles(false);
                         //}
                     }
 
@@ -116,7 +116,7 @@ namespace Grayscale.ShogiKifuConverter
                     if (arguments.Merge)
                     {
                         // JSON作成フェーズ。
-                        (mergedCount, merged) = MergeTapesfragFiles(true);
+                        (mergedCount, merged) = JamTapesfragFiles(true);
                     }
 
                     Trace.WriteLine($"{LogHelper.Stamp}LAST    : expandedCount: {expandedCount}, readCount: {convertedCount}, mergedCount: {mergedCount}.");
@@ -138,7 +138,7 @@ namespace Grayscale.ShogiKifuConverter
                     {
                         // このディレクトリ以下のディレクトリをすべて取得する
                         IEnumerable<string> subDirectories =
-                            System.IO.Directory.EnumerateDirectories(LocationMaster.ConverterEncodedDirectory.FullName, "*", System.IO.SearchOption.TopDirectoryOnly);
+                            System.IO.Directory.EnumerateDirectories(LocationMaster.EncodedDirectory.FullName, "*", System.IO.SearchOption.TopDirectoryOnly);
 
                         foreach (string subDir in subDirectories)
                         {
@@ -158,14 +158,14 @@ namespace Grayscale.ShogiKifuConverter
         /// </summary>
         /// <param name="isLast">余り。</param>
         /// <returns>ループが回った回数、マージを１つ以上行った。</returns>
-        public static (int, bool) MergeTapesfragFiles(bool isLast)
+        public static (int, bool) JamTapesfragFiles(bool isLast)
         {
             Trace.WriteLine($"{LogHelper.Stamp}Merge   : Start. Tapesfrage isLast: {isLast}.");
 
             // 指定ディレクトリ以下のファイルをすべて取得する
             IEnumerable<string> tapesfragFileFullNames =
                 System.IO.Directory.EnumerateFiles(
-                    LocationMaster.ConverterOutputDirectory.FullName, "*.tapesfrag", System.IO.SearchOption.AllDirectories);
+                    LocationMaster.ConvertedDirectory.FullName, "*.tapesfrag", System.IO.SearchOption.AllDirectories);
 
             var count = 0;
 
@@ -219,7 +219,7 @@ namespace Grayscale.ShogiKifuConverter
             // ファイル名が被ってしまったら、今回はパス。
             {
                 // ランダムな名前のファイル。
-                var tapeBoxFile = TapeBoxJson.CreateTapeBoxFileAtRandom();
+                var tapeBoxFile = TapeBoxJson.CreateTapeBoxFileAtRandom(LocationMaster.JammedDirectory);
                 if (!File.Exists(tapeBoxFile.FullName))
                 {
                     new TraceableFile(tapeBoxFile.FullName).WriteAllText(tapeBoxContent);
@@ -246,12 +246,12 @@ namespace Grayscale.ShogiKifuConverter
         /// <returns>成功件数。</returns>
         public static int ConvertSomeFilesToRpm()
         {
-            Trace.WriteLine($"{LogHelper.Stamp}ToRpm   : Start... Directory: {LocationMaster.ConverterEncodedDirectory.FullName}.");
+            Trace.WriteLine($"{LogHelper.Stamp}ToRpm   : Start... Directory: {LocationMaster.EncodedDirectory.FullName}.");
 
             // 指定ディレクトリ以下のファイルをすべて取得する
             IEnumerable<string> eatingGoFiles =
                 System.IO.Directory.EnumerateFiles(
-                    LocationMaster.ConverterEncodedDirectory.FullName, "*", System.IO.SearchOption.AllDirectories);
+                    LocationMaster.EncodedDirectory.FullName, "*", System.IO.SearchOption.AllDirectories);
 
             // 200件回す。
             var suceedCount = 0;

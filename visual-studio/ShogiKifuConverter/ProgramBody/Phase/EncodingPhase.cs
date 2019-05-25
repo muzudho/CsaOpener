@@ -60,7 +60,7 @@
             // Trace.WriteLine($"{LogHelper.Stamp}ParentDirectory={parentDirectory}, Stem={stem}, ExtensionWithDot={extensionWithDot}.");
 
             // 出力先ディレクトリー。
-            var outputDir = LocationMaster.ConverterEncodedDirectory;
+            var outputDir = LocationMaster.EncodedDirectory;
 
             var encoded = false;
             switch (extensionWithDot.ToUpperInvariant())

@@ -58,7 +58,7 @@
         /// <returns>成功。</returns>
         public override bool ConvertAnyFileToRpm()
         {
-            int returnCode = RustExe.ConvertAnyFileToRpm(this.EncodedFile, this.OutputFile);
+            int returnCode = RustExe.ConvertAnyFileToRpm(this.EncodedFile, this.ConvertedFile);
 
             if (returnCode == 0)
             {
@@ -67,7 +67,7 @@
                 return true;
             }
 
-            this.EncodedFile.MoveTo(LocationMaster.ConverterErrorDirectory, true);
+            this.EncodedFile.MoveTo(LocationMaster.ErrorDirectory, true);
             return false;
         }
     }

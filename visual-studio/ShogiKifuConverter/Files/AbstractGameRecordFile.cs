@@ -40,13 +40,13 @@
             private set
             {
                 this.encodedFileInstance = value;
-                this.OutputFile = new TraceableFile(PathHelper.Combine(LocationMaster.ConverterOutputDirectory.FullName, $"{Path.GetFileNameWithoutExtension(value.FullName)}.tapesfrag").Replace(@"\", "/"));
+                this.ConvertedFile = new TraceableFile(PathHelper.Combine(LocationMaster.ConvertedDirectory.FullName, $"{Path.GetFileNameWithoutExtension(value.FullName)}.tapesfrag").Replace(@"\", "/"));
             }
         }
 
         /// <summary>
         /// Gets a 出力先ファイルパス。
         /// </summary>
-        public TraceableFile OutputFile { get; private set; }
+        public TraceableFile ConvertedFile { get; private set; }
     }
 }
