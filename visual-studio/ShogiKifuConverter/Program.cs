@@ -126,7 +126,7 @@ namespace Grayscale.ShogiKifuConverter
                     {
                         // このディレクトリ以下のディレクトリをすべて取得する
                         IEnumerable<string> subDirectories =
-                            System.IO.Directory.EnumerateDirectories(LocationMaster.FomationGoDirectory.FullName, "*", System.IO.SearchOption.TopDirectoryOnly);
+                            System.IO.Directory.EnumerateDirectories(LocationMaster.ConverterWorkingDirectory.FullName, "*", System.IO.SearchOption.TopDirectoryOnly);
 
                         foreach (string subDir in subDirectories)
                         {

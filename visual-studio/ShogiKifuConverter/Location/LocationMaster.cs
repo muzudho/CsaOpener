@@ -15,7 +15,7 @@
             MyAppConf = new TraceableFile(PathHelper.Combine(AppDomain.CurrentDomain.BaseDirectory.TrimEnd('\\'), "./app-config.json"));
             {
                 var json = DynamicJson.Parse(LocationMaster.MyAppConf.ReadAllText());
-                MyAppConfJson = json.Deserialize<AppConfigJson>();
+                MyAppConfJson = json.Deserialize<ExeConfigJson>();
             }
 
             // ゲームエンジンの設定ファイル。
@@ -25,22 +25,21 @@
                 Kw29MasterConfJson = json.Deserialize<KifuwarabeWcsc29MasterConfigJson>();
             }
 
-            // 解凍フェーズ。
+            // 入力ディレクトリー。
             ConverterInputDirectory = new TraceableDirectory(LocationMaster.Kw29MasterConfJson.converter_input);
             ConverterInputDirectory.Create();
 
+            // 解凍済みディレクトリー。
             ConverterExpandDirectory = new TraceableDirectory(LocationMaster.Kw29MasterConfJson.converter_expand);
             ConverterExpandDirectory.Create();
 
-            // エンコーディング・フェーズ。
-            FomationGoDirectory = new TraceableDirectory(LocationMaster.Kw29MasterConfJson.formation.go);
-            FomationGoDirectory.Create();
+            // エンコーディング済みディレクトリー。
+            ConverterWorkingDirectory = new TraceableDirectory(LocationMaster.Kw29MasterConfJson.converter_working);
+            ConverterWorkingDirectory.Create();
 
-            FomationWentDirectory = new TraceableDirectory(LocationMaster.Kw29MasterConfJson.formation.went);
-            FomationWentDirectory.Create();
-
-            FomationOutputDirectory = new TraceableDirectory(LocationMaster.Kw29MasterConfJson.formation.output);
-            FomationOutputDirectory.Create();
+            // 変換済みディレクトリー。
+            ConverterOutputDirectory = new TraceableDirectory(LocationMaster.Kw29MasterConfJson.converter_output);
+            ConverterOutputDirectory.Create();
 
             // 棋譜読取フェーズ。
             EatingGoDirectory = new TraceableDirectory(LocationMaster.Kw29MasterConfJson.eating.go);
@@ -83,19 +82,14 @@
         public static TraceableDirectory ConverterExpandDirectory { get; private set; }
 
         /// <summary>
-        /// Gets a エンコーディング待ちディレクトリー。
+        /// Gets a 変換中ディレクトリー。
         /// </summary>
-        public static TraceableDirectory FomationGoDirectory { get; private set; }
+        public static TraceableDirectory ConverterWorkingDirectory { get; private set; }
 
         /// <summary>
-        /// Gets a エンコーディング済みディレクトリー。
+        /// Gets a 変換出力ディレクトリー。
         /// </summary>
-        public static TraceableDirectory FomationWentDirectory { get; private set; }
-
-        /// <summary>
-        /// Gets a エンコーディング成果ディレクトリー。
-        /// </summary>
-        public static TraceableDirectory FomationOutputDirectory { get; private set; }
+        public static TraceableDirectory ConverterOutputDirectory { get; private set; }
 
         /// <summary>
         /// Gets a 成果物ディレクトリー。
@@ -115,7 +109,7 @@
         /// <summary>
         /// Gets a このアプリケーション.exeと同じディレクトリに置いてある設定ファイルの内容。
         /// </summary>
-        public static AppConfigJson MyAppConfJson { get; private set; }
+        public static ExeConfigJson MyAppConfJson { get; private set; }
 
         /// <summary>
         /// Gets a ゲームエンジンの設定ファイルの内容。

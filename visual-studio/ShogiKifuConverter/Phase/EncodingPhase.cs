@@ -38,9 +38,7 @@
                     goto next;
                 }
 
-                var fileW = FileWaitingToBeEncoded.FromFile(file);
-
-                if (EncodingPhase.EncodingOfTextFile(fileW))
+                if (EncodingPhase.EncodingOfTextFile(new TraceableFile(file)))
                 {
                     encodedCount++;
                 }
@@ -54,61 +52,32 @@
         /// <summary>
         /// CSAファイルは Shift-JIS と決めつけて、UTF8に変換する。
         /// </summary>
-        /// <param name="fileW">棋譜のテキストファイル。圧縮ファイルではなく。</param>
+        /// <param name="expandedFile">解凍済み棋譜のテキストファイル。</param>
         /// <returns>エンコーディング変換した。</returns>
-        private static bool EncodingOfTextFile(FileWaitingToBeEncoded fileW)
+        private static bool EncodingOfTextFile(TraceableFile expandedFile)
         {
+            Trace.WriteLine($"{LogHelper.Stamp}Encode  : エンコーディング変換対象: {expandedFile.FullName}");
+            var (stem, extensionWithDot) = PathHelper.DestructFileName(expandedFile.FullName);
+            Trace.WriteLine($"{LogHelper.Stamp}Stem={stem}, ExtensionWithDot={extensionWithDot}.");
+
+            // 出力先ディレクトリー。
+            var outputDir = LocationMaster.ConverterWorkingDirectory.FullName;
+
             var encoded = false;
-            Trace.WriteLine($"{LogHelper.Stamp}Encode  : エンコーディング変換対象: {fileW.GoFile.FullName}");
-            switch (Path.GetExtension(fileW.GoFile.FullName).ToUpperInvariant())
+            switch (extensionWithDot.ToUpperInvariant())
             {
                 case ".CSA":
                 case ".KIF":
+                    // TODO 両方試したい。 (1)変換なし (2)Shift-JIS -> UTF-8 変換
                     {
-                        byte[] bytesData;
+                        // 出力先ファイル。
+                        var outputFile = new TraceableFile(PathHelper.Combine(outputDir, string.Concat(stem, "[SJ-U8]", extensionWithDot)));
+                        new EncordsSjisToU8().Execute(expandedFile, outputFile);
 
-                        // ファイルをbyte形で全て読み込み
-                        using (FileStream fs1 = new FileStream(fileW.GoFile.FullName, FileMode.Open))
-                        {
-                            byte[] data = new byte[fs1.Length];
-                            fs1.Read(data, 0, data.Length);
-                            fs1.Close();
-
-                            // Shift-JIS -> UTF-8 変換（byte形）
-                            string sjisstr = Encoding.GetEncoding("Shift_JIS").GetString(data);
-                            bytesData = System.Text.Encoding.UTF8.GetBytes(sjisstr);
-                        }
-
-                        // 出力ファイル
-                        Trace.WriteLine($"{LogHelper.Stamp}outputFile: {fileW.OutputFile.FullName}");
-
-                        using (FileStream fs2 = new FileStream(fileW.OutputFile.FullName, FileMode.Create))
-                        {
-                            // 書き込み設定（デフォルトはUTF-8）
-                            BinaryWriter bw = new BinaryWriter(fs2);
-
-                            // 出力ファイルへ全て書き込み
-                            bw.Write(bytesData);
-                            bw.Close();
-                            fs2.Close();
-                        }
-
-                        // 終わったファイルを移動。
-                        /*
-                        // ExpantionGoPath = C:\shogi-record\go\hunting
-                        // InputFilePath   = C:\shogi-record\go\cooking\floodgate\2008\wdoor+floodgate-900-0+a+gps500+20080803103002.csa とかいうファイルパスになっている。
-                        var belowPath = textFile.Substring(FileSystem.FomationGoDirectory.FullName.Length);
-
-                        // var wentDir = PathHelper.Combine(FormationWentPath, Directory.GetParent(inputFile).Name);
-                        var wentFile = new TraceableFile(PathHelper.Combine(FileSystem.FomationWentDirectory.FullName, belowPath));
-
-                        Trace.WriteLine($"FomationWentDirectory.Instance.FullName: '{FileSystem.FomationWentDirectory.FullName}'. belowPath: '{belowPath}'. wentFile.FullName: '{wentFile.FullName}'.");
-                        wentFile.CreateParentDirectory();
-                        */
-
+                        // 終わったファイルは消す。
                         try
                         {
-                            fileW.GoFile.Move(fileW.WentFile, true);
+                            expandedFile.Delete();
                         }
                         catch (IOException e)
                         {

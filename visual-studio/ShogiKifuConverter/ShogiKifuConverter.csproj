@@ -66,19 +66,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commons\LogHelper.cs" />
-    <Compile Include="Parameter\RawArguments.cs" />
+    <Compile Include="Feature\EncordsSjisToU8.cs" />
+    <Compile Include="Parameter\CommandLine\RawArguments.cs" />
     <Compile Include="Commons\PathFlat.cs" />
     <Compile Include="CommonAction\RustExe.cs" />
     <Compile Include="Commons\PathHelper.cs" />
     <Compile Include="Commons\TraceableDirectory.cs" />
     <Compile Include="Commons\TraceableFile.cs" />
     <Compile Include="Parameter\Config\KifuwarabeWcsc29MasterConfigJson.cs" />
-    <Compile Include="Parameter\Config\AppConfigJson.cs" />
+    <Compile Include="Parameter\Config\ExeConfigJson.cs" />
     <Compile Include="DynamicJson.cs" />
     <Compile Include="Files\AbstractArchiveFile.cs" />
     <Compile Include="Files\AbstractFile.cs" />
     <Compile Include="Files\AbstractGameRecordFile.cs" />
-    <Compile Include="Files\FileWaitingToBeEncoded.cs" />
     <Compile Include="Files\Records\CsaFile.cs" />
     <Compile Include="Files\Records\KifFile.cs" />
     <Compile Include="Files\Archives\LzhFile.cs" />

@@ -29,5 +29,15 @@
         {
             return Path.Combine(left, middle.TrimStart('/', '\\'), right.TrimStart('/', '\\'));
         }
+
+        /// <summary>
+        /// パスから、ファイル名の基幹部と、ドット付き拡張子を抜き出す。
+        /// </summary>
+        /// <param name="path">ファイル・パス。</param>
+        /// <returns>ファイル名の基幹部と、ドット付き拡張子。</returns>
+        public static (string, string) DestructFileName(string path)
+        {
+            return (Path.GetFileNameWithoutExtension(path), Path.GetExtension(path));
+        }
     }
 }

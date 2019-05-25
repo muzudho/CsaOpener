@@ -51,11 +51,6 @@
         }
 
         /// <summary>
-        /// Gets a エンコーディング変換。
-        /// </summary>
-        public Directories formation { get; private set; }
-
-        /// <summary>
         /// Gets a PRM棋譜に変換。
         /// </summary>
         public Directories eating { get; private set; }

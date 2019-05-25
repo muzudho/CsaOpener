@@ -7,7 +7,7 @@
     /// <summary>
     /// 設定の内容。
     /// </summary>
-    public class AppConfigJson
+    public class ExeConfigJson
     {
         /// <summary>
         /// Gets a 設定ファイルへのパス。
