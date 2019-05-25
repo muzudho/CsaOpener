@@ -1,7 +1,4 @@
-# CsaOpener
-.csa棋譜を全部解凍してUTF-8にしたいぜ☆（＾～＾）
+# Shogi kifu converter
+インターネット上で拾えるあらゆる棋譜ファイルを、きふわらべが読み込める形式の棋譜に変換したいぜ☆（＾～＾）
 
-```
---input ディレクトリパス --output ディレクトリパス
---input "C:\shogi-record\go\hunting\floodgate" --output "C:\muzudho\shogi-record\done\hunted\floodgate"
-```
+[Explain](http://shogi.warabenture.com/converter.html)
