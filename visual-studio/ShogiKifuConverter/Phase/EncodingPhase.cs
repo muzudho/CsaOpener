@@ -50,18 +50,18 @@
         }
 
         /// <summary>
-        /// CSAファイルは Shift-JIS と決めつけて、UTF8に変換する。
+        /// エンコーディング変換。
         /// </summary>
         /// <param name="expandedFile">解凍済み棋譜のテキストファイル。</param>
         /// <returns>エンコーディング変換した。</returns>
         private static bool EncodingOfTextFile(TraceableFile expandedFile)
         {
             Trace.WriteLine($"{LogHelper.Stamp}Encode  : エンコーディング変換対象: {expandedFile.FullName}");
-            var (stem, extensionWithDot) = PathHelper.DestructFileName(expandedFile.FullName);
-            Trace.WriteLine($"{LogHelper.Stamp}Stem={stem}, ExtensionWithDot={extensionWithDot}.");
+            var (parentDirectory, stem, extensionWithDot) = PathHelper.DestructFileName(expandedFile.FullName);
+            Trace.WriteLine($"{LogHelper.Stamp}ParentDirectory={parentDirectory}, Stem={stem}, ExtensionWithDot={extensionWithDot}.");
 
             // 出力先ディレクトリー。
-            var outputDir = LocationMaster.ConverterWorkingDirectory.FullName;
+            var outputDir = LocationMaster.ConverterWorkingDirectory;
 
             var encoded = false;
             switch (extensionWithDot.ToUpperInvariant())
@@ -70,9 +70,11 @@
                 case ".KIF":
                     // TODO 両方試したい。 (1)変換なし (2)Shift-JIS -> UTF-8 変換
                     {
-                        // 出力先ファイル。
-                        var outputFile = new TraceableFile(PathHelper.Combine(outputDir, string.Concat(stem, "[SJ-U8]", extensionWithDot)));
-                        new EncordsSjisToU8().Execute(expandedFile, outputFile);
+                        // 名前を変えて、そのまま保存します。
+                        new Encords().ExecuteAsIt(expandedFile, outputDir);
+
+                        // Shift-JIS と決めつけて、UTF8に変換する。
+                        new Encords().ExecuteSjisToU8(expandedFile, outputDir);
 
                         // 終わったファイルは消す。
                         try

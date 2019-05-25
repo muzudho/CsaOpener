@@ -34,10 +34,10 @@
         /// パスから、ファイル名の基幹部と、ドット付き拡張子を抜き出す。
         /// </summary>
         /// <param name="path">ファイル・パス。</param>
-        /// <returns>ファイル名の基幹部と、ドット付き拡張子。</returns>
-        public static (string, string) DestructFileName(string path)
+        /// <returns>親ディレクトリー・パスと、ファイル名の基幹部と、ドット付き拡張子。</returns>
+        public static (string, string, string) DestructFileName(string path)
         {
-            return (Path.GetFileNameWithoutExtension(path), Path.GetExtension(path));
+            return (Directory.GetParent(path).FullName, Path.GetFileNameWithoutExtension(path), Path.GetExtension(path));
         }
     }
 }
