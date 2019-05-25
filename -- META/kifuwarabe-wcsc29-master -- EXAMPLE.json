@@ -1,0 +1,17 @@
+{
+	"converter_input" : "C:/muzudho/wcsc29-master/shogi-record/converter-input",
+	"converter_expanded" : "C:/muzudho/wcsc29-master/shogi-record/converter-expanded",
+	"converter_encoded" : "C:/muzudho/wcsc29-master/shogi-record/converter-encoded",
+	"converter_output" : "C:/muzudho/wcsc29-master/shogi-record/tapes-fragments",
+	"converter_error" : "C:/muzudho/wcsc29-master/shogi-record/converter-error",
+	
+	"training": "C:/muzudho/wcsc29-master/shogi-record/training",
+
+    "learning": "C:/muzudho/wcsc29-master/shogi-record/learning",
+
+	"book": "C:/muzudho/wcsc29-master/shogi-record/book",
+
+    "tapes_fragments": "C:/muzudho/wcsc29-master/shogi-record/tapes-fragments",
+		
+	"kifuwarabe_wcsc29_exe_path_for_read_kifu" : "C:/muzudho/software-computer-shogi/kifuwarabe-wcsc29/kifuwarabe-wcsc29.exe"
+}

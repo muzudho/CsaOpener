@@ -97,6 +97,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Files\Archives\SevenZipFile.cs" />
     <Compile Include="Lib\SevenZManager.cs" />
+    <Compile Include="Settings\ZerothSettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

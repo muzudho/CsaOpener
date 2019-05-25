@@ -1,9 +1,5 @@
 ﻿namespace Grayscale.ShogiKifuConverter
 {
-    using System.IO;
-    using Codeplex.Data;
-    using Grayscale.ShogiKifuConverter.Location;
-
     /// <summary>
     /// 設定。
     /// </summary>

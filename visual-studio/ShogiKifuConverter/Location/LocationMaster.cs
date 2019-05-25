@@ -1,6 +1,5 @@
 ﻿namespace Grayscale.ShogiKifuConverter.Location
 {
-    using System;
     using Codeplex.Data;
     using Grayscale.ShogiKifuConverter.Commons;
 
@@ -12,22 +11,22 @@
         static LocationMaster()
         {
             // このアプリケーション.exeと同じディレクトリに置いてある設定ファイル。
-            MyAppConf = new TraceableFile(PathHelper.Combine(AppDomain.CurrentDomain.BaseDirectory.TrimEnd('\\'), "./app-config.json"));
+            ExeConf = new TraceableFile(PathHelper.Combine(ZerothSettings.ExeDirectory, "./exe-config.json"));
             {
-                var json = DynamicJson.Parse(LocationMaster.MyAppConf.ReadAllText());
-                MyAppConfJson = json.Deserialize<ExeConfigJson>();
+                var json = DynamicJson.Parse(LocationMaster.ExeConf.ReadAllText());
+                ExeConfJson = json.Deserialize<ExeConfigJson>();
             }
 
             // ゲームエンジンの設定ファイル。
-            Kw29MasterConf = new TraceableFile(LocationMaster.MyAppConfJson.kifuwarabe_wcsc29_master_config_path);
+            Kw29MasterConf = new TraceableFile(LocationMaster.ExeConfJson.kifuwarabe_wcsc29_master_config_path);
             {
                 var json = DynamicJson.Parse(LocationMaster.Kw29MasterConf.ReadAllText());
                 Kw29MasterConfJson = json.Deserialize<KifuwarabeWcsc29MasterConfigJson>();
             }
 
             // 入力ディレクトリー。
-            ConverterInputDirectory = new TraceableDirectory(LocationMaster.Kw29MasterConfJson.converter_input);
-            ConverterInputDirectory.Create();
+            InputDirectory = new TraceableDirectory(LocationMaster.Kw29MasterConfJson.converter_input);
+            InputDirectory.Create();
 
             // 解凍済みディレクトリー。
             ExpandedDirectory = new TraceableDirectory(LocationMaster.Kw29MasterConfJson.converter_expanded);
@@ -53,7 +52,7 @@
         /// <summary>
         /// Gets a 解凍待ちディレクトリー。
         /// </summary>
-        public static TraceableDirectory ConverterInputDirectory { get; private set; }
+        public static TraceableDirectory InputDirectory { get; private set; }
 
         /// <summary>
         /// Gets a 解凍の成果ディレクトリー。
@@ -88,12 +87,12 @@
         /// <summary>
         /// Gets a このアプリケーション.exeと同じディレクトリに置いてある設定ファイル。
         /// </summary>
-        public static TraceableFile MyAppConf { get; private set; }
+        public static TraceableFile ExeConf { get; private set; }
 
         /// <summary>
         /// Gets a このアプリケーション.exeと同じディレクトリに置いてある設定ファイルの内容。
         /// </summary>
-        public static ExeConfigJson MyAppConfJson { get; private set; }
+        public static ExeConfigJson ExeConfJson { get; private set; }
 
         /// <summary>
         /// Gets a ゲームエンジンの設定ファイルの内容。
