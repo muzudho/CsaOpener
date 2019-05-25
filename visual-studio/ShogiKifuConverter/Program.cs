@@ -49,7 +49,7 @@ namespace Grayscale.ShogiKifuConverter
 
                 // List<string> expansionOutputDirectories;
                 // 処理が行われている間、繰り返す。
-                while (expandedCount + encodedCount + convertedCount + mergedCount > 0 || merged)
+                while (expandedCount + encodedCount + convertedCount > 0 || merged)
                 {
                     Trace.WriteLine($"{LogHelper.Stamp}Program : Running...");
 

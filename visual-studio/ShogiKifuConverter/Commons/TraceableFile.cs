@@ -52,12 +52,13 @@
         {
             new TraceableFile(destFile.FullName).CreateParentDirectory();
 
-            Trace.WriteLine($"{LogHelper.Stamp}Move    : '{this.FullName}' --> '{destFile.FullName}'...");
             if (overwrite)
             {
+                // 既存のファイルがあれば先に削除。
                 destFile.Delete();
             }
 
+            Trace.WriteLine($"{LogHelper.Stamp}Move    : '{this.FullName}' --> '{destFile.FullName}'...");
             System.IO.File.Move(this.FullName, destFile.FullName);
         }
 
@@ -69,8 +70,8 @@
         public void MoveTo(TraceableDirectory destDir, bool overwrite)
         {
             destDir.Create();
-            Trace.WriteLine($"{LogHelper.Stamp}Move    : '{this.FullName}' --into--> '{destDir.FullName}' directory...");
 
+            // Trace.WriteLine($"{LogHelper.Stamp}Move    : '{this.FullName}' --into--> '{destDir.FullName}' directory...");
             var dstFile = new TraceableFile(PathHelper.Combine(destDir.FullName, Path.GetFileName(this.FullName)));
 
             this.MoveTo(dstFile, overwrite);
