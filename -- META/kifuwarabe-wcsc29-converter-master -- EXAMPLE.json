@@ -1,9 +1,0 @@
-{
-	"input"     : "C:/muzudho/wcsc29-master/shogi-record/converter/input",
-	"expanded"  : "C:/muzudho/wcsc29-master/shogi-record/converter/expanded",
-	"encoded"   : "C:/muzudho/wcsc29-master/shogi-record/converter/encoded",
-	"error"     : "C:/muzudho/wcsc29-master/shogi-record/converter/error",
-	"converted" : "C:/muzudho/wcsc29-master/shogi-record/converter/converted",
-	"jammed"    : "C:/muzudho/wcsc29-master/shogi-record/converter/jammed",
-	"kifuwarabe_wcsc29_exe_path_for_convert_kifu" : "C:/muzudho/software-computer-shogi/kifuwarabe-wcsc29/kifuwarabe-wcsc29.exe"
-}

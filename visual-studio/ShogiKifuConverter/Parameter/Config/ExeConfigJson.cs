@@ -10,8 +10,8 @@
     public class ExeConfigJson
     {
         /// <summary>
-        /// Gets a 棋譜変換設定マスター・ファイルへのパス。
+        /// Gets a きふわらべマスター・ファイルへのパス。
         /// </summary>
-        public string kifuwarabe_wcsc29_converter_master_config_path { get; set; }
+        public string kifuwarabe_wcsc29_master_config_path { get; set; }
     }
 }

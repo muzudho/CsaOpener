@@ -1,6 +1,7 @@
 ﻿namespace Grayscale.ShogiKifuConverter.Location
 {
     using Codeplex.Data;
+    using Grayscale.ShogiKifuConverter;
     using Grayscale.ShogiKifuConverter.Commons;
 
     /// <summary>
@@ -18,34 +19,34 @@
             }
 
             // ゲームエンジンの設定ファイル。
-            Kw29MasterConf = new TraceableFile(LocationMaster.ExeConfJson.kifuwarabe_wcsc29_converter_master_config_path);
+            Kw29MasterConf = new TraceableFile(LocationMaster.ExeConfJson.kifuwarabe_wcsc29_master_config_path);
             {
                 var json = DynamicJson.Parse(LocationMaster.Kw29MasterConf.ReadAllText());
-                Kw29MasterConfJson = json.Deserialize<KifuwarabeWcsc29ConverterMasterConfigJson>();
+                Kw29MasterConfJson = json.Deserialize<KifuwarabeWcsc29MasterConfigJson>();
             }
 
             // 入力ディレクトリー。
-            InputDirectory = new TraceableDirectory(LocationMaster.Kw29MasterConfJson.input);
+            InputDirectory = new TraceableDirectory(PathHelper.Combine(LocationMaster.Kw29MasterConfJson.converter_var_lib, "input"));
             InputDirectory.Create();
 
             // 解凍済みディレクトリー。
-            ExpandedDirectory = new TraceableDirectory(LocationMaster.Kw29MasterConfJson.expanded);
+            ExpandedDirectory = new TraceableDirectory(PathHelper.Combine(LocationMaster.Kw29MasterConfJson.converter_var_lib, "expanded"));
             ExpandedDirectory.Create();
 
             // エンコーディング済みディレクトリー。
-            EncodedDirectory = new TraceableDirectory(LocationMaster.Kw29MasterConfJson.encoded);
+            EncodedDirectory = new TraceableDirectory(PathHelper.Combine(LocationMaster.Kw29MasterConfJson.converter_var_lib, "encoded"));
             EncodedDirectory.Create();
 
             // 変換済みの棋譜ディレクトリー。
-            ConvertedDirectory = new TraceableDirectory(LocationMaster.Kw29MasterConfJson.converted);
+            ConvertedDirectory = new TraceableDirectory(PathHelper.Combine(LocationMaster.Kw29MasterConfJson.converter_var_lib, "converted"));
             ConvertedDirectory.Create();
 
             // 棋譜を１つのファイルに詰め込んだファイルのディレクトリー。
-            JammedDirectory = new TraceableDirectory(LocationMaster.Kw29MasterConfJson.jammed);
+            JammedDirectory = new TraceableDirectory(PathHelper.Combine(LocationMaster.Kw29MasterConfJson.converter_var_lib, "jammed"));
             JammedDirectory.Create();
 
             // 変換エラー出力ディレクトリー。
-            ErrorDirectory = new TraceableDirectory(LocationMaster.Kw29MasterConfJson.error);
+            ErrorDirectory = new TraceableDirectory(PathHelper.Combine(LocationMaster.Kw29MasterConfJson.converter_var_lib, "error"));
             ErrorDirectory.Create();
         }
 
@@ -95,8 +96,24 @@
         public static ExeConfigJson ExeConfJson { get; private set; }
 
         /// <summary>
+        /// Gets a 棋譜を変換するための実行ファイル。
+        /// </summary>
+        public static TraceableFile Kw29Exe
+        {
+            get { return new TraceableFile(PathHelper.Combine(LocationMaster.Kw29MasterConfJson.kifuwarabe_wcsc29_opt, "kifuwarabe-wcsc29.exe")); }
+        }
+
+        /// <summary>
+        /// Gets a 棋譜を変換するための実行ファイルが置いてあるディレクトリー。
+        /// </summary>
+        public static TraceableDirectory Kw29Opt
+        {
+            get { return new TraceableDirectory(LocationMaster.Kw29MasterConfJson.kifuwarabe_wcsc29_opt); }
+        }
+
+        /// <summary>
         /// Gets a ゲームエンジンの設定ファイルの内容。
         /// </summary>
-        public static KifuwarabeWcsc29ConverterMasterConfigJson Kw29MasterConfJson { get; private set; }
+        private static KifuwarabeWcsc29MasterConfigJson Kw29MasterConfJson { get; set; }
     }
 }

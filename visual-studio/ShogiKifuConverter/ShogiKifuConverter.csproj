@@ -73,7 +73,6 @@
     <Compile Include="Commons\PathHelper.cs" />
     <Compile Include="Commons\TraceableDirectory.cs" />
     <Compile Include="Commons\TraceableFile.cs" />
-    <Compile Include="Parameter\Config\KifuwarabeWcsc29ConverterMasterConfigJson.cs" />
     <Compile Include="Parameter\Config\ExeConfigJson.cs" />
     <Compile Include="DynamicJson.cs" />
     <Compile Include="Files\AbstractArchiveFile.cs" />
@@ -91,6 +90,7 @@
     <Compile Include="Lib\OldLogRemover.cs" />
     <Compile Include="Location\LocationMaster.cs" />
     <Compile Include="Location\TapeBoxJson.cs" />
+    <Compile Include="Parameter\Config\KifuwarabeWcsc29MasterConfigJson.cs" />
     <Compile Include="ProgramBody\Phase\EncodingPhase.cs" />
     <Compile Include="ProgramBody\Phase\ExpansionPhase.cs" />
     <Compile Include="Program.cs" />
