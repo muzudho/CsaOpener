@@ -28,7 +28,7 @@
         /// <returns>展開に成功した。</returns>
         public override bool Expand()
         {
-            Trace.WriteLine($"{LogHelper.Stamp}Expand  : {this.ExpansionGoFile.FullName} -> {LocationMaster.ExpandedDirectory.FullName}");
+            Trace.WriteLine($"{LogHelper.Stamp}Expand  : {this.InputFile.FullName} -> {LocationMaster.ExpandedDirectory.FullName}");
 
             /*
             // 既存なら削除。
@@ -36,13 +36,13 @@
             file.Delete();
             */
 
-            ZipFile.ExtractToDirectory(this.ExpansionGoFile.FullName, LocationMaster.ExpandedDirectory.FullName);
+            ZipFile.ExtractToDirectory(this.InputFile.FullName, LocationMaster.ExpandedDirectory.FullName);
 
             // ディレクトリーを浅くします。
             PathFlat.GoFlat(LocationMaster.ExpandedDirectory.FullName);
 
             // 解凍が終わった元ファイルは削除。
-            this.ExpansionGoFile.Delete();
+            this.InputFile.Delete();
 
             // 解凍したとき作ったディレクトリーが残ってしまう。ディレクトリーは消す。
             {

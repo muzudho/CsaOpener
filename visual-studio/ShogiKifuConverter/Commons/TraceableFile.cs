@@ -3,6 +3,7 @@
     using System.Diagnostics;
     using System;
     using System.IO;
+    using System.Threading;
 
     /// <summary>
     /// ログを出すファイル。

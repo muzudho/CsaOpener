@@ -9,7 +9,7 @@
     /// </summary>
     public abstract class AbstractFile
     {
-        private TraceableFile expansionGoFileInstance;
+        private TraceableFile inputFileInstance;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AbstractFile"/> class.
@@ -17,22 +17,22 @@
         /// <param name="expansionGoFile">解凍を待っているファイル。</param>
         protected AbstractFile(TraceableFile expansionGoFile)
         {
-            this.ExpansionGoFile = expansionGoFile;
+            this.InputFile = expansionGoFile;
         }
 
         /// <summary>
         /// Gets or sets a 解凍を待っているファイル。
         /// </summary>
-        public TraceableFile ExpansionGoFile
+        public TraceableFile InputFile
         {
             get
             {
-                return this.expansionGoFileInstance;
+                return this.inputFileInstance;
             }
 
             protected set
             {
-                this.expansionGoFileInstance = value;
+                this.inputFileInstance = value;
             }
         }
 

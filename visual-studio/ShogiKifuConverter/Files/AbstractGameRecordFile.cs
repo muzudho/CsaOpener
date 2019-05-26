@@ -23,11 +23,6 @@
         }
 
         /// <summary>
-        /// Gets or sets a 解凍先ファイル。
-        /// </summary>
-        public TraceableFile ExpansionOutputFile { get; protected set; }
-
-        /// <summary>
         /// Gets a 棋譜読取を待っているファイル。
         /// </summary>
         public TraceableFile EncodedFile

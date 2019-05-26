@@ -29,13 +29,13 @@
         /// <returns>展開に成功した。</returns>
         public override bool Expand()
         {
-            Trace.WriteLine($"{LogHelper.Stamp}Expand  : {this.ExpansionGoFile.FullName} -> {LocationMaster.ExpandedDirectory.FullName}");
-            if (string.IsNullOrWhiteSpace(this.ExpansionGoFile.FullName))
+            Trace.WriteLine($"{LogHelper.Stamp}Expand  : {this.InputFile.FullName} -> {LocationMaster.ExpandedDirectory.FullName}");
+            if (string.IsNullOrWhiteSpace(this.InputFile.FullName))
             {
                 return false;
             }
 
-            using (var inStream = File.OpenRead(this.ExpansionGoFile.FullName))
+            using (var inStream = File.OpenRead(this.InputFile.FullName))
             {
                 using (var gzipStream = new GZipInputStream(inStream))
                 {
@@ -50,7 +50,7 @@
             PathFlat.GoFlat(LocationMaster.ExpandedDirectory.FullName);
 
             // 解凍が終わった元ファイルは削除。
-            this.ExpansionGoFile.Delete();
+            this.InputFile.Delete();
 
             return true;
         }

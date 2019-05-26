@@ -38,16 +38,17 @@
         /// <returns>展開に成功した。</returns>
         public override bool Expand()
         {
-            Trace.WriteLine($"{LogHelper.Stamp}Expand  : {this.ExpansionGoFile.FullName} -> {this.ExpansionGoFile.FullName}");
-            if (string.IsNullOrWhiteSpace(this.ExpansionGoFile.FullName))
+            if (string.IsNullOrWhiteSpace(this.InputFile.FullName))
             {
                 return false;
             }
 
-            this.ExpansionGoFile.Copy(this.ExpansionGoFile, true);
+            Trace.WriteLine($"{LogHelper.Stamp}Expand  : [{this.InputFile.FullName}].");
+
+            this.InputFile.Copy(new TraceableFile(PathHelper.Combine(LocationMaster.ExpandedDirectory.FullName, Path.GetFileName(this.InputFile.FullName))), true);
 
             // 解凍が終わった元ファイルは削除。
-            this.ExpansionGoFile.Delete();
+            this.InputFile.Delete();
 
             return true;
         }

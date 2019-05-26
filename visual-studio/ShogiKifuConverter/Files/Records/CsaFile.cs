@@ -1,6 +1,7 @@
 ﻿namespace Grayscale.ShogiKifuConverter
 {
     using System.Diagnostics;
+    using System.IO;
     using Grayscale.ShogiKifuConverter.Commons;
     using Grayscale.ShogiKifuConverter.Location;
 
@@ -37,17 +38,18 @@
         /// <returns>展開に成功した。</returns>
         public override bool Expand()
         {
-            Trace.WriteLine($"{LogHelper.Stamp}Expand  : {this.ExpansionGoFile.FullName} -> {this.ExpansionOutputFile}");
-            if (string.IsNullOrWhiteSpace(this.ExpansionGoFile.FullName))
+            if (string.IsNullOrWhiteSpace(this.InputFile.FullName))
             {
                 return false;
             }
 
+            Trace.WriteLine($"{LogHelper.Stamp}Expand  : [{this.InputFile.FullName}].");
+
             // 成果物の作成。
-            this.ExpansionGoFile.Copy(this.ExpansionOutputFile, true);
+            this.InputFile.Copy(new TraceableFile(PathHelper.Combine(LocationMaster.ExpandedDirectory.FullName, Path.GetFileName(this.InputFile.FullName))), true);
 
             // 解凍が終わった元ファイルは削除。
-            this.ExpansionGoFile.Delete();
+            this.InputFile.Delete();
 
             return true;
         }

@@ -29,8 +29,8 @@
         /// <returns>展開に成功した。</returns>
         public override bool Expand()
         {
-            Trace.WriteLine($"{LogHelper.Stamp}Expand  : {this.ExpansionGoFile.FullName} -> None.");
-            if (string.IsNullOrWhiteSpace(this.ExpansionGoFile.FullName))
+            Trace.WriteLine($"{LogHelper.Stamp}Expand  : {this.InputFile.FullName} -> None.");
+            if (string.IsNullOrWhiteSpace(this.InputFile.FullName))
             {
                 return false;
             }
@@ -39,7 +39,7 @@
             PathFlat.GoFlat(LocationMaster.ExpandedDirectory.FullName);
 
             // 無理だった元ファイルは削除。
-            this.ExpansionGoFile.Delete();
+            this.InputFile.Delete();
 
             return true;
         }

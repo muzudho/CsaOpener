@@ -30,19 +30,19 @@
         {
             try
             {
-                Trace.WriteLine($"{LogHelper.Stamp}Expand  : {this.ExpansionGoFile.FullName} -> {LocationMaster.ExpandedDirectory.FullName}");
-                if (string.IsNullOrWhiteSpace(this.ExpansionGoFile.FullName))
+                Trace.WriteLine($"{LogHelper.Stamp}Expand  : {this.InputFile.FullName} -> {LocationMaster.ExpandedDirectory.FullName}");
+                if (string.IsNullOrWhiteSpace(this.InputFile.FullName))
                 {
                     return false;
                 }
 
-                SevenZManager.fnExtract(this.ExpansionGoFile.FullName, LocationMaster.ExpandedDirectory.FullName);
+                SevenZManager.fnExtract(this.InputFile.FullName, LocationMaster.ExpandedDirectory.FullName);
 
                 // ディレクトリーを浅くします。
                 PathFlat.GoFlat(LocationMaster.ExpandedDirectory.FullName);
 
                 // 解凍が終わった元ファイルは削除。
-                this.ExpansionGoFile.Delete();
+                this.InputFile.Delete();
                 return true;
             }
             catch (BadImageFormatException e)
